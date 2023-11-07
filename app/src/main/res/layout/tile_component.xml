@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="15dp"
+    android:background="@color/white"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:cardCornerRadius="20dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:paddingTop="8dp"
+            android:paddingHorizontal="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:background="@color/light_grey">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/apartment_image"
+                android:layout_width="135dp"
+                android:layout_height="90dp"
+                app:cardCornerRadius="15dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/stars" >
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/apartment"/>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/apartment_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:fontFamily="@font/montserrat_medium"
+                android:text="Test Apartman"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:layout_constraintStart_toEndOf="@id/apartment_image"/>
+
+            <TextView
+                android:id="@+id/apartment_address"
+                style="@style/TextAppearance.MaterialComponents.Subtitle2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:text="Bulevar Kneza Milos 45, Novi Sad, Srbija"
+                android:textColor="#474747"
+                android:textSize="11sp"
+                app:layout_constraintStart_toEndOf="@id/apartment_image"
+                app:layout_constraintTop_toBottomOf="@id/apartment_name" />
+
+            <TextView
+                android:id="@+id/text"
+                style="@style/TextAppearance.MaterialComponents.Body2"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:layout_marginStart="12dp"
+                android:text="I'm a supporting text. Very Lorem ipsum dolor sit amet. "
+                app:layout_constraintStart_toEndOf="@id/apartment_image"
+                app:layout_constraintTop_toBottomOf="@id/apartment_address"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:textColor="@color/black"
+                android:textSize="13sp"
+                app:layout_constraintBottom_toTopOf="@id/details"/>
+
+            <TextView
+                android:id="@+id/price"
+                style="@style/TextAppearance.MaterialComponents.Body2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_semibold"
+                android:text="135 EUR"
+                android:textColor="@color/charcoal"
+                android:textSize="13sp"
+                tools:layout_editor_absoluteX="175dp"
+                tools:layout_editor_absoluteY="98dp"
+                app:layout_constraintStart_toEndOf="@id/stars"
+                app:layout_constraintEnd_toStartOf="@id/details"/>
+
+            <TextView
+                android:id="@+id/priceperday"
+                style="@style/TextAppearance.MaterialComponents.Body2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_semibold"
+                android:text="35 EUR a day"
+                android:textColor="@color/charcoal"
+                android:textSize="10sp"
+                android:layout_marginBottom="4dp"
+                app:layout_constraintTop_toBottomOf="@id/price"
+                app:layout_constraintStart_toStartOf="@id/price"
+                app:layout_constraintEnd_toEndOf="@id/price"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <Button
+                android:id="@+id/details"
+                android:layout_width="100dp"
+                android:layout_height="32dp"
+                android:fontFamily="@font/montserrat_medium"
+                android:text="@string/details"
+                android:textColor="@color/white"
+                android:textSize="12dp"
+                android:padding="0dp"
+                android:layout_marginBottom="4dp"
+                android:paddingStart="16dp"
+                android:textAlignment="textStart"
+                android:backgroundTint="@color/charcoal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <ImageView
+                android:id="@+id/arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                app:srcCompat="@drawable/arrow"
+                app:layout_constraintEnd_toEndOf="@id/details"
+                app:layout_constraintTop_toTopOf="@id/details"
+                app:layout_constraintBottom_toBottomOf="@id/details"/>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/stars"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/apartment_image"
+                app:layout_constraintEnd_toEndOf="@id/apartment_image"
+                app:layout_constraintBottom_toTopOf="@id/apartment_image">
+
+                <ImageView
+                    android:id="@+id/star1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:tint="@color/caribbean"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/star2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/star" />
+
+                <ImageView
+                    android:id="@+id/star2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:tint="@color/caribbean"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/star3"
+                    app:layout_constraintStart_toEndOf="@id/star1"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/star" />
+
+                <ImageView
+                    android:id="@+id/star3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:tint="@color/caribbean"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/star4"
+                    app:layout_constraintStart_toEndOf="@id/star2"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/star" />
+
+                <ImageView
+                    android:id="@+id/star4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:tint="@color/caribbean"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/star3"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/star" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,24 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.Bookify" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimaryContainer">@color/light_grey</item>
+        <item name="colorOnPrimaryContainer">@color/charcoal</item>
+
+        <item name="colorPrimary">@color/charcoal</item>
+        <item name="colorPrimaryDark">@color/honeydew</item>
+        <item name="colorAccent">@color/battleship</item>
+
+        <item name="android:windowBackground">@color/white</item>
+
+        <item name="android:fontFamily">@font/montserrat</item>
+    </style>
+
+    <style name="Theme.Bookify" parent="Base.Theme.Bookify" />
+    
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_in</item>
+        <item name="android:windowExitAnimation">@anim/slide_out</item>
+    </style>
+</resources>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="charcoal">#2E4057</color>
+    <color name="caribbean">#326268</color>
+    <color name="battleship">#A29D92</color>
+    <color name="lemon">#FAF0CA</color>
+    <color name="honeydew">#D8EBDE</color>
+    <color name="light_grey">#E4E4E4</color>
+    <color name="dark_grey">#383838</color>
+</resources>

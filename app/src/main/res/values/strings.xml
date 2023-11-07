@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Bookify</string>
+    <string name="location">Location</string>
+    <string name="date">Date</string>
+    <string name="persons">Persons</string>
+    <string name="details">Details</string>
+    <string name="room_picture">Picture fo the room</string>
+    <string name="sort">Sort by</string>
+    <string name="price">Price</string>
+    <string name="filter">Filter</string>
+    <string name="save">Save</string>
+    <string name="remove">Remove</string>
+
+    <string-array name="sort_by">
+        <item>Price lowest first</item>
+        <item>Price highest first</item>
+        <item>Name</item>
+    </string-array>
+</resources>

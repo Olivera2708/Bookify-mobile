@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/top_rounded"
+    android:padding="10dp">
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="70dp"
+        android:layout_height="3dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/dark_grey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/sortText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sort"
+        android:textSize="16sp"
+        android:layout_marginTop="30dp"
+        android:layout_marginHorizontal="36dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/line"/>
+
+    <Spinner
+        android:id="@+id/sortSpinner"
+        android:layout_width="230dp"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dropdown"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="75dp"
+        app:layout_constraintStart_toEndOf="@id/sortText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/sortText"
+        app:layout_constraintBottom_toBottomOf="@id/sortText"/>
+
+    <View
+        android:id="@+id/lineSort"
+        android:layout_width="200dp"
+        android:layout_height="3dp"
+        android:layout_marginVertical="10dp"
+        android:layout_gravity="center_horizontal"
+        android:backgroundTint="@color/caribbean"
+        android:background="@color/dark_grey"
+        app:layout_constraintStart_toStartOf="@id/sortText"
+        app:layout_constraintTop_toBottomOf="@id/sortText"/>
+
+    <TextView
+        android:id="@+id/priceText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/price"
+        android:textSize="16sp"
+        android:layout_marginTop="30dp"
+        android:layout_marginHorizontal="36dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/lineSort"/>
+
+    <SeekBar
+        android:id="@+id/priceBar"
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
+        android:layout_width="230dp"
+        android:layout_height="wrap_content"
+        android:max="1000"
+        android:progress="1"
+        app:layout_constraintStart_toEndOf="@id/priceText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/priceText"
+        app:layout_constraintBottom_toBottomOf="@id/priceText"/>
+
+    <View
+        android:id="@+id/linePrice"
+        android:layout_width="200dp"
+        android:layout_height="3dp"
+        android:layout_marginVertical="10dp"
+        android:layout_gravity="center_horizontal"
+        android:backgroundTint="@color/caribbean"
+        android:background="@color/dark_grey"
+        app:layout_constraintStart_toStartOf="@id/priceText"
+        app:layout_constraintTop_toBottomOf="@id/priceText"/>
+
+    <TextView
+        android:id="@+id/filterText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/filter"
+        android:textSize="16sp"
+        android:layout_marginTop="30dp"
+        android:layout_marginHorizontal="36dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linePrice"/>
+
+    <View
+        android:id="@+id/lineFilter"
+        android:layout_width="60dp"
+        android:layout_height="3dp"
+        android:layout_gravity="center_horizontal"
+        android:backgroundTint="@color/caribbean"
+        android:background="@color/dark_grey"
+        app:layout_constraintStart_toStartOf="@id/filterText"
+        app:layout_constraintTop_toBottomOf="@id/filterText"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/remove"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/battleship"
+            android:text="@string/remove"
+            android:layout_marginStart="30dp"
+            android:layout_weight="1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/save"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/save"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:text="@string/save"
+            android:layout_weight="1"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
