@@ -8,9 +8,10 @@
 
         <item name="colorPrimary">@color/charcoal</item>
         <item name="colorPrimaryDark">@color/honeydew</item>
-        <item name="colorAccent">@color/battleship</item>
 
         <item name="android:windowBackground">@color/white</item>
+        <item name="popupMenuBackground">@color/light_grey</item>
+        <item name="colorOutline">@color/caribbean</item>
 
         <item name="android:fontFamily">@font/montserrat</item>
     </style>
