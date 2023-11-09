@@ -33,10 +33,4 @@
     <string name="deposit_box">Deposit box</string>
     <string name="non_smoking">Non-smoking</string>
     <string name="city_center">City center</string>
-
-    <string-array name="sort_by">
-        <item>Price lowest first</item>
-        <item>Price highest first</item>
-        <item>Name</item>
-    </string-array>
 </resources>

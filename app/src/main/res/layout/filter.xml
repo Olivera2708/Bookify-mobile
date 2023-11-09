@@ -19,49 +19,48 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <TextView
-        android:id="@+id/sortText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/sort"
-        android:textSize="16sp"
-        android:layout_marginTop="40dp"
-        android:layout_marginHorizontal="10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/line"/>
-
-    <Spinner
-        android:id="@+id/sortSpinner"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
         android:layout_width="230dp"
-        android:layout_height="wrap_content"
-        android:spinnerMode="dropdown"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="75dp"
-        app:layout_constraintStart_toEndOf="@id/sortText"
+        android:layout_height="40dp"
+        android:layout_marginTop="30dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/sortText"
-        app:layout_constraintBottom_toBottomOf="@id/sortText"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/line">
+
+        <AutoCompleteTextView
+            android:id="@+id/filled_exposed"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="0dp"
+            android:hint="@string/sort"
+            android:inputType="none">
+
+        </AutoCompleteTextView>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <View
         android:id="@+id/lineSort"
-        android:layout_width="200dp"
+        android:layout_width="300dp"
         android:layout_height="3dp"
-        android:layout_marginVertical="10dp"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
         android:background="?colorOutline"
-        app:layout_constraintStart_toStartOf="@id/sortText"
-        app:layout_constraintTop_toBottomOf="@id/sortText"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
 
     <TextView
         android:id="@+id/priceText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/price"
-        android:textSize="16sp"
-        android:layout_marginTop="26dp"
         android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/price"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/lineSort"/>
+        app:layout_constraintTop_toBottomOf="@id/lineSort" />
 
     <SeekBar
         android:id="@+id/priceBar"
@@ -70,6 +69,7 @@
         android:layout_height="wrap_content"
         android:max="1000"
         android:progress="1"
+        android:layout_marginStart="30dp"
         app:layout_constraintStart_toEndOf="@id/priceText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/priceText"
@@ -79,18 +79,18 @@
         android:id="@+id/linePrice"
         android:layout_width="200dp"
         android:layout_height="3dp"
-        android:layout_marginVertical="10dp"
         android:layout_gravity="center_horizontal"
+        android:layout_marginVertical="16dp"
         android:background="?colorOutline"
         app:layout_constraintStart_toStartOf="@id/priceText"
-        app:layout_constraintTop_toBottomOf="@id/priceText"/>
+        app:layout_constraintTop_toBottomOf="@+id/priceBar" />
 
     <TextView
         android:id="@+id/filterText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/filter"
-        android:textSize="16sp"
+        android:textSize="18sp"
         android:layout_marginTop="26dp"
         android:layout_marginHorizontal="10dp"
         app:layout_constraintStart_toStartOf="parent"

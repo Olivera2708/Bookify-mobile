@@ -10,7 +10,9 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -40,10 +42,21 @@ public class ResultsActivity extends AppCompatActivity {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.filter);
 
-        Spinner sortSpinner = dialog.findViewById(R.id.sortSpinner);
-        ArrayAdapter<CharSequence>adapter= ArrayAdapter.createFromResource(this, R.array.sort_by, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        sortSpinner.setAdapter(adapter);
+//        Spinner sortSpinner = dialog.findViewById(R.id.sortSpinner);
+//        ArrayAdapter<CharSequence>adapter= ArrayAdapter.createFromResource(this, R.array.sort_by, android.R.layout.simple_spinner_item);
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+//        sortSpinner.setAdapter(adapter);
+
+        String[] sort = new String[] {"Price lowest first", "Price highest first", "Name"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.dropdown_item, sort);
+        AutoCompleteTextView autoCompleteTextView = dialog.findViewById(R.id.filled_exposed);
+        autoCompleteTextView.setAdapter(adapter);
+        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //code when something is selected
+            }
+        });
 
         dialog.show();
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
