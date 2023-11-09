@@ -6,6 +6,8 @@
         <item name="colorPrimaryContainer">@color/off_white</item>
         <item name="colorOnPrimaryContainer">@color/charcoal</item>
 
+        <item name="colorSecondary">@color/off_white</item>
+
         <item name="colorPrimary">@color/charcoal</item>
         <item name="colorPrimaryDark">@color/honeydew</item>
         <item name="colorSurfaceContainerHighest">@color/light_grey</item>

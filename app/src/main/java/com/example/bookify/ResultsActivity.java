@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.Layout;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +16,14 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ResultsActivity extends AppCompatActivity {
 
@@ -28,7 +33,7 @@ public class ResultsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.results);
 
-        filterButton = (FloatingActionButton) findViewById(R.id.filter);
+        filterButton = (FloatingActionButton) findViewById(R.id.filterButton);
         filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -41,11 +46,6 @@ public class ResultsActivity extends AppCompatActivity {
         final BottomSheetDialog dialog = new BottomSheetDialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.filter);
-
-//        Spinner sortSpinner = dialog.findViewById(R.id.sortSpinner);
-//        ArrayAdapter<CharSequence>adapter= ArrayAdapter.createFromResource(this, R.array.sort_by, android.R.layout.simple_spinner_item);
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-//        sortSpinner.setAdapter(adapter);
 
         String[] sort = new String[] {"Price lowest first", "Price highest first", "Name"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.dropdown_item, sort);
