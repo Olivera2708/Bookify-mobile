@@ -54,7 +54,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clickable="true"
-                android:onClick="o"
+                android:onClick="openForgotPasswordActivity"
                 android:text="@string/forget_password" />
 
             <Button

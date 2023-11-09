@@ -37,6 +37,8 @@
 
     <string name="login">Log in</string>
     <string name="register">Register</string>
-    <string name="continue_guest">Continue as a guest</string>
+    <string name="send">Send</string>
+    <string name="check_email">Check email</string>
+    <string name="continue_guest">Continue as guest</string>
     <string name="forget_password">Forget your password?</string>
 </resources>
