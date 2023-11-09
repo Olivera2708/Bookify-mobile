@@ -34,4 +34,7 @@
     <string name="deposit_box">Deposit box</string>
     <string name="non_smoking">Non-smoking</string>
     <string name="city_center">City center</string>
+
+    <string name="login">Log in</string>
+    <string name="forget_password">Forget your password?</string>
 </resources>

@@ -17,6 +17,8 @@
         <item name="colorOutline">@color/battleship</item>
 
         <item name="android:fontFamily">@font/montserrat</item>
+
+        <item name="logo">@drawable/logo</item>
     </style>
 
     <style name="Theme.Bookify" parent="Base.Theme.Bookify" />
