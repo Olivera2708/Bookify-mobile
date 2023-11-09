@@ -7,6 +7,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
@@ -28,6 +29,9 @@ public class SplashScreenActivity extends AppCompatActivity {
     private ConnectivityManager connectivityManager;
     private ConnectivityManager.NetworkCallback networkCallback;
     private HandlerThread handlerThread;
+    private Handler handler;
+    private MediaPlayer player;
+    private Runnable navigateTo, playPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,14 +45,18 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         handlerThread = new HandlerThread("HandlerThread");
         handlerThread.start();
-        Handler handler = new Handler(handlerThread.getLooper());
+        handler = new Handler(handlerThread.getLooper());
+
+        playPlayer = () -> play();
+        handler.postDelayed(playPlayer, 1700);
 
         if (isConnectedToInternet()) {
-            handler.postDelayed(() -> {
+            navigateTo = () -> {
                 Intent intent = new Intent(SplashScreenActivity.this, ResultsActivity.class);
                 startActivity(intent);
                 finish();
-            }, SPLASH_TIME_OUT);
+            };
+            handler.postDelayed(navigateTo, SPLASH_TIME_OUT);
         } else {
             Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
                     "Niste povezani na internet",
@@ -91,14 +99,27 @@ public class SplashScreenActivity extends AppCompatActivity {
         NetworkRequest networkRequest = new NetworkRequest.Builder()
                 .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET).build();
         connectivityManager.registerNetworkCallback(networkRequest, networkCallback);
-//        new Timer().schedule(new TimerTask() {
-//            @Override
-//            public void run() {
-//                Intent intent = new Intent(SplashScreenActivity.this, ResultsActivity.class);
-//                startActivity(intent);
-//                finish();
-//            }
-//        }, SPLASH_TIME_OUT);
+    }
+
+    private void play() {
+        if (player == null) {
+            player = MediaPlayer.create(this, R.raw.sound);
+            player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+
+                }
+            });
+        }
+        player.start();
+    }
+
+    private void stopPlayer() {
+        if (player != null) {
+            player.release();
+            player = null;
+        }
     }
 
     private boolean isConnectedToInternet() {
@@ -122,5 +143,14 @@ public class SplashScreenActivity extends AppCompatActivity {
         if (handlerThread != null) {
             handlerThread.quit();
         }
+        handler.removeCallbacks(navigateTo);
+    }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+        handler.removeCallbacks(playPlayer);
+        handler.removeCallbacks(navigateTo);
+        stopPlayer();
     }
 }
