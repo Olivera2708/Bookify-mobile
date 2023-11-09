@@ -112,7 +112,9 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/searchInfo">
 
-        <include layout="@layout/tile_component" />
+        <include
+            android:id="@+id/tile"
+            layout="@layout/tile_component" />
     </FrameLayout>
 
     <FrameLayout
