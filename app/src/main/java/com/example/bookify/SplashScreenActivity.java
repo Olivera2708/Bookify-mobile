@@ -153,4 +153,10 @@ public class SplashScreenActivity extends AppCompatActivity {
         handler.removeCallbacks(navigateTo);
         stopPlayer();
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        handler.removeCallbacks(navigateTo);
+    }
 }
