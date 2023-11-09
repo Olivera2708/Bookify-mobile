@@ -4,22 +4,30 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.NetworkRequest;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.provider.Settings;
 import android.util.Log;
+import android.widget.Toast;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
-    private boolean isPermissions = true;
-    private String [] permissions = {
-            android.Manifest.permission.INTERNET,
-            Manifest.permission.MANAGE_DEVICE_POLICY_MOBILE_NETWORK
-    };
-    private static final int REQUEST_PERMISSIONS = 200;
+    private ConnectivityManager connectivityManager;
+    private ConnectivityManager.NetworkCallback networkCallback;
+    private HandlerThread handlerThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,34 +36,91 @@ public class SplashScreenActivity extends AppCompatActivity {
 
 //        getSupportActionBar().hide();
         int SPLASH_TIME_OUT = 5000;
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
+
+        connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        handlerThread = new HandlerThread("HandlerThread");
+        handlerThread.start();
+        Handler handler = new Handler(handlerThread.getLooper());
+
+        if (isConnectedToInternet()) {
+            handler.postDelayed(() -> {
                 Intent intent = new Intent(SplashScreenActivity.this, ResultsActivity.class);
                 startActivity(intent);
                 finish();
+            }, SPLASH_TIME_OUT);
+        } else {
+            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
+                    "Niste povezani na internet",
+                    Snackbar.LENGTH_INDEFINITE).setAction("Povezi se", v -> {
+                Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
+                startActivity(intent);
+            });
+
+            snackbar.show();
+
+            handler.postDelayed(() -> {
+                if (!isConnectedToInternet()) {
+                    Toast.makeText(SplashScreenActivity.this, "Niste povezani na internet. Zatvaranje aplikacije.",
+                            Toast.LENGTH_SHORT).show();
+                    handler.postDelayed(() -> finish(), 2000);
+                }
+            }, 10000);
+        }
+
+        networkCallback = new ConnectivityManager.NetworkCallback() {
+            @Override
+            public void onAvailable(Network network) {
+                Snackbar.make(findViewById(android.R.id.content), "Povezani ste na internet",
+                        Snackbar.LENGTH_SHORT).show();
+
+                handler.postDelayed(() -> {
+                    Intent intent = new Intent(SplashScreenActivity.this, ResultsActivity.class);
+                    startActivity(intent);
+                    finish();
+                }, 5000);
             }
-        }, SPLASH_TIME_OUT);
+
+            @Override
+            public void onLost(Network network) {
+                Snackbar.make(findViewById(android.R.id.content), "Izgubili ste vezu.", Snackbar.LENGTH_SHORT).show();
+                handler.postDelayed(() -> finish(), 1000);
+            }
+        };
+
+        NetworkRequest networkRequest = new NetworkRequest.Builder()
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET).build();
+        connectivityManager.registerNetworkCallback(networkRequest, networkCallback);
+//        new Timer().schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+//                Intent intent = new Intent(SplashScreenActivity.this, ResultsActivity.class);
+//                startActivity(intent);
+//                finish();
+//            }
+//        }, SPLASH_TIME_OUT);
+    }
+
+    private boolean isConnectedToInternet() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager != null) {
+            Network network = connectivityManager.getActiveNetwork();
+            if (network != null) {
+                NetworkCapabilities capabilities = connectivityManager.getNetworkCapabilities(network);
+                return capabilities != null && capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
+            }
+        }
+        return false;
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults){
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        switch (requestCode){
-            case REQUEST_PERMISSIONS:
-                for(int i = 0; i < permissions.length; i++) {
-                    Log.i("Bookify", "permission " + permissions[i] + " " + grantResults[i]);
-                    if(grantResults[i] == PackageManager.PERMISSION_DENIED){
-                        isPermissions = false;
-                    }
-                }
-                break;
+    protected void onDestroy() {
+        super.onDestroy();
+        if (connectivityManager != null && networkCallback != null) {
+            connectivityManager.unregisterNetworkCallback(networkCallback);
         }
-
-        if (!isPermissions) {
-            Log.e("Bookigy", "Error: no permission");
-            finishAndRemoveTask();
+        if (handlerThread != null) {
+            handlerThread.quit();
         }
     }
 }
