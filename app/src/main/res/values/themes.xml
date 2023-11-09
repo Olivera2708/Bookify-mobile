@@ -7,6 +7,7 @@
         <item name="colorOnPrimaryContainer">@color/charcoal</item>
 
         <item name="colorSecondary">@color/off_white</item>
+        <item name="colorOnSecondary">@color/dark_grey</item>
 
         <item name="colorPrimary">@color/charcoal</item>
         <item name="colorPrimaryDark">@color/honeydew</item>
