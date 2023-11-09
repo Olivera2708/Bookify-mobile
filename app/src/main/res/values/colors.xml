@@ -7,6 +7,9 @@
     <color name="battleship">#A29D92</color>
     <color name="lemon">#FAF0CA</color>
     <color name="honeydew">#D8EBDE</color>
-    <color name="light_grey">#E4E4E4</color>
+    <color name="off_white">#E4E4E4</color>
     <color name="dark_grey">#383838</color>
+    <color name="dark_background">#242424</color>
+    <color name="grey">#575757</color>
+    <color name="light_grey">#8f8f8f</color>
 </resources>

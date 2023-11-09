@@ -3,14 +3,16 @@
     <style name="Base.Theme.Bookify" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-        <item name="colorPrimaryContainer">@color/light_grey</item>
+        <item name="colorPrimaryContainer">@color/off_white</item>
         <item name="colorOnPrimaryContainer">@color/charcoal</item>
 
         <item name="colorPrimary">@color/charcoal</item>
         <item name="colorPrimaryDark">@color/honeydew</item>
-        <item name="colorAccent">@color/battleship</item>
+        <item name="colorSurfaceContainerHighest">@color/light_grey</item>
 
         <item name="android:windowBackground">@color/white</item>
+        <item name="popupMenuBackground">@color/off_white</item>
+        <item name="colorOutline">@color/caribbean</item>
 
         <item name="android:fontFamily">@font/montserrat</item>
     </style>

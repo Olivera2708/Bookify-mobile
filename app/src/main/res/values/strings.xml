@@ -9,11 +9,28 @@
     <string name="price">Price</string>
     <string name="filter">Filter</string>
     <string name="save">Save</string>
-    <string name="remove">Remove</string>
+    <string name="remove_all">Remove all</string>
 
-    <string-array name="sort_by">
-        <item>Price lowest first</item>
-        <item>Price highest first</item>
-        <item>Name</item>
-    </string-array>
+    <string name="free_wifi">Free WiFi</string>
+    <string name="free_parking">Free parking</string>
+    <string name="air_conditioning">Air conditioning</string>
+    <string name="family_rooms">Family rooms</string>
+    <string name="terrace">Terrace</string>
+    <string name="garden">Garden</string>
+    <string name="swimming_pool">Swimming pool</string>
+    <string name="front_desk">24-hour front desk</string>
+    <string name="bar">Bar</string>
+    <string name="jacuzzi">Jacuzzi</string>
+    <string name="sauna">Sauna</string>
+    <string name="heating">Heating</string>
+    <string name="luggage_storage">Luggage storage</string>
+    <string name="breakfast">Breakfast</string>
+    <string name="lunch">Lunch</string>
+    <string name="dinner">Dinner</string>
+    <string name="airport_shuttle">Airport shuttle</string>
+    <string name="private_bathroom">Private bathroom</string>
+    <string name="wheelchair">Wheelchair</string>
+    <string name="deposit_box">Deposit box</string>
+    <string name="non_smoking">Non-smoking</string>
+    <string name="city_center">City center</string>
 </resources>

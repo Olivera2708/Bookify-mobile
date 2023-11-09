@@ -5,5 +5,22 @@
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
         <item name="colorPrimaryContainer">@color/dark_grey</item>
         <item name="colorOnPrimaryContainer">@color/honeydew</item>
+
+        <item name="colorPrimary">@color/off_white</item>
+        <item name="colorPrimaryDark">@color/dark_grey</item>
+<!--        <item name="colorSurfaceContainerHighest">@color/off_white</item>-->
+
+        <item name="android:windowBackground">@color/dark_background</item>
+        <item name="popupMenuBackground">@color/grey</item>
+        <item name="colorOutline">@color/battleship</item>
+
+        <item name="android:fontFamily">@font/montserrat</item>
+    </style>
+
+    <style name="Theme.Bookify" parent="Base.Theme.Bookify" />
+
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_in</item>
+        <item name="android:windowExitAnimation">@anim/slide_out</item>
     </style>
 </resources>
