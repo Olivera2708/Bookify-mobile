@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#2E4057"
+    tools:context=".SplashScreenActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/splash_gif"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/splash_screen"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"/>
+
+        <ImageView
+            android:id="@+id/splash_text"
+            android:layout_width="300dp"
+            android:layout_height="80dp"
+            android:src="@drawable/splash_text"
+            android:layout_below="@id/splash_gif"
+            android:layout_centerHorizontal="true"/>
+            />
+    </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
