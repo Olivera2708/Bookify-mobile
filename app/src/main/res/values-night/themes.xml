@@ -6,8 +6,9 @@
         <item name="colorPrimaryContainer">@color/dark_grey</item>
         <item name="colorOnPrimaryContainer">@color/honeydew</item>
 
-        <item name="colorPrimary">@color/light_grey</item>
+        <item name="colorPrimary">@color/off_white</item>
         <item name="colorPrimaryDark">@color/dark_grey</item>
+<!--        <item name="colorSurfaceContainerHighest">@color/off_white</item>-->
 
         <item name="android:windowBackground">@color/dark_background</item>
         <item name="popupMenuBackground">@color/grey</item>
