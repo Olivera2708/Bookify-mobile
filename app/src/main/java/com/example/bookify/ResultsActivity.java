@@ -3,9 +3,11 @@ package com.example.bookify;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Pair;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.Layout;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +35,16 @@ public class ResultsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
+
+        View tile = findViewById(R.id.tile);
+        Button details = tile.findViewById(R.id.details);
+        details.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ResultsActivity.this, AccommodationDetailsActivity.class);
+                startActivity(intent);
+            }
+        });
 
         editDate = findViewById(R.id.editButton);
         editDate.setOnClickListener(new View.OnClickListener() {
