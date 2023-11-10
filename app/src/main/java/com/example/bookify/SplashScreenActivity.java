@@ -52,7 +52,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         if (isConnectedToInternet()) {
             navigateTo = () -> {
-                Intent intent = new Intent(SplashScreenActivity.this, ResultsActivity.class);
+                Intent intent = new Intent(SplashScreenActivity.this, LandingActivity.class);
                 startActivity(intent);
                 finish();
             };
@@ -83,7 +83,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                         Snackbar.LENGTH_SHORT).show();
 
                 handler.postDelayed(() -> {
-                    Intent intent = new Intent(SplashScreenActivity.this, ResultsActivity.class);
+                    Intent intent = new Intent(SplashScreenActivity.this, LandingActivity.class);
                     startActivity(intent);
                     finish();
                 }, 5000);

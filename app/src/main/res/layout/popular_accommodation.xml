@@ -2,14 +2,12 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="15dp"
-    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <androidx.cardview.widget.CardView
         android:layout_width="200dp"
-        android:layout_height="260dp"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,14 +16,15 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="200dp"
-            android:layout_height="260dp"
-            android:background="@color/light_grey">
+            android:layout_height="wrap_content"
+            android:background="?attr/colorSecondary">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/apartment_image"
-                android:layout_width="200dp"
+                android:layout_width="match_parent"
                 android:layout_height="133dp"
-                app:cardCornerRadius="15dp"
+                app:cardCornerRadius="10dp"
+                android:layout_margin="10dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" >
 
@@ -33,6 +32,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/apartment"
+                    android:scaleType="centerCrop"
                     android:contentDescription="@string/room_picture" />
             </androidx.cardview.widget.CardView>
 
@@ -73,6 +73,8 @@
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="12sp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="6dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -82,7 +84,7 @@
                 android:id="@+id/stars"
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/apartment_image">

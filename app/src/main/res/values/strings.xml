@@ -13,6 +13,9 @@
     <string name="search">Search</string>
     <string name="owner">Owner</string>
     <string name="reserve">Reserve</string>
+    <string name="dateFromTo">Date from - Date to</string>
+    <string name="top_locations">Top locations</string>
+    <string name="top_accommodations">Top accommodations</string>
 
     <string name="free_wifi">Free WiFi</string>
     <string name="free_parking">Free parking</string>
