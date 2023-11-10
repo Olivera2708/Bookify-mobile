@@ -3,11 +3,9 @@ package com.example.bookify;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Pair;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 
@@ -25,7 +23,7 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_accommodation_details);
 
         View reservationTile = findViewById(R.id.reservation);
-        Button reservationDate = reservationTile.findViewById(R.id.editDate);
+        reservationDate = reservationTile.findViewById(R.id.editDate);
         reservationDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -126,6 +126,7 @@
             <LinearLayout
                 android:id="@+id/linearLayout2"
                 android:layout_width="0sp"
+                android:minHeight="160dp"
                 android:layout_height="wrap_content"
                 android:gravity="left"
                 android:orientation="vertical"
@@ -210,7 +211,7 @@
 
             <LinearLayout
                 android:layout_width="0sp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:padding="10dp"
@@ -224,6 +225,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Bulevar kneza Milosa 45, Novi Sad, Srbija"
+                    android:layout_marginTop="4dp"
                     android:textAlignment="center"
                     android:textSize="12sp" />
 
