@@ -24,6 +24,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
             Intent intent = new Intent(ForgotPasswordActivity.this, LoginActivity.class);
             startActivity(intent);
             Toast.makeText(ForgotPasswordActivity.this, getString(R.string.check_email), Toast.LENGTH_SHORT).show();
+            finish();
         });
     }
 }

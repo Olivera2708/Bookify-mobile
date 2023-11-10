@@ -59,8 +59,8 @@ public class SplashScreenActivity extends AppCompatActivity {
             handler.postDelayed(navigateTo, SPLASH_TIME_OUT);
         } else {
             Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
-                    "Niste povezani na internet",
-                    Snackbar.LENGTH_INDEFINITE).setAction("Povezi se", v -> {
+                    getString(R.string.you_not_internet),
+                    Snackbar.LENGTH_INDEFINITE).setAction(getString(R.string.connect), v -> {
                 Intent intent = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
                 startActivity(intent);
             });
@@ -69,7 +69,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
             handler.postDelayed(() -> {
                 if (!isConnectedToInternet()) {
-                    Toast.makeText(SplashScreenActivity.this, "Niste povezani na internet. Zatvaranje aplikacije.",
+                    Toast.makeText(SplashScreenActivity.this, getString(R.string.you_not_internet) + ". " + getString(R.string.closing),
                             Toast.LENGTH_SHORT).show();
                     handler.postDelayed(() -> finish(), 2000);
                 }
@@ -79,7 +79,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         networkCallback = new ConnectivityManager.NetworkCallback() {
             @Override
             public void onAvailable(Network network) {
-                Snackbar.make(findViewById(android.R.id.content), "Povezani ste na internet",
+                Snackbar.make(findViewById(android.R.id.content), getString(R.string.you_internet),
                         Snackbar.LENGTH_SHORT).show();
 
                 handler.postDelayed(() -> {
@@ -91,7 +91,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
             @Override
             public void onLost(Network network) {
-                Snackbar.make(findViewById(android.R.id.content), "Izgubili ste vezu.", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(findViewById(android.R.id.content), getString(R.string.lost), Snackbar.LENGTH_SHORT).show();
                 handler.postDelayed(() -> finish(), 1000);
             }
         };

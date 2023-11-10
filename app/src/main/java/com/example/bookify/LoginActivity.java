@@ -22,6 +22,7 @@ public class LoginActivity extends AppCompatActivity {
         binding.btnGuest.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, ResultsActivity.class);
             startActivity(intent);
+            finish();
         });
     }
 
