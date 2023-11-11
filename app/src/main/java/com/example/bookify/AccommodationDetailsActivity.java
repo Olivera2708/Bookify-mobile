@@ -3,6 +3,7 @@ package com.example.bookify;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Pair;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.transition.Slide;
 import android.view.View;
@@ -18,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Random;
 
 public class AccommodationDetailsActivity extends AppCompatActivity {
 
@@ -64,5 +66,6 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
         imageList.add(new SlideModel(R.drawable.apartman6, ScaleTypes.FIT));
 
         imageSlider.setImageList(imageList, ScaleTypes.FIT);
+
     }
 }
