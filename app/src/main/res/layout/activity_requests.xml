@@ -67,21 +67,21 @@
 
             <include
                 android:id="@+id/acco1"
-                layout="@layout/accommodation_request"
+                layout="@layout/accommodation_request_guest"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp" />
 
             <include
                 android:id="@+id/acco2"
-                layout="@layout/accommodation_request"
+                layout="@layout/accommodation_request_guest"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp" />
 
             <include
                 android:id="@+id/acco3"
-                layout="@layout/accommodation_request"
+                layout="@layout/accommodation_request_guest"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp" />
