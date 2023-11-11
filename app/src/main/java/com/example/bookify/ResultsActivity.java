@@ -46,6 +46,16 @@ public class ResultsActivity extends AppCompatActivity {
             }
         });
 
+        tile = findViewById(R.id.tile2);
+        details = tile.findViewById(R.id.details);
+        details.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ResultsActivity.this, FavoritesActivity.class);
+                startActivity(intent);
+            }
+        });
+
         editDate = findViewById(R.id.editButton);
         editDate.setOnClickListener(new View.OnClickListener() {
             @Override
