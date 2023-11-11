@@ -136,7 +136,9 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/f2">
 
-        <include layout="@layout/accomodation_view" />
+        <include
+            android:id="@+id/tile3"
+            layout="@layout/accomodation_view" />
     </FrameLayout>
 
     <FrameLayout
