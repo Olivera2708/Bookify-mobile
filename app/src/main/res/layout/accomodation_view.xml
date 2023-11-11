@@ -46,7 +46,7 @@
                 android:layout_marginStart="10dp"
                 android:fontFamily="@font/montserrat_medium"
                 android:text="Test Apartman Hotel Name"
-                android:textColor="@color/black"
+                android:textColor="?attr/textFillColor"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.14"
@@ -59,7 +59,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Bulevar Kneza Milos 45, Novi Sad, Srbija"
-                android:textColor="#474747"
+                android:textColor="?attr/textFillColor"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toTopOf="@+id/price"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -76,7 +76,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat_semibold"
                 android:text="135 EUR"
-                android:textColor="@color/charcoal"
+                android:textColor="?attr/textFillColor"
                 android:textSize="13sp"
                 app:layout_constraintBottom_toTopOf="@+id/priceperday"
                 app:layout_constraintEnd_toEndOf="@+id/priceperday"
@@ -90,7 +90,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat_semibold"
                 android:text="35 EUR a day"
-                android:textColor="@color/charcoal"
+                android:textColor="?attr/textFillColor"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toBottomOf="@+id/details"
                 app:layout_constraintEnd_toStartOf="@+id/details"
@@ -140,7 +140,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/star"
-                    app:tint="@color/caribbean" />
+                    app:tint="?attr/colorOnBackground" />
 
                 <ImageView
                     android:id="@+id/star2"
@@ -151,7 +151,7 @@
                     app:layout_constraintStart_toEndOf="@id/star1"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/star"
-                    app:tint="@color/caribbean" />
+                    app:tint="?attr/colorOnBackground" />
 
                 <ImageView
                     android:id="@+id/star3"
@@ -162,7 +162,7 @@
                     app:layout_constraintStart_toEndOf="@id/star2"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/star"
-                    app:tint="@color/caribbean" />
+                    app:tint="?attr/colorOnBackground" />
 
                 <ImageView
                     android:id="@+id/star4"
@@ -173,7 +173,7 @@
                     app:layout_constraintStart_toEndOf="@id/star3"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/star"
-                    app:tint="@color/caribbean" />
+                    app:tint="?attr/colorOnBackground" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

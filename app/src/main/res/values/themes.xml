@@ -6,8 +6,12 @@
         <item name="colorPrimaryContainer">@color/off_white</item>
         <item name="colorOnPrimaryContainer">@color/charcoal</item>
 
-        <item name="colorSecondary">@color/off_white</item>
+        <item name="colorSecondary">@color/off_white</item> <!-- pozadina na card -->
         <item name="colorOnSecondary">@color/dark_grey</item>
+        <item name="iconTint">@color/charcoal</item> <!-- male ikonice -->
+        <item name="textFillColor">@color/black</item> <!-- tekst -->
+        <item name="colorOnBackground">@color/caribbean</item> <!-- zvezde -->
+        <item name="colorSecondaryContainer">@color/honeydew</item>
 
         <item name="colorPrimary">@color/charcoal</item>
         <item name="colorPrimaryDark">@color/honeydew</item>

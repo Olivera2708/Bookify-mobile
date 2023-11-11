@@ -19,7 +19,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/honeydew"
+            android:background="?attr/colorSecondaryContainer"
             android:padding="12dp"
             android:paddingHorizontal="8dp"
             android:paddingTop="8dp">
@@ -38,6 +38,7 @@
                     android:layout_height="80dp"
                     android:layout_centerHorizontal="true"
                     android:background="@drawable/account_round"
+                    android:backgroundTint="?attr/colorSecondaryContainer"
                     android:scaleType="centerCrop"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView2" />
@@ -65,13 +66,15 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Luka" />
+                            android:text="Luka"
+                            android:textColor="?attr/colorOnSecondary"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="25.10.2023."
-                            android:textSize="10dp" />
+                            android:textSize="10dp"
+                            android:textColor="?attr/colorOnSecondary" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -85,28 +88,28 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             app:srcCompat="@drawable/star"
-                            app:tint="@color/caribbean" />
+                            app:tint="?attr/iconTint" />
 
                         <ImageView
                             android:id="@+id/star2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             app:srcCompat="@drawable/star"
-                            app:tint="@color/caribbean" />
+                            app:tint="?attr/iconTint" />
 
                         <ImageView
                             android:id="@+id/star3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             app:srcCompat="@drawable/star"
-                            app:tint="@color/caribbean" />
+                            app:tint="?attr/iconTint" />
 
                         <ImageView
                             android:id="@+id/star4"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             app:srcCompat="@drawable/star"
-                            app:tint="@color/caribbean" />
+                            app:tint="?attr/iconTint" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -114,7 +117,8 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Veoma prljavo i staro. Zaobidjite!"/>
+                    android:text="Veoma prljavo i staro. Zaobidjite!"
+                    android:textColor="?attr/colorOnSecondary"/>
             </LinearLayout>
 
             <LinearLayout
