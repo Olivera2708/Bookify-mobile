@@ -48,43 +48,45 @@
             android:textSize="20sp" />
     </LinearLayout>
 
-    <HorizontalScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.39">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout5"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingHorizontal="12dp"
-            android:layout_marginTop="12dp">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
             <include
                 android:id="@+id/acco1"
                 layout="@layout/accommodation_request"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="34dp" />
+                android:layout_marginBottom="20dp" />
 
             <include
                 android:id="@+id/acco2"
                 layout="@layout/accommodation_request"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="34dp" />
+                android:layout_marginBottom="20dp" />
 
             <include
                 android:id="@+id/acco3"
                 layout="@layout/accommodation_request"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="12dp" />
+                android:layout_marginBottom="20dp" />
 
         </LinearLayout>
-    </HorizontalScrollView>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
