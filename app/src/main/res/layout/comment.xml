@@ -19,7 +19,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/battleship"
+            android:background="@color/honeydew"
             android:padding="12dp"
             android:paddingHorizontal="8dp"
             android:paddingTop="8dp">
