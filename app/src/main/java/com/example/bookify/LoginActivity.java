@@ -20,7 +20,13 @@ public class LoginActivity extends AppCompatActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         binding.btnGuest.setOnClickListener(v -> {
-            Intent intent = new Intent(LoginActivity.this, ResultsActivity.class);
+            Intent intent = new Intent(LoginActivity.this, LandingActivity.class);
+            startActivity(intent);
+            finish();
+        });
+
+        binding.btnLogin.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, LandingActivity.class);
             startActivity(intent);
             finish();
         });

@@ -124,7 +124,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/stars"
-                android:layout_width="120dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toTopOf="@id/apartment_image"
                 app:layout_constraintEnd_toEndOf="@id/apartment_image"
