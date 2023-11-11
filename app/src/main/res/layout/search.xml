@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:padding="10dp"
-            android:background="@color/light_grey">
+            android:background="?attr/colorSecondary">
 
             <ImageView
                 android:id="@+id/locationIcon"
@@ -33,7 +33,8 @@
                 android:layout_marginTop="10dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/location" />
+                app:srcCompat="@drawable/location"
+                app:tint="?attr/iconTint"/>
 
             <EditText
                 android:id="@+id/locationInput"
@@ -60,7 +61,8 @@
                 android:layout_marginTop="10dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/locationIcon"
-                app:srcCompat="@drawable/calendar" />
+                app:srcCompat="@drawable/calendar"
+                app:tint="?attr/iconTint" />
 
             <Button
                 android:id="@+id/dateInput"
@@ -84,7 +86,8 @@
                 android:layout_marginTop="10dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/calendarIcon"
-                app:srcCompat="@drawable/person" />
+                app:srcCompat="@drawable/person"
+                app:tint="?attr/iconTint" />
 
             <EditText
                 android:id="@+id/personInput"
@@ -107,6 +110,8 @@
                 android:layout_height="40dp"
                 android:layout_marginStart="8dp"
                 android:text="Search"
+                android:backgroundTint="@color/charcoal"
+                android:textColor="@color/white"
                 android:layout_marginTop="12dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
