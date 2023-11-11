@@ -11,6 +11,7 @@
         <item name="iconTint">@color/honeydew</item>
         <item name="textFillColor">@color/white</item>
         <item name="colorOnBackground">@color/lemon</item>
+        <item name="colorSecondaryContainer">@color/charcoal</item>
 
         <item name="colorPrimary">@color/off_white</item>
         <item name="colorPrimaryDark">@color/dark_grey</item>

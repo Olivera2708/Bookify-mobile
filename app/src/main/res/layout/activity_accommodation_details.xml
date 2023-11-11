@@ -285,13 +285,11 @@
 
         </LinearLayout>
 
-        <!--    ovde idu komentari i ocene-->
         <LinearLayout
             android:id="@+id/ratingLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="12dp"
-            android:gravity="left"
+            android:layout_marginHorizontal="0dp"
             android:orientation="vertical"
             android:padding="10dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -322,9 +320,9 @@
                 app:cardCornerRadius="20dp">
 
                 <LinearLayout
-                    android:background="?popupMenuBackground"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="?android:windowBackground"
                     android:orientation="vertical">
                     <include layout="@layout/comment" />
                     <include layout="@layout/comment" />
