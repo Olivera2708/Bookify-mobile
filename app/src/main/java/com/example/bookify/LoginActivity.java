@@ -30,6 +30,12 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
+
+        binding.btnRegister.setOnClickListener(v->{
+            Intent intent = new Intent(LoginActivity.this, RegistrationActivity.class);
+            startActivity(intent);
+            finish();
+        });
     }
 
     public void openForgotPasswordActivity(View view) {

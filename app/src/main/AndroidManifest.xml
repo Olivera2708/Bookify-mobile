@@ -15,6 +15,9 @@
         android:theme="@style/Theme.Bookify"
         tools:targetApi="31">
         <activity
+            android:name=".RegistrationActivity"
+            android:exported="false" />
+        <activity
             android:name=".ForgotPasswordActivity"
             android:exported="false" />
         <activity
@@ -28,15 +31,16 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".ResultsActivity"
-            android:exported="false"/>
+            android:exported="false" />
         <activity
             android:name=".AccommodationDetailsActivity"
-            android:exported="false"/>
+            android:exported="false" />
 
         <meta-data
             android:name="preloaded_fonts"

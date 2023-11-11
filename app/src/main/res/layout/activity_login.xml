@@ -73,7 +73,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
-                android:background="@drawable/button"
                 android:text="@string/login"
                 tools:layout_editor_absoluteX="157dp"
                 tools:layout_editor_absoluteY="390dp" />
@@ -97,7 +96,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="start|bottom"
                     android:layout_marginTop="30dp"
-                    android:background="@drawable/button"
                     android:text="@string/register"
                     tools:layout_editor_absoluteX="157dp"
                     tools:layout_editor_absoluteY="390dp" />
@@ -117,7 +115,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|end"
                     android:layout_marginTop="30dp"
-                    android:background="@drawable/button"
                     android:text="@string/continue_guest"
                     tools:layout_editor_absoluteX="157dp"
                     tools:layout_editor_absoluteY="390dp" />
