@@ -19,8 +19,6 @@ import com.example.bookify.databinding.FragmentRegistrationAccountInfoBinding;
  */
 public class RegistrationFragmentAccountInfo extends Fragment {
 
-    private FragmentRegistrationAccountInfoBinding binding;
-
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -75,5 +73,6 @@ public class RegistrationFragmentAccountInfo extends Fragment {
                         getActivity(), false, R.id.registration);
             }
         });
-        return view;    }
+        return view;
+    }
 }
