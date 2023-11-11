@@ -16,6 +16,8 @@
     <string name="dateFromTo">Date from - Date to</string>
     <string name="top_locations">Top locations</string>
     <string name="top_accommodations">Top accommodations</string>
+    <string name="favorites">Favorites</string>
+    <string name="remove">Remove</string>
 
     <string name="free_wifi">Free WiFi</string>
     <string name="free_parking">Free parking</string>
