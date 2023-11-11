@@ -39,4 +39,16 @@
     <string name="deposit_box">Deposit box</string>
     <string name="non_smoking">Non-smoking</string>
     <string name="city_center">City center</string>
+
+    <string name="you_not_internet">You are not connected to the Internet</string>
+    <string name="you_internet">You are connected to the Internet</string>
+    <string name="login">Log in</string>
+    <string name="connect">Connect</string>
+    <string name="lost">You lost the connect</string>
+    <string name="closing">Closing app</string>
+    <string name="register">Register</string>
+    <string name="send">Send</string>
+    <string name="check_email">Check email</string>
+    <string name="continue_guest">Continue as guest</string>
+    <string name="forget_password">Forget your password?</string>
 </resources>

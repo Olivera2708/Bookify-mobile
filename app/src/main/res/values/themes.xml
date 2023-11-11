@@ -18,6 +18,8 @@
         <item name="colorOutline">@color/caribbean</item>
 
         <item name="android:fontFamily">@font/montserrat</item>
+
+        <item name="logo">@drawable/logo3</item>
     </style>
 
     <style name="Theme.Bookify" parent="Base.Theme.Bookify" />
