@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/top_rounded"
+    android:padding="15dp">
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="70dp"
+        android:layout_height="3dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/dark_grey"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/textInputLayout"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+        android:layout_width="230dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="30dp">
+
+        <AutoCompleteTextView
+            android:id="@+id/filled_exposed"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="0dp"
+            android:hint="@string/accommodation"
+            android:inputType="none">
+
+        </AutoCompleteTextView>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <View
+        android:id="@+id/lineSort"
+        android:layout_width="300dp"
+        android:layout_height="3dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:background="?colorOutline"/>
+
+    <TextView
+        android:id="@+id/priceText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/date"
+        android:textSize="18sp" />
+
+    <View
+        android:id="@+id/linePrice"
+        android:layout_width="60dp"
+        android:layout_height="3dp"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginVertical="0dp"
+        android:background="?colorOutline" />
+
+    <Button
+        android:id="@+id/editButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:background="@android:color/transparent"
+        android:drawableRight="@drawable/edit"
+        android:textColor="?attr/colorOnSecondary"
+        android:text="12.5.2023. - 16.5.2023."
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/calendarIcon"
+        app:layout_constraintStart_toEndOf="@+id/calendarIcon"
+        app:layout_constraintTop_toTopOf="@+id/calendarIcon" />
+
+    <TextView
+        android:id="@+id/statusText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:text="@string/status"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/priceBar" />
+
+    <View
+        android:id="@+id/lineFilter"
+        android:layout_width="60dp"
+        android:layout_height="3dp"
+        android:layout_marginHorizontal="10dp"
+        android:background="?colorOutline"
+        app:layout_constraintStart_toStartOf="@id/filterText"
+        app:layout_constraintTop_toBottomOf="@+id/statusText" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="10dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lineFilter">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lineFilter">
+
+            <CheckBox
+                android:id="@+id/pending"
+                android:layout_width="170dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:text="@string/pending" />
+
+            <CheckBox
+                android:id="@+id/accepted"
+                android:layout_width="170dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:text="@string/accepted" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lineFilter">
+
+            <CheckBox
+                android:id="@+id/rejected"
+                android:layout_width="170dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:text="@string/rejected" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+
+        <Button
+            android:id="@+id/remove"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/battleship"
+            android:text="@string/remove_all"
+            android:textColor="@color/charcoal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/save"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/save"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="30dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/caribbean"
+            android:text="@string/save"
+            android:textColor="@color/off_white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+    </LinearLayout>
+
+</LinearLayout>

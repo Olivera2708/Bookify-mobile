@@ -132,21 +132,21 @@
 
                     <include
                         android:id="@+id/acco1"
-                        layout="@layout/popular_accommodation"
+                        layout="@layout/popular_accommodation_guest"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="34dp" />
 
                     <include
                         android:id="@+id/acco2"
-                        layout="@layout/popular_accommodation"
+                        layout="@layout/popular_accommodation_guest"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="34dp" />
 
                     <include
                         android:id="@+id/acco3"
-                        layout="@layout/popular_accommodation"
+                        layout="@layout/popular_accommodation_guest"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="12dp" />

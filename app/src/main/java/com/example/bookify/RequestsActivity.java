@@ -3,11 +3,9 @@ package com.example.bookify;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Pair;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.text.Layout;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +14,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -27,46 +24,41 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class ResultsActivity extends AppCompatActivity {
+public class RequestsActivity extends AppCompatActivity {
 
     FloatingActionButton filterButton;
-    Button editDate;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_results);
+        setContentView(R.layout.activity_requests);
 
-        View tile = findViewById(R.id.tile);
-        Button details = tile.findViewById(R.id.details);
-        details.setOnClickListener(new View.OnClickListener() {
+        filterButton = (FloatingActionButton) findViewById(R.id.filterButton);
+        filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ResultsActivity.this, AccommodationDetailsActivity.class);
-                startActivity(intent);
+                showBottomDialog();
+            }
+        });
+    }
+
+    private void showBottomDialog(){
+        final BottomSheetDialog dialog = new BottomSheetDialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.filter_requests);
+
+        String[] sort = new String[] {"Test Apartment", "Cool hotel", "Babo's house"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.dropdown_item, sort);
+        AutoCompleteTextView autoCompleteTextView = dialog.findViewById(R.id.filled_exposed);
+        autoCompleteTextView.setAdapter(adapter);
+        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //code when something is selected
             }
         });
 
-        tile = findViewById(R.id.tile2);
-        details = tile.findViewById(R.id.details);
-        details.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ResultsActivity.this, FavoritesActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        tile = findViewById(R.id.tile3);
-        details = tile.findViewById(R.id.details);
-        details.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ResultsActivity.this, RequestsActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        editDate = findViewById(R.id.editButton);
+        Button editDate = dialog.findViewById(R.id.editButton);
         editDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -86,31 +78,6 @@ public class ResultsActivity extends AppCompatActivity {
                 });
 
                 materialDatePicker.show(getSupportFragmentManager(), "tag");
-            }
-        });
-
-        filterButton = (FloatingActionButton) findViewById(R.id.filterButton);
-        filterButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showBottomDialog();
-            }
-        });
-    }
-
-    private void showBottomDialog(){
-        final BottomSheetDialog dialog = new BottomSheetDialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.filter);
-
-        String[] sort = new String[] {"Price lowest first", "Price highest first", "Name"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.dropdown_item, sort);
-        AutoCompleteTextView autoCompleteTextView = dialog.findViewById(R.id.filled_exposed);
-        autoCompleteTextView.setAdapter(adapter);
-        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //code when something is selected
             }
         });
 
