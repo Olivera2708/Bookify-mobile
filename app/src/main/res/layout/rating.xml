@@ -41,6 +41,8 @@
                     android:progressTint="?attr/colorOnBackground"
                     android:numStars="5"
                     android:rating="3.5"
+                    android:scaleY="0.8"
+                    android:scaleX="0.8"
                     android:isIndicator="true"/>
 
                 <TextView
