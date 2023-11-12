@@ -1,5 +1,6 @@
 package com.example.bookify;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Pair;
 
@@ -9,6 +10,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Layout;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -18,10 +20,12 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationBarView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -35,7 +39,7 @@ public class ResultsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
-
+        setBottomNavigation();
         View tile = findViewById(R.id.tile);
         Button details = tile.findViewById(R.id.details);
         details.setOnClickListener(new View.OnClickListener() {
@@ -119,5 +123,34 @@ public class ResultsActivity extends AppCompatActivity {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
+    }
+    private void setBottomNavigation() {
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigaiton);
+        bottomNavigationView.setSelectedItemId(R.id.navigation_home);
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                if (item.getItemId() == R.id.navigation_home) {
+                    Intent intent = new Intent(ResultsActivity.this, LandingActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else if (item.getItemId() == R.id.navigation_account) {
+                    Intent intent = new Intent(ResultsActivity.this, AccountDetailsActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else if (item.getItemId() == R.id.navigation_reservations) {
+                    Intent intent = new Intent(ResultsActivity.this, ResultsActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else if (item.getItemId() == R.id.navigation_favorites) {
+                    Intent intent = new Intent(ResultsActivity.this, FavoritesActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else if (item.getItemId() == R.id.navigation_notifications) {
+                   return true;
+                }
+                return false;
+            }
+        });
     }
 }

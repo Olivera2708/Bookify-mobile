@@ -1,12 +1,15 @@
 package com.example.bookify;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Pair;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -15,10 +18,12 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationBarView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -32,7 +37,7 @@ public class RequestsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_requests);
-
+        setBottomNavigation();
         filterButton = (FloatingActionButton) findViewById(R.id.filterButton);
         filterButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,5 +91,32 @@ public class RequestsActivity extends AppCompatActivity {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
+    }
+    private void setBottomNavigation() {
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigaiton);
+        bottomNavigationView.setSelectedItemId(R.id.navigation_reservations);
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                if (item.getItemId() == R.id.navigation_home) {
+                    Intent intent = new Intent(RequestsActivity.this, LandingActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else if (item.getItemId() == R.id.navigation_account) {
+                    Intent intent = new Intent(RequestsActivity.this, AccountDetailsActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else if (item.getItemId() == R.id.navigation_reservations) {
+                    return false;
+                } else if (item.getItemId() == R.id.navigation_favorites) {
+                    Intent intent = new Intent(RequestsActivity.this, FavoritesActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else if (item.getItemId() == R.id.navigation_notifications) {
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 }
