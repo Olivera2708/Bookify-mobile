@@ -79,9 +79,16 @@ public class LandingActivity extends AppCompatActivity {
         details.setOnClickListener(v -> {
             ShowDialog(R.layout.report);
         });
+
+        accoLayout = findViewById(R.id.acco3);
+        details = accoLayout.findViewById(R.id.details);
+        details.setOnClickListener(v -> {
+            Intent intent = new Intent(LandingActivity.this, AccountDetailsActivity.class);
+            startActivity(intent);
+        });
     }
 
-    private void ShowDialog(int id){
+    private void ShowDialog(int id) {
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(id);

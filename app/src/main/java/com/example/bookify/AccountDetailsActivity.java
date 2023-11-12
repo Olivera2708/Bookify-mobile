@@ -34,6 +34,7 @@ public class AccountDetailsActivity extends AppCompatActivity {
         setSaveButtonAction();
         setBottomNavigation();
         setAccountPictureChange();
+        setChangePasswordAction();
     }
 
     private void setAccountPictureChange() {
