@@ -71,16 +71,20 @@ public class LandingActivity extends AppCompatActivity {
         View accoLayout = findViewById(R.id.acco1);
         Button details = accoLayout.findViewById(R.id.details);
         details.setOnClickListener(v -> {
-            ShowDialog();
+            ShowDialog(R.layout.new_comment);
+        });
+
+        accoLayout = findViewById(R.id.acco2);
+        details = accoLayout.findViewById(R.id.details);
+        details.setOnClickListener(v -> {
+            ShowDialog(R.layout.report);
         });
     }
 
-    private void ShowDialog(){
+    private void ShowDialog(int id){
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.new_comment);
-
-
+        dialog.setContentView(id);
 
         dialog.show();
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
