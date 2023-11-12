@@ -86,7 +86,7 @@ public class LandingActivity extends AppCompatActivity {
         accoLayout = findViewById(R.id.acco3);
         details = accoLayout.findViewById(R.id.details);
         details.setOnClickListener(v -> {
-            Intent intent = new Intent(LandingActivity.this, AccountDetailsActivity.class);
+            Intent intent = new Intent(LandingActivity.this, AccommodationUpdateActivity.class);
             startActivity(intent);
         });
 

@@ -5,10 +5,104 @@
     android:layout_height="match_parent"
     tools:context=".AccommodationFragmentLocation">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="15dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="left"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/country" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/country">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/countryInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="10dp"
+                    android:ems="10"
+                    android:inputType="text"
+                    tools:layout_editor_absoluteX="91dp"
+                    tools:layout_editor_absoluteY="142dp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/city" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/city">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/cityInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="10dp"
+                    android:ems="10"
+                    android:inputType="text"
+                    tools:layout_editor_absoluteX="91dp"
+                    tools:layout_editor_absoluteY="142dp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/street_address" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/street_address">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/streetAddressInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="10dp"
+                    android:ems="10"
+                    android:inputType="text"
+                    tools:layout_editor_absoluteX="91dp"
+                    tools:layout_editor_absoluteY="142dp" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/zip_code" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/zip_code">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/zipCodeInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="10dp"
+                    android:ems="10"
+                    android:inputType="text"
+                    tools:layout_editor_absoluteX="91dp"
+                    tools:layout_editor_absoluteY="142dp" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+    </LinearLayout>
+
 
 </FrameLayout>

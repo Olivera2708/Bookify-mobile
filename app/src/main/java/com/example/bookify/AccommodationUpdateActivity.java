@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
+import android.view.View;
 
 import com.example.bookify.databinding.ActivityAccommodationUpdateBinding;
 
@@ -35,8 +36,12 @@ public class AccommodationUpdateActivity extends AppCompatActivity {
 
         binding.next.setOnClickListener(v -> {
             if (counter < fragments.length) {
+                binding.previous.setVisibility(View.VISIBLE);
                 FragmentTransition.to(fragments[counter++], AccommodationUpdateActivity.this, true,
                         R.id.accommodationFragment);
+            }
+            if(counter==fragments.length-1){
+                binding.next.setText("Submit");
             }
         });
 
@@ -44,6 +49,9 @@ public class AccommodationUpdateActivity extends AppCompatActivity {
             if (counter >= 0) {
                 FragmentTransition.to(fragments[counter--], AccommodationUpdateActivity.this, true,
                         R.id.accommodationFragment);
+            }
+            if(counter==0){
+                binding.previous.setVisibility(View.INVISIBLE);
             }
         });
     }

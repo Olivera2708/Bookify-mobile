@@ -91,4 +91,8 @@
     <string name="previous">Previous</string>
     <string name="property_name">Property name</string>
     <string name="description">Description</string>
+    <string name="country">Country</string>
+    <string name="city">City</string>
+    <string name="street_address">Street address</string>
+    <string name="zip_code">Zip code</string>
 </resources>
