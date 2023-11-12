@@ -71,16 +71,31 @@ public class AccountDetailsActivity extends AppCompatActivity {
             }
         });
     }
-
     private void setBottomNavigation() {
-        BottomNavigationView btm = findViewById(R.id.bottom_navigaiton);
-        btm.setSelectedItemId(R.id.navigation_account);
-        int nav_account = R.id.navigation_account;
-        btm.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigaiton);
+        bottomNavigationView.setSelectedItemId(R.id.navigation_account);
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                // TO-DO
-                return true;
+                if (item.getItemId() == R.id.navigation_home) {
+                    Intent intent = new Intent(AccountDetailsActivity.this, LandingActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else if (item.getItemId() == R.id.navigation_account) {
+                    return false;
+                } else if (item.getItemId() == R.id.navigation_reservations) {
+                    Intent intent = new Intent(AccountDetailsActivity.this, RequestsActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else if (item.getItemId() == R.id.navigation_favorites) {
+                    Intent intent = new Intent(AccountDetailsActivity.this, FavoritesActivity.class);
+                    startActivity(intent);
+                    finish();
+                } else if (item.getItemId() == R.id.navigation_notifications) {
+                   return true;
+                }
+                return false;
             }
         });
     }
