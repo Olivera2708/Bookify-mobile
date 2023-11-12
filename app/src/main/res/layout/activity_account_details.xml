@@ -25,7 +25,8 @@
                 android:id="@+id/account_image"
                 android:layout_width="match_parent"
                 android:layout_height="227dp"
-                android:src="@drawable/account_round" />
+                android:src="@drawable/account_round"
+                app:tint="?attr/iconTint" />
             <include layout="@layout/account_information" />
             <include layout="@layout/user_information" />
 
