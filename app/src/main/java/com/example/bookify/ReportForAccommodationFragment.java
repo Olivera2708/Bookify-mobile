@@ -1,12 +1,15 @@
 package com.example.bookify;
 
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.anychart.APIlib;
 import com.anychart.AnyChart;
@@ -75,14 +78,20 @@ public class ReportForAccommodationFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_report_for_accommodation, container, false);
-        secondExample(view);
+        charts(view);
         return view;
     }
 
-    private void secondExample(View view){
+    private void charts(View view){
         AnyChartView incomeYearChart = view.findViewById(R.id.incomeYearChart);
         APIlib.getInstance().setActiveAnyChartView(incomeYearChart);
         Cartesian cartesianIncome = AnyChart.column();
+
+        ColorDrawable colorDrawable = (ColorDrawable) getActivity().getWindow().getDecorView().getBackground();
+        String hexColor = String.format("#%06X", (0xFFFFFF & colorDrawable.getColor()));
+
+        cartesianIncome.background().enabled(true);
+        cartesianIncome.background().fill(hexColor);
 
         List<DataEntry> data = new ArrayList<>();
         data.add(new ValueDataEntry("Jan", 120));
@@ -121,6 +130,9 @@ public class ReportForAccommodationFragment extends Fragment {
         AnyChartView reservationsYearChart = view.findViewById(R.id.reservationsYearChart);
         APIlib.getInstance().setActiveAnyChartView(reservationsYearChart);
         Cartesian cartesianReservations = AnyChart.column();
+
+        cartesianReservations.background().enabled(true);
+        cartesianReservations.background().fill(hexColor);
 
         List<DataEntry> dataReservations = new ArrayList<>();
         dataReservations.add(new ValueDataEntry("Jan", 1));
