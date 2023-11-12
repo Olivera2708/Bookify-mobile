@@ -43,27 +43,29 @@ public class AccountDetailsActivity extends AppCompatActivity {
         });
     }
 
-    private void setEditButtonAction(){
+    private void setEditButtonAction() {
         findViewById(R.id.btn_edit).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for(int id : USER_FIELDS){
+                for (int id : USER_FIELDS) {
                     findViewById(id).setEnabled(true);
                 }
             }
         });
     }
-    private void setSaveButtonAction(){
+
+    private void setSaveButtonAction() {
         findViewById(R.id.btn_save).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for(int id : USER_FIELDS){
+                for (int id : USER_FIELDS) {
                     findViewById(id).setEnabled(false);
                 }
             }
         });
     }
-    private void setBottomNavigation(){
+
+    private void setBottomNavigation() {
         BottomNavigationView btm = findViewById(R.id.bottom_navigaiton);
         btm.setSelectedItemId(R.id.navigation_account);
         int nav_account = R.id.navigation_account;
@@ -73,6 +75,12 @@ public class AccountDetailsActivity extends AppCompatActivity {
                 // TO-DO
                 return true;
             }
+        });
+    }
+
+    private void setChangePasswordAction() {
+        findViewById(R.id.btnEditPassword).setOnClickListener(v -> {
+
         });
     }
 }
