@@ -24,21 +24,21 @@
         <item name="android:fontFamily">@font/montserrat</item>
 
         <item name="logo">@drawable/logo3</item>
-        <item name="bottomNavigationStyle">@style/Widget.App.BottomNavigationView</item>
-        <item name="android:navigationBarColor">@color/charcoal</item>
+<!--        <item name="bottomNavigationStyle">@style/Widget.App.BottomNavigationView</item>-->
+<!--        <item name="android:navigationBarColor">@color/charcoal</item>-->
     </style>
 
-    <style name="Widget.App.BottomNavigationView" parent="Widget.Material3.BottomNavigationView">
-        <item name="materialThemeOverlay">@style/ThemeOverlay.App.BottomNavigationView</item>
-    </style>
+<!--    <style name="Widget.App.BottomNavigationView" parent="Widget.Material3.BottomNavigationView">-->
+<!--        <item name="materialThemeOverlay">@style/ThemeOverlay.App.BottomNavigationView</item>-->
+<!--    </style>-->
 
-    <style name="ThemeOverlay.App.BottomNavigationView" parent="">
-        <item name="colorSurface">@color/charcoal</item>
-        <item name="colorOnSurfaceVariant">@color/lemon</item>
-        <item name="colorOnSurface">@color/lemon</item>
-        <item name="colorOnSecondaryContainer">@color/charcoal</item>
+<!--    <style name="ThemeOverlay.App.BottomNavigationView" parent="">-->
+<!--        <item name="colorSurface">@color/charcoal</item>-->
+<!--        <item name="colorOnSurfaceVariant">@color/lemon</item>-->
+<!--        <item name="colorOnSurface">@color/lemon</item>-->
+<!--        <item name="colorOnSecondaryContainer">@color/charcoal</item>-->
 
-    </style>
+<!--    </style>-->
 
 
     <style name="Theme.Bookify" parent="Base.Theme.Bookify" />

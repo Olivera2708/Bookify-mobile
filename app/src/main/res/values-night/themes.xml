@@ -23,6 +23,7 @@
         <item name="android:fontFamily">@font/montserrat</item>
 
         <item name="logo">@drawable/logo</item>
+        <item name="android:navigationBarColor">@color/charcoal</item>
     </style>
 
     <style name="Theme.Bookify" parent="Base.Theme.Bookify" />
