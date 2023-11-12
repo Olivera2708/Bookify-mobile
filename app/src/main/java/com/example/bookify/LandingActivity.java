@@ -23,6 +23,16 @@ public class LandingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing);
 
+        View loc1 = findViewById(R.id.acco1);
+        Button b = loc1.findViewById(R.id.details);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LandingActivity.this, ReportsActivity.class);
+                startActivity(intent);
+            }
+        });
+
         View searchLayout = findViewById(R.id.searchLayout);
         editDate = searchLayout.findViewById(R.id.dateInput);
         editDate.setOnClickListener(new View.OnClickListener() {
