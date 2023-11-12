@@ -3,11 +3,21 @@ package com.example.bookify;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Pair;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 
@@ -18,6 +28,7 @@ import java.util.Locale;
 public class LandingActivity extends AppCompatActivity {
     Button editDate;
     Button search;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,5 +66,30 @@ public class LandingActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
+        View accoLayout = findViewById(R.id.acco1);
+        Button details = accoLayout.findViewById(R.id.details);
+        details.setOnClickListener(v -> {
+            ShowDialog(R.layout.new_comment);
+        });
+
+        accoLayout = findViewById(R.id.acco2);
+        details = accoLayout.findViewById(R.id.details);
+        details.setOnClickListener(v -> {
+            ShowDialog(R.layout.report);
+        });
+    }
+
+    private void ShowDialog(int id){
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(id);
+
+        dialog.show();
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().setGravity(Gravity.CENTER_VERTICAL);
     }
 }
