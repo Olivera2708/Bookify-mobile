@@ -1,159 +1,176 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".LandingActivity">
 
-    <LinearLayout
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigaiton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/bottom_nav_menu_guest"
+        />
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <include
-            android:id="@+id/searchLayout"
-            layout="@layout/search"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <LinearLayout
-            android:id="@+id/linearLayout4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:orientation="vertical"
-            android:padding="10dp">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <View
-                    android:layout_width="3dp"
-                    android:layout_height="24dp"
-                    android:layout_marginStart="12dp"
-                    android:background="@drawable/all_rounded"
-                    android:backgroundTint="@color/caribbean"
-                    app:layout_constraintStart_toStartOf="@id/filterText"
-                    app:layout_constraintTop_toBottomOf="@id/filterText" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="6dp"
-                    android:fontFamily="@font/montserrat_medium"
-                    android:text="@string/top_locations"
-                    android:textAlignment="center"
-                    android:textSize="20sp" />
-            </LinearLayout>
-
-            <HorizontalScrollView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="12dp">
-
-                    <include
-                        android:id="@+id/loc1"
-                        layout="@layout/popular_location"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="34dp" />
-
-                    <include
-                        android:id="@+id/loc2"
-                        layout="@layout/popular_location"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="34dp" />
-
-                    <include
-                        android:id="@+id/loc3"
-                        layout="@layout/popular_location"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="12dp" />
-
-                </LinearLayout>
-            </HorizontalScrollView>
-        </LinearLayout>
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigaiton"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:orientation="vertical"
-            android:padding="10dp"
-            android:layout_marginBottom="20dp">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include
+                android:id="@+id/searchLayout"
+                layout="@layout/search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:id="@+id/linearLayout4"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <View
-                    android:layout_width="3dp"
-                    android:layout_height="24dp"
-                    android:layout_marginStart="12dp"
-                    android:background="@drawable/all_rounded"
-                    android:backgroundTint="@color/caribbean"
-                    app:layout_constraintStart_toStartOf="@id/filterText"
-                    app:layout_constraintTop_toBottomOf="@id/filterText" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="6dp"
-                    android:fontFamily="@font/montserrat_medium"
-                    android:text="@string/top_accommodations"
-                    android:textAlignment="center"
-                    android:textSize="20sp" />
-            </LinearLayout>
-
-            <HorizontalScrollView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp">
+                android:gravity="left"
+                android:orientation="vertical"
+                android:padding="10dp">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="12dp">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
-                    <include
-                        android:id="@+id/acco1"
-                        layout="@layout/popular_accommodation_guest"
+                    <View
+                        android:layout_width="3dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="12dp"
+                        android:background="@drawable/all_rounded"
+                        android:backgroundTint="@color/caribbean"
+                        app:layout_constraintStart_toStartOf="@id/filterText"
+                        app:layout_constraintTop_toBottomOf="@id/filterText" />
+
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="34dp" />
-
-                    <include
-                        android:id="@+id/acco2"
-                        layout="@layout/popular_accommodation_guest"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="34dp" />
-
-                    <include
-                        android:id="@+id/acco3"
-                        layout="@layout/popular_accommodation_guest"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="12dp" />
-
+                        android:layout_marginHorizontal="6dp"
+                        android:fontFamily="@font/montserrat_medium"
+                        android:text="@string/top_locations"
+                        android:textAlignment="center"
+                        android:textSize="20sp" />
                 </LinearLayout>
-            </HorizontalScrollView>
-        </LinearLayout>
-    </LinearLayout>
 
-</ScrollView>
+                <HorizontalScrollView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="12dp">
+
+                        <include
+                            android:id="@+id/loc1"
+                            layout="@layout/popular_location"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="34dp" />
+
+                        <include
+                            android:id="@+id/loc2"
+                            layout="@layout/popular_location"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="34dp" />
+
+                        <include
+                            android:id="@+id/loc3"
+                            layout="@layout/popular_location"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="12dp" />
+
+                    </LinearLayout>
+                </HorizontalScrollView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:gravity="left"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:layout_width="3dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="12dp"
+                        android:background="@drawable/all_rounded"
+                        android:backgroundTint="@color/caribbean"
+                        app:layout_constraintStart_toStartOf="@id/filterText"
+                        app:layout_constraintTop_toBottomOf="@id/filterText" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="6dp"
+                        android:fontFamily="@font/montserrat_medium"
+                        android:text="@string/top_accommodations"
+                        android:textAlignment="center"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+                <HorizontalScrollView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="12dp">
+
+                        <include
+                            android:id="@+id/acco1"
+                            layout="@layout/popular_accommodation_guest"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="34dp" />
+
+                        <include
+                            android:id="@+id/acco2"
+                            layout="@layout/popular_accommodation_guest"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="34dp" />
+
+                        <include
+                            android:id="@+id/acco3"
+                            layout="@layout/popular_accommodation_guest"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="12dp" />
+
+                    </LinearLayout>
+                </HorizontalScrollView>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
