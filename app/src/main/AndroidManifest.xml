@@ -18,6 +18,9 @@
             android:name=".ReportsActivity"
             android:exported="false" />
         <activity
+            android:name=".AccountDetailsActivity"
+            android:exported="false" />
+        <activity
             android:name=".RequestsActivity"
             android:exported="false" />
         <activity
