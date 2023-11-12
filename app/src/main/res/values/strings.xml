@@ -81,4 +81,11 @@
     <string name="comment">Comment</string>
     <string name="reason">Reason</string>
     <string name="report">Report</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="edit_account">Edit Account</string>
+    <string name="save_account">Save Changes</string>
+    <string name="edit_password">Change Password</string>
+    <string name="user_information">User Information</string>
+    <string name="account_information">Account Information</string>
+    <string name="logout">Logout</string>
 </resources>
