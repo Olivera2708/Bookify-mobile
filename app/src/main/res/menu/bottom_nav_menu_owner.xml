@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_home"
+        android:title="@string/home"
+        android:icon="@drawable/ic_home"
+        />
+    <item
+        android:id="@+id/navigation_accommodation"
+        android:title="@string/accommodation"
+        android:icon="@drawable/ic_accomodations"
+        />
+    <item
+        android:id="@+id/navigation_reservations"
+        android:title="@string/reservations"
+        android:icon="@drawable/ic_reservations"/>
+    <item
+        android:id="@+id/navigation_notifications"
+        android:title="@string/notifications"
+        android:icon="@drawable/ic_notification"
+        />
+    <item
+        android:id="@+id/navigation_account"
+        android:title="@string/account"
+        android:icon="@drawable/ic_account"
+        />
+</menu>
