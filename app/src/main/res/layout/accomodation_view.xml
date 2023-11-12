@@ -24,12 +24,28 @@
             android:layout_height="140dp"
             android:background="?attr/colorSecondary">
 
+            <RatingBar
+                android:id="@+id/stars"
+                style="@style/Widget.AppCompat.RatingBar.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:isIndicator="true"
+                android:numStars="5"
+                android:progressTint="?attr/colorOnBackground"
+                android:rating="4"
+                android:scaleX="1.5"
+                android:scaleY="1.5"
+                app:layout_constraintEnd_toEndOf="@+id/apartment_image"
+                app:layout_constraintStart_toStartOf="@+id/apartment_image"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <androidx.cardview.widget.CardView
                 android:id="@+id/apartment_image"
                 android:layout_width="135dp"
                 android:layout_height="90dp"
                 app:cardCornerRadius="15dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="14dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/stars" >
 
@@ -122,60 +138,60 @@
                 app:layout_constraintTop_toTopOf="@id/details"
                 app:layout_constraintBottom_toBottomOf="@id/details"/>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/stars"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toTopOf="@id/apartment_image"
-                app:layout_constraintEnd_toEndOf="@id/apartment_image"
-                app:layout_constraintStart_toStartOf="@id/apartment_image"
-                app:layout_constraintTop_toTopOf="parent">
+<!--            <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--                android:id="@+id/stars"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                app:layout_constraintBottom_toTopOf="@id/apartment_image"-->
+<!--                app:layout_constraintEnd_toEndOf="@id/apartment_image"-->
+<!--                app:layout_constraintStart_toStartOf="@id/apartment_image"-->
+<!--                app:layout_constraintTop_toTopOf="parent">-->
 
-                <ImageView
-                    android:id="@+id/star1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/star2"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/star"
-                    app:tint="?attr/colorOnBackground" />
+<!--                <ImageView-->
+<!--                    android:id="@+id/star1"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                    app:layout_constraintEnd_toStartOf="@id/star2"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="parent"-->
+<!--                    app:srcCompat="@drawable/star"-->
+<!--                    app:tint="?attr/colorOnBackground" />-->
 
-                <ImageView
-                    android:id="@+id/star2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/star3"
-                    app:layout_constraintStart_toEndOf="@id/star1"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/star"
-                    app:tint="?attr/colorOnBackground" />
+<!--                <ImageView-->
+<!--                    android:id="@+id/star2"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                    app:layout_constraintEnd_toStartOf="@id/star3"-->
+<!--                    app:layout_constraintStart_toEndOf="@id/star1"-->
+<!--                    app:layout_constraintTop_toTopOf="parent"-->
+<!--                    app:srcCompat="@drawable/star"-->
+<!--                    app:tint="?attr/colorOnBackground" />-->
 
-                <ImageView
-                    android:id="@+id/star3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/star4"
-                    app:layout_constraintStart_toEndOf="@id/star2"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/star"
-                    app:tint="?attr/colorOnBackground" />
+<!--                <ImageView-->
+<!--                    android:id="@+id/star3"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                    app:layout_constraintEnd_toStartOf="@id/star4"-->
+<!--                    app:layout_constraintStart_toEndOf="@id/star2"-->
+<!--                    app:layout_constraintTop_toTopOf="parent"-->
+<!--                    app:srcCompat="@drawable/star"-->
+<!--                    app:tint="?attr/colorOnBackground" />-->
 
-                <ImageView
-                    android:id="@+id/star4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/star3"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/star"
-                    app:tint="?attr/colorOnBackground" />
+<!--                <ImageView-->
+<!--                    android:id="@+id/star4"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintStart_toEndOf="@id/star3"-->
+<!--                    app:layout_constraintTop_toTopOf="parent"-->
+<!--                    app:srcCompat="@drawable/star"-->
+<!--                    app:tint="?attr/colorOnBackground" />-->
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+<!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
