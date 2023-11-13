@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:minHeight="730dp"
     android:layout_height="match_parent"
     android:background="@drawable/top_rounded"
     android:orientation="vertical"
@@ -18,415 +19,474 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout"
-        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-        android:layout_width="230dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <AutoCompleteTextView
-            android:id="@+id/filled_exposed"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="@string/sort"
-            android:inputType="none"
-            android:padding="0dp">
-
-        </AutoCompleteTextView>
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <View
-        android:id="@+id/lineSort"
-        android:layout_width="300dp"
-        android:layout_height="3dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp"
-        android:background="?colorOutline"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
-
-    <TextView
-        android:id="@+id/priceText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/price"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/lineSort" />
-
-    <com.google.android.material.slider.RangeSlider
-        android:id="@+id/priceBar"
-        android:layout_width="330dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="0dp"
-        android:valueFrom="0"
-        android:valueTo="100"
-        app:labelBehavior="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linePrice"
-        app:trackColorInactive="?attr/colorSurfaceContainerHighest"
-        app:values="@array/initial_price_values" />
-
-    <View
-        android:id="@+id/linePrice"
-        android:layout_width="60dp"
-        android:layout_height="3dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginVertical="0dp"
-        android:background="?colorOutline"
-        app:layout_constraintStart_toStartOf="@id/priceText"
-        app:layout_constraintTop_toBottomOf="@+id/priceText" />
-
-    <TextView
-        android:id="@+id/filterText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="10dp"
-        android:text="@string/filter"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/priceBar" />
-
-    <View
-        android:id="@+id/lineFilter"
-        android:layout_width="60dp"
-        android:layout_height="3dp"
-        android:layout_gravity="center_horizontal"
-        android:background="?colorOutline"
-        app:layout_constraintStart_toStartOf="@id/filterText"
-        app:layout_constraintTop_toBottomOf="@id/filterText" />
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lineFilter">
+        android:orientation="vertical">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lineFilter">
+            android:layout_height="wrap_content">
 
-            <CheckBox
-                android:id="@+id/freeWiFi"
-                android:layout_width="170dp"
-                android:layout_height="30dp"
-                android:layout_weight="1"
-                android:text="@string/free_wifi" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                android:layout_width="230dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-            <CheckBox
-                android:id="@+id/freeParking"
-                android:layout_width="170dp"
-                android:layout_height="30dp"
-                android:layout_weight="1"
-                android:text="@string/free_parking" />
-        </LinearLayout>
+                <AutoCompleteTextView
+                    android:id="@+id/filled_exposed"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/sort"
+                    android:inputType="none"
+                    android:padding="0dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lineFilter">
+                </AutoCompleteTextView>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <CheckBox
-                android:id="@+id/airConditioning"
-                android:layout_width="170dp"
-                android:layout_height="30dp"
-                android:layout_weight="1"
-                android:text="@string/air_conditioning" />
+            <View
+                android:id="@+id/lineSort"
+                android:layout_width="300dp"
+                android:layout_height="3dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp"
+                android:background="?colorOutline"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
 
-            <CheckBox
-                android:id="@+id/familyRooms"
-                android:layout_width="170dp"
-                android:layout_height="30dp"
-                android:layout_weight="1"
-                android:text="@string/family_rooms" />
-        </LinearLayout>
+            <TextView
+                android:id="@+id/priceText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/price"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/lineSort" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lineFilter">
+            <LinearLayout
+                android:id="@+id/priceInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                app:layout_constraintStart_toStartOf="@+id/priceText"
+                app:layout_constraintTop_toTopOf="@+id/linePrice">
 
-            <CheckBox
-                android:id="@+id/terrace"
-                android:layout_width="170dp"
-                android:layout_height="30dp"
-                android:layout_weight="1"
-                android:text="@string/terrace" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/minPrice"
+                    android:layout_width="120dp"
+                    android:layout_weight="1"
+                    android:layout_marginHorizontal="40dp"
+                    android:layout_height="34dp">
 
-            <CheckBox
-                android:id="@+id/garden"
-                android:layout_width="170dp"
-                android:layout_height="30dp"
-                android:layout_weight="1"
-                android:text="@string/garden" />
-        </LinearLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:enabled="true"
+                        android:inputType="number" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lineFilter">
+                <TextView
+                    android:layout_width="30dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="30sp"
+                    android:text="-"/>
 
-            <CheckBox
-                android:id="@+id/swimmingPool"
-                android:layout_width="170dp"
-                android:layout_height="30dp"
-                android:layout_weight="1"
-                android:text="@string/swimming_pool" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/MaxPrice"
+                    android:layout_width="120dp"
+                    android:layout_weight="1"
+                    android:layout_marginHorizontal="40dp"
+                    android:layout_height="34dp">
 
-            <CheckBox
-                android:id="@+id/frontDesk"
-                android:layout_width="170dp"
-                android:layout_height="30dp"
-                android:layout_weight="1"
-                android:text="@string/front_desk" />
-        </LinearLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:enabled="true"
+                        android:inputType="number" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lineFilter">
 
-            <CheckBox
-                android:id="@+id/bar"
-                android:layout_width="170dp"
-                android:layout_height="30dp"
-                android:layout_weight="1"
-                android:text="@string/bar" />
+            <com.google.android.material.slider.RangeSlider
+                android:id="@+id/priceBar"
+                android:layout_width="330dp"
+                android:layout_height="wrap_content"
+                android:valueFrom="0"
+                android:valueTo="100"
+                app:labelBehavior="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/priceInput"
+                app:trackColorInactive="?attr/colorSurfaceContainerHighest"
+                app:values="@array/initial_price_values" />
 
-            <CheckBox
-                android:id="@+id/jacuzzi"
-                android:layout_width="170dp"
-                android:layout_height="30dp"
-                android:layout_weight="1"
-                android:text="@string/jacuzzi" />
-        </LinearLayout>
+            <View
+                android:id="@+id/linePrice"
+                android:layout_width="60dp"
+                android:layout_height="3dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginVertical="0dp"
+                android:background="?colorOutline"
+                app:layout_constraintStart_toStartOf="@id/priceText"
+                app:layout_constraintTop_toBottomOf="@+id/priceText" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lineFilter">
+            <TextView
+                android:id="@+id/filterText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:text="@string/filter"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/priceBar" />
 
-            <CheckBox
-                android:id="@+id/sauna"
-                android:layout_width="170dp"
-                android:layout_height="30dp"
-                android:layout_weight="1"
-                android:text="@string/sauna" />
+            <View
+                android:id="@+id/lineFilter"
+                android:layout_width="60dp"
+                android:layout_height="3dp"
+                android:layout_gravity="center_horizontal"
+                android:background="?colorOutline"
+                app:layout_constraintStart_toStartOf="@id/filterText"
+                app:layout_constraintTop_toBottomOf="@id/filterText" />
 
-            <CheckBox
-                android:id="@+id/heating"
-                android:layout_width="170dp"
-                android:layout_height="30dp"
-                android:layout_weight="1"
-                android:text="@string/heating" />
-        </LinearLayout>
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lineFilter">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lineFilter">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lineFilter">
 
-            <CheckBox
-                android:id="@+id/luggageStorage"
-                android:layout_width="170dp"
-                android:layout_height="30dp"
-                android:layout_weight="1"
-                android:text="@string/luggage_storage" />
+                    <CheckBox
+                        android:id="@+id/freeWiFi"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/free_wifi" />
 
-            <CheckBox
-                android:id="@+id/breakfast"
-                android:layout_width="170dp"
-                android:layout_height="30dp"
-                android:layout_weight="1"
-                android:text="@string/breakfast" />
-        </LinearLayout>
+                    <CheckBox
+                        android:id="@+id/freeParking"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/free_parking" />
+                </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lineFilter">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lineFilter">
 
-            <CheckBox
-                android:id="@+id/lunch"
-                android:layout_width="170dp"
-                android:layout_height="30dp"
-                android:layout_weight="1"
-                android:text="@string/lunch" />
+                    <CheckBox
+                        android:id="@+id/airConditioning"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/air_conditioning" />
 
-            <CheckBox
-                android:id="@+id/dinner"
-                android:layout_width="170dp"
-                android:layout_height="30dp"
-                android:layout_weight="1"
-                android:text="@string/dinner" />
-        </LinearLayout>
+                    <CheckBox
+                        android:id="@+id/familyRooms"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/family_rooms" />
+                </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lineFilter">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lineFilter">
 
-            <CheckBox
-                android:id="@+id/airportShuttle"
-                android:layout_width="170dp"
-                android:layout_height="30dp"
-                android:layout_weight="1"
-                android:text="@string/airport_shuttle" />
+                    <CheckBox
+                        android:id="@+id/terrace"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/terrace" />
 
-            <CheckBox
-                android:id="@+id/privateBathroom"
-                android:layout_width="170dp"
-                android:layout_height="30dp"
-                android:layout_weight="1"
-                android:text="@string/private_bathroom" />
-        </LinearLayout>
+                    <CheckBox
+                        android:id="@+id/garden"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/garden" />
+                </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lineFilter">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lineFilter">
 
-            <CheckBox
-                android:id="@+id/wheelchair"
-                android:layout_width="170dp"
-                android:layout_height="30dp"
-                android:layout_weight="1"
-                android:text="@string/wheelchair" />
+                    <CheckBox
+                        android:id="@+id/swimmingPool"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/swimming_pool" />
 
-            <CheckBox
-                android:id="@+id/deposit_box"
-                android:layout_width="170dp"
-                android:layout_height="30dp"
-                android:layout_weight="1"
-                android:text="@string/deposit_box" />
-        </LinearLayout>
+                    <CheckBox
+                        android:id="@+id/frontDesk"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/front_desk" />
+                </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lineFilter">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lineFilter">
 
-            <CheckBox
-                android:id="@+id/non_smoking"
-                android:layout_width="170dp"
-                android:layout_height="30dp"
-                android:layout_weight="1"
-                android:text="@string/non_smoking" />
+                    <CheckBox
+                        android:id="@+id/bar"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/bar" />
 
-            <CheckBox
-                android:id="@+id/city_center"
-                android:layout_width="170dp"
-                android:layout_height="30dp"
-                android:layout_weight="1"
-                android:text="@string/city_center" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lineFilter">
+                    <CheckBox
+                        android:id="@+id/jacuzzi"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/jacuzzi" />
+                </LinearLayout>
 
-            <CheckBox
-                android:id="@+id/hotel"
-                android:layout_width="170dp"
-                android:layout_height="30dp"
-                android:layout_weight="1"
-                android:text="@string/hotel" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lineFilter">
 
-            <CheckBox
-                android:id="@+id/apartment"
-                android:layout_width="170dp"
-                android:layout_height="30dp"
-                android:layout_weight="1"
-                android:text="@string/apartment" />
-        </LinearLayout>
-    </LinearLayout>
+                    <CheckBox
+                        android:id="@+id/sauna"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/sauna" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout6"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+                    <CheckBox
+                        android:id="@+id/heating"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/heating" />
+                </LinearLayout>
 
-        <Button
-            android:id="@+id/remove"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="140dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:layout_weight="1"
-            android:backgroundTint="@color/battleship"
-            android:text="@string/remove_all"
-            android:textColor="@color/charcoal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/save"
-            app:layout_constraintStart_toStartOf="parent" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lineFilter">
 
-        <Button
-            android:id="@+id/save"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="140dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="50dp"
-            android:layout_marginEnd="30dp"
-            android:layout_weight="1"
-            android:backgroundTint="@color/caribbean"
-            android:text="@string/save"
-            android:textColor="@color/off_white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-    </LinearLayout>
+                    <CheckBox
+                        android:id="@+id/luggageStorage"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/luggage_storage" />
+
+                    <CheckBox
+                        android:id="@+id/breakfast"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/breakfast" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lineFilter">
+
+                    <CheckBox
+                        android:id="@+id/lunch"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/lunch" />
+
+                    <CheckBox
+                        android:id="@+id/dinner"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/dinner" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lineFilter">
+
+                    <CheckBox
+                        android:id="@+id/airportShuttle"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/airport_shuttle" />
+
+                    <CheckBox
+                        android:id="@+id/privateBathroom"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/private_bathroom" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lineFilter">
+
+                    <CheckBox
+                        android:id="@+id/wheelchair"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/wheelchair" />
+
+                    <CheckBox
+                        android:id="@+id/deposit_box"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/deposit_box" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lineFilter">
+
+                    <CheckBox
+                        android:id="@+id/non_smoking"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/non_smoking" />
+
+                    <CheckBox
+                        android:id="@+id/city_center"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/city_center" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lineFilter">
+
+                    <CheckBox
+                        android:id="@+id/hotel"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/hotel" />
+
+                    <CheckBox
+                        android:id="@+id/apartment"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/apartment" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+
+                <Button
+                    android:id="@+id/remove"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/battleship"
+                    android:text="@string/remove_all"
+                    android:textColor="@color/charcoal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/save"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <Button
+                    android:id="@+id/save"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginEnd="30dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/caribbean"
+                    android:text="@string/save"
+                    android:textColor="@color/off_white"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
