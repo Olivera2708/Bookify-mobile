@@ -98,4 +98,9 @@
     <string name="filters">What can guests use at your accommodation?</string>
     <string name="photos">Photos</string>
     <string name="upload">Upload</string>
+    <string name="min_guests">Min guests</string>
+    <string name="max_guests">Max guests</string>
+    <string name="type">Type</string>
+    <string name="automatic">Automatic</string>
+    <string name="manual">Manual</string>
 </resources>
