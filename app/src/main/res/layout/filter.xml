@@ -22,7 +22,11 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_marginTop="12dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/line">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -75,47 +79,47 @@
                 android:id="@+id/priceInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center"
                 android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:orientation="horizontal"
                 app:layout_constraintStart_toStartOf="@+id/priceText"
                 app:layout_constraintTop_toTopOf="@+id/linePrice">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/minPrice"
                     android:layout_width="120dp"
-                    android:layout_weight="1"
+                    android:layout_height="34dp"
                     android:layout_marginHorizontal="40dp"
-                    android:layout_height="34dp">
+                    android:layout_weight="1">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/minPrice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"
                         android:enabled="true"
-                        android:inputType="number" />
+                        android:inputType="number"
+                        android:textSize="16sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:layout_width="30dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textSize="30sp"
-                    android:text="-"/>
+                    android:text="-"
+                    android:textSize="30sp" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/MaxPrice"
                     android:layout_width="120dp"
-                    android:layout_weight="1"
+                    android:layout_height="34dp"
                     android:layout_marginHorizontal="40dp"
-                    android:layout_height="34dp">
+                    android:layout_weight="1">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/maxPrice"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"
                         android:enabled="true"
-                        android:inputType="number" />
+                        android:inputType="number"
+                        android:textSize="16sp" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
@@ -424,6 +428,7 @@
                         android:layout_weight="1"
                         android:text="@string/city_center" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -452,8 +457,8 @@
                 android:id="@+id/linearLayout6"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_marginTop="20dp"
+                android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout">
