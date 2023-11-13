@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:cardCornerRadius="20dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:paddingTop="8dp"
+            android:paddingHorizontal="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:background="?attr/colorSecondary">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/apartment_image"
+                android:layout_width="135dp"
+                android:layout_height="90dp"
+                app:cardCornerRadius="15dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/stars" >
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/apartment"/>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/apartment_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:fontFamily="@font/montserrat_medium"
+                android:text="Test Apartman Hotel Name"
+                android:textColor="?attr/textFillColor"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.14"
+                app:layout_constraintStart_toEndOf="@+id/apartment_image"
+                app:layout_constraintTop_toTopOf="@+id/stars" />
+
+            <TextView
+                android:id="@+id/apartment_address"
+                style="@style/TextAppearance.MaterialComponents.Subtitle2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Bulevar Kneza Milos 45, Novi Sad, Srbija"
+                android:textColor="?attr/textFillColor"
+                android:textSize="10sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/apartment_name"
+                app:layout_constraintTop_toBottomOf="@id/apartment_name"
+                app:layout_constraintVertical_bias="0.0"
+                app:layout_wrapBefore="true" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+                <Button
+                    android:id="@+id/remove_accomodation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="42dp"
+                    android:fontFamily="@font/montserrat_medium"
+                    android:text="@string/edit"
+                    android:textSize="14dp"
+                    android:textAlignment="center"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginRight="5dp"
+                    android:backgroundTint="@color/charcoal"
+                    android:textColor="@color/white"/>
+
+                <Button
+                    android:id="@+id/details"
+                    android:layout_width="wrap_content"
+                    android:layout_height="42dp"
+                    android:fontFamily="@font/montserrat_medium"
+                    android:text="@string/remove"
+                    android:textSize="14dp"
+                    android:textAlignment="center"
+                    android:layout_marginBottom="4dp"
+                    android:backgroundTint="?attr/android:windowBackground"
+                    android:textColor="?attr/iconTint"/>
+
+            </LinearLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/stars"
+                android:layout_width="180dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                app:layout_constraintEnd_toEndOf="@+id/apartment_image"
+                app:layout_constraintStart_toStartOf="@+id/apartment_image"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <RatingBar
+                    android:id="@+id/starsRating"
+                    style="@style/Widget.AppCompat.RatingBar.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:isIndicator="true"
+                    android:numStars="5"
+                    android:progressTint="?attr/colorOnBackground"
+                    android:rating="4"
+                    android:scaleX="1.4"
+                    android:scaleY="1.4"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -96,6 +96,7 @@
     <string name="user_information">User Information</string>
     <string name="account_information">Account Information</string>
     <string name="logout">Logout</string>
+    <string name="edit">Edit</string>
     <string name="previous">Previous</string>
     <string name="property_name">Property name</string>
     <string name="description">Description</string>
