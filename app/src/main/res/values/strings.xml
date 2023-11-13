@@ -95,4 +95,7 @@
     <string name="city">City</string>
     <string name="street_address">Street address</string>
     <string name="zip_code">Zip code</string>
+    <string name="filters">What can guests use at your accommodation?</string>
+    <string name="photos">Photos</string>
+    <string name="upload">Upload</string>
 </resources>

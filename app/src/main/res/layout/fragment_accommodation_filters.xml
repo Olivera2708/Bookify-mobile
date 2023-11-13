@@ -5,10 +5,253 @@
     android:layout_height="match_parent"
     tools:context=".AccommodationFragmentFilters">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="15dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="left"
+            android:orientation="vertical">
+
+            <TextView
+                android:text="@string/filters"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/freeWiFi"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/free_wifi" />
+
+                    <CheckBox
+                        android:id="@+id/freeParking"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/free_parking" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/airConditioning"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/air_conditioning" />
+
+                    <CheckBox
+                        android:id="@+id/familyRooms"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/family_rooms" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/terrace"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/terrace" />
+
+                    <CheckBox
+                        android:id="@+id/garden"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/garden" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/swimmingPool"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/swimming_pool" />
+
+                    <CheckBox
+                        android:id="@+id/frontDesk"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/front_desk" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/bar"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/bar" />
+
+                    <CheckBox
+                        android:id="@+id/jacuzzi"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/jacuzzi" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/sauna"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/sauna" />
+
+                    <CheckBox
+                        android:id="@+id/heating"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/heating" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/luggageStorage"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/luggage_storage" />
+
+                    <CheckBox
+                        android:id="@+id/breakfast"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/breakfast" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/lunch"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/lunch" />
+
+                    <CheckBox
+                        android:id="@+id/dinner"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/dinner" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/airportShuttle"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/airport_shuttle" />
+
+                    <CheckBox
+                        android:id="@+id/privateBathroom"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/private_bathroom" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/wheelchair"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/wheelchair" />
+
+                    <CheckBox
+                        android:id="@+id/deposit_box"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/deposit_box" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/non_smoking"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/non_smoking" />
+
+                    <CheckBox
+                        android:id="@+id/city_center"
+                        android:layout_width="170dp"
+                        android:layout_height="30dp"
+                        android:layout_weight="1"
+                        android:text="@string/city_center" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
 
 </FrameLayout>
