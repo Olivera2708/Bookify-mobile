@@ -21,16 +21,17 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0sp"
         android:layout_marginTop="12dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/line">
+        app:layout_constraintTop_toBottomOf="@+id/line"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="0sp">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayout"
@@ -87,14 +88,18 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="120dp"
-                    android:layout_height="34dp"
-                    android:layout_marginHorizontal="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginHorizontal="30dp"
                     android:layout_weight="1">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/minPrice"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="0"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="0dp"
+                        android:hint="Min"
                         android:enabled="true"
                         android:inputType="number"
                         android:textSize="16sp" />
@@ -104,19 +109,24 @@
                     android:layout_width="30dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:textAlignment="center"
                     android:text="-"
                     android:textSize="30sp" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="120dp"
-                    android:layout_height="34dp"
-                    android:layout_marginHorizontal="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginHorizontal="30dp"
                     android:layout_weight="1">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/maxPrice"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="1000"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="0dp"
+                        android:hint="Max"
                         android:enabled="true"
                         android:inputType="number"
                         android:textSize="16sp" />
@@ -129,7 +139,7 @@
                 android:layout_width="330dp"
                 android:layout_height="wrap_content"
                 android:valueFrom="0"
-                android:valueTo="100"
+                android:valueTo="1000"
                 app:labelBehavior="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -148,14 +158,59 @@
                 app:layout_constraintTop_toBottomOf="@+id/priceText" />
 
             <TextView
+                android:id="@+id/typeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:text="@string/accommodation_type"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/priceBar" />
+
+            <View
+                android:id="@+id/lineType"
+                android:layout_width="60dp"
+                android:layout_height="3dp"
+                android:layout_gravity="center_horizontal"
+                android:background="?colorOutline"
+                app:layout_constraintStart_toStartOf="@id/typeText"
+                app:layout_constraintTop_toBottomOf="@id/typeText" />
+
+            <LinearLayout
+                android:id="@+id/typeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="6dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lineType">
+
+                <CheckBox
+                    android:id="@+id/hotel"
+                    android:layout_width="170dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="1"
+                    android:text="@string/hotel" />
+
+                <CheckBox
+                    android:id="@+id/apartment"
+                    android:layout_width="170dp"
+                    android:layout_height="30dp"
+                    android:layout_weight="1"
+                    android:text="@string/apartment" />
+            </LinearLayout>
+
+            <TextView
                 android:id="@+id/filterText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="12dp"
                 android:text="@string/filter"
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/priceBar" />
+                app:layout_constraintTop_toBottomOf="@+id/typeLayout" />
 
             <View
                 android:id="@+id/lineFilter"
@@ -170,7 +225,7 @@
                 android:id="@+id/linearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="6dp"
                 android:orientation="vertical"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -427,29 +482,6 @@
                         android:layout_height="30dp"
                         android:layout_weight="1"
                         android:text="@string/city_center" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/lineFilter">
-
-                    <CheckBox
-                        android:id="@+id/hotel"
-                        android:layout_width="170dp"
-                        android:layout_height="30dp"
-                        android:layout_weight="1"
-                        android:text="@string/hotel" />
-
-                    <CheckBox
-                        android:id="@+id/apartment"
-                        android:layout_width="170dp"
-                        android:layout_height="30dp"
-                        android:layout_weight="1"
-                        android:text="@string/apartment" />
                 </LinearLayout>
             </LinearLayout>
 
