@@ -26,15 +26,21 @@ public class FavoritesActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if (item.getItemId() == R.id.navigation_home) {
                     Intent intent = new Intent(FavoritesActivity.this, LandingActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(intent);
+                    overridePendingTransition(0,0);
                     finish();
                 } else if (item.getItemId() == R.id.navigation_account) {
                     Intent intent = new Intent(FavoritesActivity.this, AccountDetailsActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(intent);
+                    overridePendingTransition(0,0);
                     finish();
                 } else if (item.getItemId() == R.id.navigation_reservations) {
                     Intent intent = new Intent(FavoritesActivity.this, RequestsActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(intent);
+                    overridePendingTransition(0,0);
                     finish();
                 } else if (item.getItemId() == R.id.navigation_favorites) {
                     return false;
