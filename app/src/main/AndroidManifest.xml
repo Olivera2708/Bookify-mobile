@@ -18,6 +18,12 @@
             android:name=".OwnerAccommodationsActivity"
             android:exported="false" />
         <activity
+            android:name=".AccommodationUpdateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ReportsActivity"
+            android:exported="false" />
+        <activity
             android:name=".AccountDetailsActivity"
             android:exported="false" />
         <activity

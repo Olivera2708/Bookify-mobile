@@ -35,6 +35,7 @@ public class ResultsActivity extends AppCompatActivity {
 
     FloatingActionButton filterButton;
     Button editDate;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,12 +103,12 @@ public class ResultsActivity extends AppCompatActivity {
         });
     }
 
-    private void showBottomDialog(){
+    private void showBottomDialog() {
         final BottomSheetDialog dialog = new BottomSheetDialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.filter);
 
-        String[] sort = new String[] {"Price lowest first", "Price highest first", "Name"};
+        String[] sort = new String[]{"Price lowest first", "Price highest first", "Name"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.dropdown_item, sort);
         AutoCompleteTextView autoCompleteTextView = dialog.findViewById(R.id.filled_exposed);
         autoCompleteTextView.setAdapter(adapter);
@@ -124,6 +125,7 @@ public class ResultsActivity extends AppCompatActivity {
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
     }
+
     private void setBottomNavigation() {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigaiton);
         bottomNavigationView.setSelectedItemId(R.id.navigation_home);
@@ -147,7 +149,7 @@ public class ResultsActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 } else if (item.getItemId() == R.id.navigation_notifications) {
-                   return true;
+                    return true;
                 }
                 return false;
             }
