@@ -103,4 +103,10 @@
     <string name="type">Type</string>
     <string name="automatic">Automatic</string>
     <string name="manual">Manual</string>
+    <string name="cancellation_deadline">Cancellation deadline</string>
+    <string name="reservation_acceptance">Reservation acceptance</string>
+    <string name="price_per">Price per</string>
+    <string name="person">Person</string>
+    <string name="room">Room</string>
+    <string name="currency">Currency</string>
 </resources>

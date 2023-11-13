@@ -76,9 +76,9 @@
                     android:id="@+id/filled_exposed"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginBottom="10dp"
                     android:hint="@string/type"
                     android:inputType="none"
-                    android:layout_marginBottom="10dp"
                     android:padding="0dp">
 
                 </AutoCompleteTextView>
@@ -87,13 +87,13 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Reservation acceptance" />
+                android:text="@string/reservation_acceptance" />
 
             <com.google.android.material.button.MaterialButtonToggleGroup
                 android:id="@+id/toggleGroup"
                 android:layout_width="match_parent"
-                android:layout_marginBottom="10dp"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
                 app:singleSelection="true">
 
                 <com.google.android.material.button.MaterialButton
