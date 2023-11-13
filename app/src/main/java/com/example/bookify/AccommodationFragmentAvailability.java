@@ -115,7 +115,7 @@ public class AccommodationFragmentAvailability extends Fragment {
     private void addRowWithData(String data1, String data2) {
         TableRow tableRow = new TableRow(getActivity());
 
-        tableRow.setBackground(ResourcesCompat.getDrawable(getResources() ,R.drawable.border_background, null));
+        tableRow.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.border_background, null));
 
         // Set TableRow properties (optional)
         TableRow.LayoutParams layoutParams = new TableRow.LayoutParams(
@@ -131,6 +131,10 @@ public class AccommodationFragmentAvailability extends Fragment {
 
         TextView textViewData3 = createTextView("Delete");
 
+        textViewData3.setOnClickListener(v -> {
+            tableLayout.removeView(tableRow);
+        });
+
         // Add TextViews to TableRow
         tableRow.addView(textViewData1);
         tableRow.addView(textViewData2);
@@ -143,7 +147,7 @@ public class AccommodationFragmentAvailability extends Fragment {
     // Method to create a TextView
     private TextView createTextView(String text) {
         TextView textView = new TextView(getActivity());
-        textView.setBackground(ResourcesCompat.getDrawable(getResources() ,R.drawable.border_background, null));
+        textView.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.border_background, null));
 
         // Set TextView properties (optional)
         TableRow.LayoutParams layoutParams = new TableRow.LayoutParams(

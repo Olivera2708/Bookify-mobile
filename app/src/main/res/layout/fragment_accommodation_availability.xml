@@ -116,14 +116,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/border_background"
-                        android:clickable="true"
                         android:gravity="center"
                         android:padding="10dp"
                         android:text="@string/delete" />
 
                 </TableRow>
-
-                <!-- Add more rows as needed -->
 
             </TableLayout>
         </ScrollView>
