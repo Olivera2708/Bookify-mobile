@@ -208,6 +208,14 @@
                     app:layout_constraintStart_toEndOf="@+id/separator"
                     app:layout_constraintTop_toTopOf="parent">
 
+                    <com.google.android.gms.maps.MapView
+                        android:id="@+id/mapView"
+                        android:layout_width="match_parent"
+                        android:layout_height="110dp"
+                        android:apiKey="AIzaSyCbuvyEduvlNzJTujCCc557cwEGrmbsGoY"
+                        app:cameraZoom="12"
+                        app:mapType="normal"/>
+
                     <TextView
                         android:id="@+id/addressText"
                         android:layout_width="wrap_content"
