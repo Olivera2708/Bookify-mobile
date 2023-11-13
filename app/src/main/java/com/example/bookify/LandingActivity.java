@@ -94,29 +94,38 @@ public class LandingActivity extends AppCompatActivity {
         details.setOnClickListener(v -> {
             ShowDialog(R.layout.report);
         });
+        
+        accoLayout = findViewById(R.id.acco3);
+        details = accoLayout.findViewById(R.id.details);
+        details.setOnClickListener(v -> {
+            Intent intent = new Intent(LandingActivity.this, AccommodationUpdateActivity.class);
+            startActivity(intent);
+        });
+
     }
-    private void setBottomNavigation(){
+
+    private void setBottomNavigation() {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigaiton);
         bottomNavigationView.setSelectedItemId(R.id.navigation_home);
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if(item.getItemId() == R.id.navigation_home){
+                if (item.getItemId() == R.id.navigation_home) {
                     return false;
-                } else if(item.getItemId() == R.id.navigation_account){
+                } else if (item.getItemId() == R.id.navigation_account) {
                     Intent intent = new Intent(LandingActivity.this, AccountDetailsActivity.class);
                     startActivity(intent);
                     finish();
-                } else if(item.getItemId() == R.id.navigation_reservations){
+                } else if (item.getItemId() == R.id.navigation_reservations) {
                     Intent intent = new Intent(LandingActivity.this, RequestsActivity.class);
                     startActivity(intent);
                     finish();
-                } else if(item.getItemId() == R.id.navigation_favorites){
+                } else if (item.getItemId() == R.id.navigation_favorites) {
                     Intent intent = new Intent(LandingActivity.this, FavoritesActivity.class);
                     startActivity(intent);
                     finish();
-                } else if(item.getItemId() == R.id.navigation_notifications){
-                   return true;
+                } else if (item.getItemId() == R.id.navigation_notifications) {
+                    return true;
                 }
                 return false;
             }
