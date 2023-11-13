@@ -8,16 +8,21 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.Layout;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -26,6 +31,7 @@ import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.android.material.slider.RangeSlider;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -107,6 +113,70 @@ public class ResultsActivity extends AppCompatActivity {
         final BottomSheetDialog dialog = new BottomSheetDialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.filter);
+
+        RangeSlider priceSlider = dialog.findViewById(R.id.priceBar);
+        EditText minPrice = dialog.findViewById(R.id.minPrice);
+        minPrice.setText("0", TextView.BufferType.EDITABLE);
+        minPrice.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().length() > 0) {
+                    if (Integer.parseInt(editable.toString()) > 1000 || editable.toString().equals("-")){
+                        minPrice.setText(editable.toString().substring(0, minPrice.getText().length() - 1));
+                    }
+                    else {
+                        float minValue = Float.valueOf(editable.toString());
+                        priceSlider.setValues(minValue, priceSlider.getValues().get(1));
+                        minPrice.setSelection(minPrice.getText().length());
+                    }
+                }
+            }
+        });
+
+        EditText maxPrice = dialog.findViewById(R.id.maxPrice);
+        maxPrice.setText("1000", TextView.BufferType.EDITABLE);
+        maxPrice.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().length() > 0) {
+                    if (Integer.parseInt(editable.toString()) > 1000 || editable.toString().equals("-")){
+                        maxPrice.setText(editable.toString().substring(0, maxPrice.getText().length() - 1));
+                    }
+                    else {
+                        float maxValue = Float.valueOf(editable.toString());
+                        priceSlider.setValues(priceSlider.getValues().get(0), maxValue);
+                        maxPrice.setSelection(maxPrice.getText().length());
+                    }
+                }
+            }
+        });
+
+        priceSlider.addOnChangeListener(new RangeSlider.OnChangeListener() {
+            @Override
+            public void onValueChange(@NonNull RangeSlider slider, float value, boolean fromUser) {
+                int valueMin = Math.round(slider.getValues().get(0));
+                minPrice.setText(Integer.toString(valueMin));
+
+                int valueMax = Math.round(slider.getValues().get(1));
+                maxPrice.setText(Integer.toString(valueMax));
+            }
+        });
+
+
 
         String[] sort = new String[]{"Price lowest first", "Price highest first", "Name"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.dropdown_item, sort);
