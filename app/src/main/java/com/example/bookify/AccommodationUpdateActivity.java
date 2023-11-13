@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.bookify.databinding.ActivityAccommodationUpdateBinding;
 import com.google.android.material.button.MaterialButton;
@@ -55,12 +56,8 @@ public class AccommodationUpdateActivity extends AppCompatActivity {
             if (counter == 0) {
                 binding.previous.setVisibility(View.INVISIBLE);
             }
-            if (counter == 4) {
-                MaterialButton left = findViewById(R.id.leftButton);
-                MaterialButton right = findViewById(R.id.rightButton);
-                right.setChecked(true);
-            }
         });
 
+//        Toast.makeText(AccommodationUpdateActivity.this, "" + counter, Toast.LENGTH_SHORT);
     }
 }

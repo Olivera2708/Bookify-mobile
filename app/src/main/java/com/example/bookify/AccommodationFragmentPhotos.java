@@ -1,9 +1,11 @@
 package com.example.bookify;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,8 @@ import android.widget.Button;
  * create an instance of this fragment.
  */
 public class AccommodationFragmentPhotos extends Fragment {
+
+    private static final int PICK_IMAGE_REQUEST = 1;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -61,11 +65,12 @@ public class AccommodationFragmentPhotos extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_accommodation_photos, container, false);
-        Button upload = view.findViewById(R.id.btnUpload);
-
-        upload.setOnClickListener(v -> {
-            
-        });
+//        Button upload = view.findViewById(R.id.btnUpload);
+//
+//        upload.setOnClickListener(v -> {
+//            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//            startActivity(intent, PICK_IMAGE_REQUEST);
+//        });
 
         return view;
     }

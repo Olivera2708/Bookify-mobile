@@ -19,11 +19,6 @@
             android:gravity="left"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/cancellation_deadline" />
-
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
@@ -60,11 +55,6 @@
                     android:layout_height="wrap_content"
                     android:text="@string/room" />
             </RadioGroup>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/currency" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayout"

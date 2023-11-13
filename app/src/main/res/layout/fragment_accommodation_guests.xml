@@ -19,11 +19,6 @@
             android:gravity="left"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/min_guests" />
-
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
@@ -40,11 +35,6 @@
                     tools:layout_editor_absoluteY="142dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/max_guests" />
-
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
@@ -60,11 +50,6 @@
                     tools:layout_editor_absoluteX="91dp"
                     tools:layout_editor_absoluteY="142dp" />
             </com.google.android.material.textfield.TextInputLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/type" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputLayout"
