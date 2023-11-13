@@ -38,16 +38,6 @@ public class LandingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing);
 
-        View loc3 = findViewById(R.id.acco3);
-        Button b = loc3.findViewById(R.id.details);
-        b.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(LandingActivity.this, ReportsActivity.class);
-                startActivity(intent);
-            }
-        });
-
         setBottomNavigation();
 
         View searchLayout = findViewById(R.id.searchLayout);
@@ -99,6 +89,13 @@ public class LandingActivity extends AppCompatActivity {
         details = accoLayout.findViewById(R.id.details);
         details.setOnClickListener(v -> {
             Intent intent = new Intent(LandingActivity.this, AccommodationUpdateActivity.class);
+            startActivity(intent);
+        });
+
+        accoLayout = findViewById(R.id.acco4);
+        details = accoLayout.findViewById(R.id.details);
+        details.setOnClickListener(v -> {
+            Intent intent = new Intent(LandingActivity.this, ReportsActivity.class);
             startActivity(intent);
         });
 

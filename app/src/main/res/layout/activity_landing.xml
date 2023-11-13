@@ -167,6 +167,13 @@
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="12dp" />
 
+                        <include
+                            android:id="@+id/acco4"
+                            layout="@layout/popular_accommodation_guest"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="12dp" />
+
                     </LinearLayout>
                 </HorizontalScrollView>
             </LinearLayout>
