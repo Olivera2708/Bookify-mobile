@@ -44,11 +44,6 @@ public class AccommodationUpdateActivity extends AppCompatActivity {
             if (counter == fragments.length - 1) {
                 binding.next.setText("Submit");
             }
-            if (counter == 4) {
-                MaterialButton left = findViewById(R.id.leftButton);
-                MaterialButton right = findViewById(R.id.rightButton);
-                right.setChecked(true);
-            }
         });
 
         binding.previous.setOnClickListener(v -> {

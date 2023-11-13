@@ -1,12 +1,16 @@
 package com.example.bookify;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.google.android.material.button.MaterialButton;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,6 +63,25 @@ public class AccommodationFragmentGuests extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_accommodation_guests, container, false);
+        View view = inflater.inflate(R.layout.fragment_accommodation_guests, container, false);
+
+        MaterialButton left = view.findViewById(R.id.leftButton);
+        MaterialButton right = view.findViewById(R.id.rightButton);
+
+        ColorStateList colorStateListSelected = right.getBackgroundTintList();
+        ColorStateList colorStateList = left.getBackgroundTintList();
+
+        left.setOnClickListener(v -> {
+            left.setBackgroundTintList(colorStateListSelected);
+            right.setBackgroundTintList(colorStateList);
+        });
+
+        right.setOnClickListener(v->{
+            left.setBackgroundTintList(colorStateList);
+            right.setBackgroundTintList(colorStateListSelected);
+        });
+
+        right.setChecked(true);
+        return view;
     }
 }
