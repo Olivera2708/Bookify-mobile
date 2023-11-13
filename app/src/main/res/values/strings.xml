@@ -56,6 +56,14 @@
     <string name="deposit_box">Deposit box</string>
     <string name="non_smoking">Non-smoking</string>
     <string name="city_center">City center</string>
+    <string name="reports">Reports</string>
+    <string name="accommodation_type">Accommodation type</string>
+    <string name="hotel">Hotel</string>
+    <string name="apartment">Apartment</string>
+    <string name="year">Year</string>
+    <string name="download">Download</string>
+    <string name="overall">Overall</string>
+    <string name="for_accommodation">For accommodation</string>
 
     <string name="you_not_internet">You are not connected to the Internet</string>
     <string name="you_internet">You are connected to the Internet</string>
