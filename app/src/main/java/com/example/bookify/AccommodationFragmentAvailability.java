@@ -11,16 +11,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.google.android.material.datepicker.DayViewDecorator;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -72,13 +78,18 @@ public class AccommodationFragmentAvailability extends Fragment {
         }
     }
 
+    View view;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_accommodation_availability, container, false);
+        view = inflater.inflate(R.layout.fragment_accommodation_availability, container, false);
 
         Button dates = view.findViewById(R.id.datesInput);
+
+        TextInputEditText test = view.findViewById(R.id.cicoInput);
+
         dates.setOnClickListener(v -> {
             MaterialDatePicker<Pair<Long, Long>> materialDatePicker = MaterialDatePicker.Builder.dateRangePicker().setSelection(new Pair<>(
                     MaterialDatePicker.thisMonthInUtcMilliseconds(),
@@ -91,7 +102,7 @@ public class AccommodationFragmentAvailability extends Fragment {
                     String startDate = new SimpleDateFormat("dd.MM.yyyy.", Locale.getDefault()).format(new Date(selection.first));
                     String endDate = new SimpleDateFormat("dd.MM.yyyy.", Locale.getDefault()).format(new Date(selection.second));
 
-                    dates.setText(startDate + " - " + endDate);
+                    test.setText(startDate + " - " + endDate);
                 }
             });
 
@@ -104,10 +115,11 @@ public class AccommodationFragmentAvailability extends Fragment {
 
         Button add = view.findViewById(R.id.btnAdd);
         add.setOnClickListener(v -> {
-            String checkDates = dates.getText().toString();
+            String checkDates = test.getText().toString();
             String priceTxt = price.getText().toString();
             addRowWithData(checkDates, priceTxt);
         });
+        //Calendar
 
         return view;
     }
@@ -125,11 +137,11 @@ public class AccommodationFragmentAvailability extends Fragment {
         tableRow.setLayoutParams(layoutParams);
 
         // Create TextView for Data 1
-        TextView textViewData1 = createTextView(data1);
+        TextView textViewData1 = createTextView(data1, 1);
         // Create TextView for Data 2
-        TextView textViewData2 = createTextView(data2);
+        TextView textViewData2 = createTextView(data2, 2);
 
-        TextView textViewData3 = createTextView("Delete");
+        TextView textViewData3 = createTextView("Delete", 3);
 
         textViewData3.setOnClickListener(v -> {
             tableLayout.removeView(tableRow);
@@ -145,9 +157,22 @@ public class AccommodationFragmentAvailability extends Fragment {
     }
 
     // Method to create a TextView
-    private TextView createTextView(String text) {
+    private TextView createTextView(String text, int column) {
         TextView textView = new TextView(getActivity());
         textView.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.border_background, null));
+
+        TextView fixed;
+        switch (column) {
+            case 1:
+                fixed = view.findViewById(R.id.cicoTV);
+                break;
+            case 2:
+                fixed = view.findViewById(R.id.priceTV);
+                break;
+            default:
+                fixed = view.findViewById(R.id.deleteTV);
+                break;
+        }
 
         // Set TextView properties (optional)
         TableRow.LayoutParams layoutParams = new TableRow.LayoutParams(
@@ -158,6 +183,12 @@ public class AccommodationFragmentAvailability extends Fragment {
         textView.setPadding(16, 8, 16, 8);
         textView.setText(text);
         textView.setGravity(Gravity.CENTER);
+
+        if(textView.getWidth() > fixed.getWidth()){
+            fixed.setWidth(textView.getWidth());
+        }else{
+            textView.setWidth(fixed.getWidth());
+        }
 
         return textView;
     }
