@@ -9,6 +9,9 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 
 import com.google.android.material.button.MaterialButton;
 
@@ -82,6 +85,18 @@ public class AccommodationFragmentGuests extends Fragment {
         });
 
         right.setChecked(true);
+
+        String[] sort = new String[] {"studio", "room", "apartment"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.dropdown_item, sort);
+        AutoCompleteTextView autoCompleteTextView = view.findViewById(R.id.typeDropDown);
+        autoCompleteTextView.setAdapter(adapter);
+        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //code when something is selected
+            }
+        });
+
         return view;
     }
 }

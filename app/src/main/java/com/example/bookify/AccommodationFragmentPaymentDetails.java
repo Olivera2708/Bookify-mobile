@@ -7,6 +7,9 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,6 +62,18 @@ public class AccommodationFragmentPaymentDetails extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_accommodation_payment_details, container, false);
+        View view = inflater.inflate(R.layout.fragment_accommodation_payment_details, container, false);
+
+        String[] sort = new String[] {"USD", "EUR", "RSD"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.dropdown_item, sort);
+        AutoCompleteTextView autoCompleteTextView = view.findViewById(R.id.currencyDropDown);
+        autoCompleteTextView.setAdapter(adapter);
+        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //code when something is selected
+            }
+        });
+        return view;
     }
 }
