@@ -70,64 +70,65 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/caribbean"
-                android:hint="@string/add" />
+                android:text="@string/add"
+                android:textColor="@color/off_white"/>
 
         </LinearLayout>
 
-        <TableLayout
-            android:id="@+id/table"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/border_background"
-            android:stretchColumns="*">
+<!--        <TableLayout-->
+<!--            android:id="@+id/table"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="15dp"-->
+<!--            android:background="@drawable/border_background"-->
+<!--            android:stretchColumns="*">-->
 
-            <TableRow android:background="@drawable/border_background">
+<!--            <TableRow android:background="@drawable/border_background">-->
 
-                <TextView
-                    android:id="@+id/cicoTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border_background"
-                    android:gravity="center"
-                    android:padding="10dp"
-                    android:text="@string/check_dates" />
+<!--                <TextView-->
+<!--                    android:id="@+id/cicoTV"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:background="@drawable/border_background"-->
+<!--                    android:gravity="center"-->
+<!--                    android:padding="10dp"-->
+<!--                    android:text="@string/check_dates" />-->
 
-                <TextView
-                    android:id="@+id/priceTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border_background"
-                    android:gravity="center"
-                    android:padding="10dp"
-                    android:text="@string/price" />
+<!--                <TextView-->
+<!--                    android:id="@+id/priceTV"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:background="@drawable/border_background"-->
+<!--                    android:gravity="center"-->
+<!--                    android:padding="10dp"-->
+<!--                    android:text="@string/price" />-->
 
-                <TextView
-                    android:id="@+id/deleteTV"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border_background"
-                    android:gravity="center"
-                    android:padding="10dp"
-                    android:text="@string/delete" />
+<!--                <TextView-->
+<!--                    android:id="@+id/deleteTV"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:background="@drawable/border_background"-->
+<!--                    android:gravity="center"-->
+<!--                    android:padding="10dp"-->
+<!--                    android:text="@string/delete" />-->
 
-            </TableRow>
+<!--            </TableRow>-->
 
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+<!--            <ScrollView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content">-->
 
-                <TableLayout
-                    android:id="@+id/tableLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/border_background"
-                    android:stretchColumns="*">
+<!--                <TableLayout-->
+<!--                    android:id="@+id/tableLayout"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:background="@drawable/border_background"-->
+<!--                    android:stretchColumns="*">-->
 
 
-                </TableLayout>
-            </ScrollView>
-        </TableLayout>
+<!--                </TableLayout>-->
+<!--            </ScrollView>-->
+<!--        </TableLayout>-->
 
         <com.prolificinteractive.materialcalendarview.MaterialCalendarView
             android:id="@+id/calendarView"
@@ -136,7 +137,11 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            app:mcv_selectionColor="@color/grey"
+            app:mcv_selectionColor="@color/caribbean"
+            app:mcv_weekDayTextAppearance="?attr/textFillColor"
+            app:mcv_dateTextAppearance="?attr/textFillColor"
+            app:mcv_leftArrow="@drawable/left_arrow"
+            app:mcv_rightArrow="@drawable/right_arrow"
             app:mcv_selectionMode="range" />
     </LinearLayout>
 

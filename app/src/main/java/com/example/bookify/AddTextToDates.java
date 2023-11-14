@@ -1,7 +1,10 @@
 package com.example.bookify;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.text.style.LineBackgroundSpan;
+
+import androidx.core.util.Pair;
 
 public class AddTextToDates implements LineBackgroundSpan {
 
@@ -25,5 +28,6 @@ public class AddTextToDates implements LineBackgroundSpan {
         dayPricePaint.setTextSize(originalTextSize * 0.8f);
 
         canvas.drawText(dayPrice, x, y, dayPricePaint);
+        Paint p = new Paint();
     }
 }

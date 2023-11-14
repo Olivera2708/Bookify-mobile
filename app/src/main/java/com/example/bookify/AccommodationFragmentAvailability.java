@@ -1,5 +1,6 @@
 package com.example.bookify;
 
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.core.content.res.ResourcesCompat;
@@ -22,13 +23,20 @@ import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClic
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -93,7 +101,8 @@ public class AccommodationFragmentAvailability extends Fragment {
         datesList.add(CalendarDay.from(2023, 11, 13));
         datesList.add(CalendarDay.from(2023, 11, 12));
 
-        com.prolificinteractive.materialcalendarview.MaterialCalendarView calendarView = view.findViewById(R.id.calendarView);
+        MaterialCalendarView calendarView = view.findViewById(R.id.calendarView);
+
         calendarView.addDecorators(new PriceDecorator(datesList, "121€"));
         calendarView.invalidateDecorators();
         //KRAJ MOG
@@ -121,87 +130,113 @@ public class AccommodationFragmentAvailability extends Fragment {
             materialDatePicker.show(getActivity().getSupportFragmentManager(), "tag");
         });
 
-        tableLayout = view.findViewById(R.id.tableLayout);
+//        tableLayout = view.findViewById(R.id.tableLayout);
 
         TextInputEditText price = view.findViewById(R.id.priceInput);
-
+        Map<CalendarDay, PriceDecorator> mapa = new HashMap<>();
         Button add = view.findViewById(R.id.btnAdd);
         add.setOnClickListener(v -> {
+//            calendarView.refreshDrawableState();
             String checkDates = test.getText().toString();
+            DateTimeFormatter dtf;
+            LocalDate startDate = null, endDate;
             String priceTxt = price.getText().toString();
-            addRowWithData(checkDates, priceTxt);
+            List<CalendarDay> datesDecorator = new ArrayList<>();
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy.");
+                startDate = LocalDate.parse(checkDates.split(" - ")[0], dtf);
+                endDate = LocalDate.parse(checkDates.split(" - ")[1], dtf);
+//                PriceDecorator pd = new PriceDecorator(priceTxt);
+                for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
+//                    pd.addDateToDecorate(CalendarDay.from(date.getYear(), date.getMonth().getValue(), date.getDayOfMonth()));
+                    CalendarDay cday = CalendarDay.from(date.getYear(), date.getMonth().getValue(), date.getDayOfMonth());
+                    PriceDecorator pd = new PriceDecorator(new ArrayList<>(Arrays.asList(cday)), priceTxt + "€");
+                    if (mapa.containsKey(cday)) {
+                        calendarView.removeDecorator(mapa.get(cday));
+                    }
+                    mapa.put(cday, pd);
+
+                    calendarView.addDecorator(pd);
+                }
+            }
+//            calendarView.addDecorators(new PriceDecorator(datesDecorator, ""));
+//            calendarView.addDecorators(new PriceDecorator(datesDecorator, priceTxt+"€"));
+            calendarView.invalidateDecorators();
+
+//            addRowWithData(checkDates, priceTxt);
         });
         //Calendar
 
         return view;
     }
 
-    private void addRowWithData(String data1, String data2) {
-        TableRow tableRow = new TableRow(getActivity());
-
-        tableRow.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.border_background, null));
-
-        // Set TableRow properties (optional)
-        TableRow.LayoutParams layoutParams = new TableRow.LayoutParams(
-                TableRow.LayoutParams.WRAP_CONTENT,
-                TableRow.LayoutParams.WRAP_CONTENT
-        );
-        tableRow.setLayoutParams(layoutParams);
-
-        // Create TextView for Data 1
-        TextView textViewData1 = createTextView(data1, 1);
-        // Create TextView for Data 2
-        TextView textViewData2 = createTextView(data2, 2);
-
-        TextView textViewData3 = createTextView("Delete", 3);
-
-        textViewData3.setOnClickListener(v -> {
-            tableLayout.removeView(tableRow);
-        });
-
-        // Add TextViews to TableRow
-        tableRow.addView(textViewData1);
-        tableRow.addView(textViewData2);
-        tableRow.addView(textViewData3);
-
-        // Add TableRow to TableLayout
-        tableLayout.addView(tableRow);
-    }
-
-    // Method to create a TextView
-    private TextView createTextView(String text, int column) {
-        TextView textView = new TextView(getActivity());
-        textView.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.border_background, null));
-
-        TextView fixed;
-        switch (column) {
-            case 1:
-                fixed = view.findViewById(R.id.cicoTV);
-                break;
-            case 2:
-                fixed = view.findViewById(R.id.priceTV);
-                break;
-            default:
-                fixed = view.findViewById(R.id.deleteTV);
-                break;
-        }
-
-        // Set TextView properties (optional)
-        TableRow.LayoutParams layoutParams = new TableRow.LayoutParams(
-                TableRow.LayoutParams.WRAP_CONTENT,
-                TableRow.LayoutParams.WRAP_CONTENT
-        );
-        textView.setLayoutParams(layoutParams);
-        textView.setPadding(16, 8, 16, 8);
-        textView.setText(text);
-        textView.setGravity(Gravity.CENTER);
-
-        if(textView.getWidth() > fixed.getWidth()){
-            fixed.setWidth(textView.getWidth());
-        }else{
-            textView.setWidth(fixed.getWidth());
-        }
-
-        return textView;
-    }
+//    private void addRowWithData(String data1, String data2) {
+//        TableRow tableRow = new TableRow(getActivity());
+//
+//        tableRow.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.border_background, null));
+//
+//        // Set TableRow properties (optional)
+//        TableRow.LayoutParams layoutParams = new TableRow.LayoutParams(
+//                TableRow.LayoutParams.WRAP_CONTENT,
+//                TableRow.LayoutParams.WRAP_CONTENT
+//        );
+//        tableRow.setLayoutParams(layoutParams);
+//
+//        // Create TextView for Data 1
+//        TextView textViewData1 = createTextView(data1, 1);
+//        // Create TextView for Data 2
+//        TextView textViewData2 = createTextView(data2, 2);
+//
+//        TextView textViewData3 = createTextView("Delete", 3);
+//
+//        textViewData3.setOnClickListener(v -> {
+//            tableLayout.removeView(tableRow);
+//        });
+//
+//        // Add TextViews to TableRow
+//        tableRow.addView(textViewData1);
+//        tableRow.addView(textViewData2);
+//        tableRow.addView(textViewData3);
+//
+//        // Add TableRow to TableLayout
+//        tableLayout.addView(tableRow);
+//    }
+//
+//    // Method to create a TextView
+//    private TextView createTextView(String text, int column) {
+//        TextView textView = new TextView(getActivity());
+//        textView.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.border_background, null));
+//
+//        TextView fixed;
+//        switch (column) {
+//            case 1:
+//                fixed = view.findViewById(R.id.cicoTV);
+//                break;
+//            case 2:
+//                fixed = view.findViewById(R.id.priceTV);
+//                break;
+//            default:
+//                fixed = view.findViewById(R.id.deleteTV);
+//                break;
+//        }
+//
+//        // Set TextView properties (optional)
+//        TableRow.LayoutParams layoutParams = new TableRow.LayoutParams(
+//                TableRow.LayoutParams.WRAP_CONTENT,
+//                TableRow.LayoutParams.WRAP_CONTENT
+//        );
+//        textView.setLayoutParams(layoutParams);
+//        textView.setPadding(16, 8, 16, 8);
+//        textView.setText(text);
+//        textView.setGravity(Gravity.CENTER);
+//
+//        if (textView.getWidth() > fixed.getWidth()) {
+//            fixed.setWidth(textView.getWidth());
+//        } else {
+//            textView.setWidth(fixed.getWidth());
+//        }
+//
+//        return textView;
+//    }
 }
