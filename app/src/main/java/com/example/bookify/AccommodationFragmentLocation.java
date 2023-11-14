@@ -1,12 +1,27 @@
 package com.example.bookify;
 
+import android.location.Address;
+import android.location.Geocoder;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.textfield.TextInputEditText;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -15,6 +30,8 @@ import android.view.ViewGroup;
  */
 public class AccommodationFragmentLocation extends Fragment {
 
+    private MapView mapView;
+    private GoogleMap gMap;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -53,12 +70,65 @@ public class AccommodationFragmentLocation extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        new ReverseGeocodingTask().execute();
     }
+
+    View view;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_accommodation_location, container, false);
+        view = inflater.inflate(R.layout.fragment_accommodation_location, container, false);
+        mapView = view.findViewById(R.id.mapView);
+        mapView.onCreate(savedInstanceState);
+        mapView.getMapAsync(googleMap -> {
+            // You can customize the map here
+            // For example, add a marker
+            LatLng markerLatLng = new LatLng(45.2453834, 19.7917393);
+            googleMap.addMarker(new MarkerOptions().position(markerLatLng).title("Marker Title"));
+
+            // Move the camera to the marker
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markerLatLng, 12));
+        });
+        return view;
+    }
+
+    private double latitude = 37.7749;  // Example: San Francisco
+    private double longitude = -122.4194;
+
+    private class ReverseGeocodingTask extends AsyncTask<Void, Void, String> {
+
+        @Override
+        protected String doInBackground(Void... params) {
+            Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
+            String result = null;
+
+            try {
+                List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+                if (addresses != null && addresses.size() > 0) {
+                    Address address = addresses.get(0);
+                    // Construct a human-readable address
+                    result = address.getAddressLine(0);
+                }
+            } catch (IOException e) {
+                Log.e("", "Error in reverse geocoding: " + e.getMessage());
+            }
+
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String address) {
+            if (address != null) {
+                Log.d("TAG", "Address: " + address);
+                TextInputEditText city = view.findViewById(R.id.cityInput);
+                city.setText(address);
+                // Use the address as needed (e.g., display it in a TextView)
+            } else {
+                Log.d("TAG", "Unable to retrieve address");
+            }
+        }
     }
 }
