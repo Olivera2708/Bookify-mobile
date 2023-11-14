@@ -1,5 +1,6 @@
 package com.example.bookify;
 
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.core.content.res.ResourcesCompat;
@@ -11,17 +12,32 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.material.datepicker.DayViewDecorator;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,8 +45,6 @@ import java.util.Locale;
  * create an instance of this fragment.
  */
 public class AccommodationFragmentAvailability extends Fragment {
-
-    private TableLayout tableLayout;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -78,87 +92,53 @@ public class AccommodationFragmentAvailability extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_accommodation_availability, container, false);
 
-        Button dates = view.findViewById(R.id.datesInput);
-        dates.setOnClickListener(v -> {
-            MaterialDatePicker<Pair<Long, Long>> materialDatePicker = MaterialDatePicker.Builder.dateRangePicker().setSelection(new Pair<>(
-                    MaterialDatePicker.thisMonthInUtcMilliseconds(),
-                    MaterialDatePicker.todayInUtcMilliseconds()
-            )).build();
-
-            materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Pair<Long, Long>>() {
-                @Override
-                public void onPositiveButtonClick(Pair<Long, Long> selection) {
-                    String startDate = new SimpleDateFormat("dd.MM.yyyy.", Locale.getDefault()).format(new Date(selection.first));
-                    String endDate = new SimpleDateFormat("dd.MM.yyyy.", Locale.getDefault()).format(new Date(selection.second));
-
-                    dates.setText(startDate + " - " + endDate);
-                }
-            });
-
-            materialDatePicker.show(getActivity().getSupportFragmentManager(), "tag");
-        });
-
-        tableLayout = view.findViewById(R.id.tableLayout);
+        MaterialCalendarView calendarView = view.findViewById(R.id.calendarView);
+        calendarView.invalidateDecorators();
 
         TextInputEditText price = view.findViewById(R.id.priceInput);
-
+        Map<CalendarDay, PriceDecorator> mapa = new HashMap<>();
         Button add = view.findViewById(R.id.btnAdd);
+
         add.setOnClickListener(v -> {
-            String checkDates = dates.getText().toString();
             String priceTxt = price.getText().toString();
-            addRowWithData(checkDates, priceTxt);
+            List<CalendarDay> selectedDates = calendarView.getSelectedDates();
+            if (selectedDates.size() > 0 && !priceTxt.equals("")) {
+                for (CalendarDay cday : selectedDates) {
+                    PriceDecorator pd = new PriceDecorator(new ArrayList<>(Arrays.asList(cday)), priceTxt + "€");
+                    if (mapa.containsKey(cday)) {
+                        calendarView.removeDecorator(mapa.get(cday));
+                    }
+                    mapa.put(cday, pd);
+
+                    calendarView.addDecorator(pd);
+                }
+            } else {
+                if (selectedDates.size() <= 0) {
+                    Toast.makeText(getActivity(), "You must select at least one date", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), "You must fill in price field", Toast.LENGTH_SHORT).show();
+                }
+            }
+            calendarView.invalidateDecorators();
+
+        });
+
+        Button delete = view.findViewById(R.id.btnDelete);
+
+        delete.setOnClickListener(v -> {
+            List<CalendarDay> selectedDates = calendarView.getSelectedDates();
+            if (selectedDates.size() > 0) {
+                for (CalendarDay cday : selectedDates) {
+                    if (mapa.containsKey(cday)) {
+                        calendarView.removeDecorator(mapa.get(cday));
+                        mapa.remove(cday);
+                    }
+                }
+            } else {
+                Toast.makeText(getActivity(), "You must select at least one date", Toast.LENGTH_SHORT).show();
+            }
         });
 
         return view;
-    }
-
-    private void addRowWithData(String data1, String data2) {
-        TableRow tableRow = new TableRow(getActivity());
-
-        tableRow.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.border_background, null));
-
-        // Set TableRow properties (optional)
-        TableRow.LayoutParams layoutParams = new TableRow.LayoutParams(
-                TableRow.LayoutParams.WRAP_CONTENT,
-                TableRow.LayoutParams.WRAP_CONTENT
-        );
-        tableRow.setLayoutParams(layoutParams);
-
-        // Create TextView for Data 1
-        TextView textViewData1 = createTextView(data1);
-        // Create TextView for Data 2
-        TextView textViewData2 = createTextView(data2);
-
-        TextView textViewData3 = createTextView("Delete");
-
-        textViewData3.setOnClickListener(v -> {
-            tableLayout.removeView(tableRow);
-        });
-
-        // Add TextViews to TableRow
-        tableRow.addView(textViewData1);
-        tableRow.addView(textViewData2);
-        tableRow.addView(textViewData3);
-
-        // Add TableRow to TableLayout
-        tableLayout.addView(tableRow);
-    }
-
-    // Method to create a TextView
-    private TextView createTextView(String text) {
-        TextView textView = new TextView(getActivity());
-        textView.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.border_background, null));
-
-        // Set TextView properties (optional)
-        TableRow.LayoutParams layoutParams = new TableRow.LayoutParams(
-                TableRow.LayoutParams.WRAP_CONTENT,
-                TableRow.LayoutParams.WRAP_CONTENT
-        );
-        textView.setLayoutParams(layoutParams);
-        textView.setPadding(16, 8, 16, 8);
-        textView.setText(text);
-        textView.setGravity(Gravity.CENTER);
-
-        return textView;
     }
 }
