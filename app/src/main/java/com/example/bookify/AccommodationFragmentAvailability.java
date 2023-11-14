@@ -16,6 +16,7 @@ import android.widget.CalendarView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.datepicker.DayViewDecorator;
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -44,8 +45,6 @@ import java.util.Map;
  * create an instance of this fragment.
  */
 public class AccommodationFragmentAvailability extends Fragment {
-
-    private TableLayout tableLayout;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -87,70 +86,24 @@ public class AccommodationFragmentAvailability extends Fragment {
         }
     }
 
-    View view;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_accommodation_availability, container, false);
-
-        //OVO SAM JA DODAVALA
-        List<CalendarDay> datesList = new ArrayList<>();
-        datesList.add(CalendarDay.today());
-        datesList.add(CalendarDay.from(2023, 11, 13));
-        datesList.add(CalendarDay.from(2023, 11, 12));
+        View view = inflater.inflate(R.layout.fragment_accommodation_availability, container, false);
 
         MaterialCalendarView calendarView = view.findViewById(R.id.calendarView);
-
-        calendarView.addDecorators(new PriceDecorator(datesList, "121€"));
         calendarView.invalidateDecorators();
-        //KRAJ MOG
-
-        Button dates = view.findViewById(R.id.datesInput);
-
-        TextInputEditText test = view.findViewById(R.id.cicoInput);
-
-        dates.setOnClickListener(v -> {
-            MaterialDatePicker<Pair<Long, Long>> materialDatePicker = MaterialDatePicker.Builder.dateRangePicker().setSelection(new Pair<>(
-                    MaterialDatePicker.thisMonthInUtcMilliseconds(),
-                    MaterialDatePicker.todayInUtcMilliseconds()
-            )).build();
-
-            materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Pair<Long, Long>>() {
-                @Override
-                public void onPositiveButtonClick(Pair<Long, Long> selection) {
-                    String startDate = new SimpleDateFormat("dd.MM.yyyy.", Locale.getDefault()).format(new Date(selection.first));
-                    String endDate = new SimpleDateFormat("dd.MM.yyyy.", Locale.getDefault()).format(new Date(selection.second));
-
-                    test.setText(startDate + " - " + endDate);
-                }
-            });
-
-            materialDatePicker.show(getActivity().getSupportFragmentManager(), "tag");
-        });
-
-//        tableLayout = view.findViewById(R.id.tableLayout);
 
         TextInputEditText price = view.findViewById(R.id.priceInput);
         Map<CalendarDay, PriceDecorator> mapa = new HashMap<>();
         Button add = view.findViewById(R.id.btnAdd);
-        add.setOnClickListener(v -> {
-//            calendarView.refreshDrawableState();
-            String checkDates = test.getText().toString();
-            DateTimeFormatter dtf;
-            LocalDate startDate = null, endDate;
-            String priceTxt = price.getText().toString();
-            List<CalendarDay> datesDecorator = new ArrayList<>();
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy.");
-                startDate = LocalDate.parse(checkDates.split(" - ")[0], dtf);
-                endDate = LocalDate.parse(checkDates.split(" - ")[1], dtf);
-//                PriceDecorator pd = new PriceDecorator(priceTxt);
-                for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
-//                    pd.addDateToDecorate(CalendarDay.from(date.getYear(), date.getMonth().getValue(), date.getDayOfMonth()));
-                    CalendarDay cday = CalendarDay.from(date.getYear(), date.getMonth().getValue(), date.getDayOfMonth());
+        add.setOnClickListener(v -> {
+            String priceTxt = price.getText().toString();
+            List<CalendarDay> selectedDates = calendarView.getSelectedDates();
+            if (selectedDates.size() > 0 && !priceTxt.equals("")) {
+                for (CalendarDay cday : selectedDates) {
                     PriceDecorator pd = new PriceDecorator(new ArrayList<>(Arrays.asList(cday)), priceTxt + "€");
                     if (mapa.containsKey(cday)) {
                         calendarView.removeDecorator(mapa.get(cday));
@@ -159,84 +112,33 @@ public class AccommodationFragmentAvailability extends Fragment {
 
                     calendarView.addDecorator(pd);
                 }
+            } else {
+                if (selectedDates.size() <= 0) {
+                    Toast.makeText(getActivity(), "You must select at least one date", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), "You must fill in price field", Toast.LENGTH_SHORT).show();
+                }
             }
-//            calendarView.addDecorators(new PriceDecorator(datesDecorator, ""));
-//            calendarView.addDecorators(new PriceDecorator(datesDecorator, priceTxt+"€"));
             calendarView.invalidateDecorators();
 
-//            addRowWithData(checkDates, priceTxt);
         });
-        //Calendar
+
+        Button delete = view.findViewById(R.id.btnDelete);
+
+        delete.setOnClickListener(v -> {
+            List<CalendarDay> selectedDates = calendarView.getSelectedDates();
+            if (selectedDates.size() > 0) {
+                for (CalendarDay cday : selectedDates) {
+                    if (mapa.containsKey(cday)) {
+                        calendarView.removeDecorator(mapa.get(cday));
+                        mapa.remove(cday);
+                    }
+                }
+            } else {
+                Toast.makeText(getActivity(), "You must select at least one date", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         return view;
     }
-
-//    private void addRowWithData(String data1, String data2) {
-//        TableRow tableRow = new TableRow(getActivity());
-//
-//        tableRow.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.border_background, null));
-//
-//        // Set TableRow properties (optional)
-//        TableRow.LayoutParams layoutParams = new TableRow.LayoutParams(
-//                TableRow.LayoutParams.WRAP_CONTENT,
-//                TableRow.LayoutParams.WRAP_CONTENT
-//        );
-//        tableRow.setLayoutParams(layoutParams);
-//
-//        // Create TextView for Data 1
-//        TextView textViewData1 = createTextView(data1, 1);
-//        // Create TextView for Data 2
-//        TextView textViewData2 = createTextView(data2, 2);
-//
-//        TextView textViewData3 = createTextView("Delete", 3);
-//
-//        textViewData3.setOnClickListener(v -> {
-//            tableLayout.removeView(tableRow);
-//        });
-//
-//        // Add TextViews to TableRow
-//        tableRow.addView(textViewData1);
-//        tableRow.addView(textViewData2);
-//        tableRow.addView(textViewData3);
-//
-//        // Add TableRow to TableLayout
-//        tableLayout.addView(tableRow);
-//    }
-//
-//    // Method to create a TextView
-//    private TextView createTextView(String text, int column) {
-//        TextView textView = new TextView(getActivity());
-//        textView.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.border_background, null));
-//
-//        TextView fixed;
-//        switch (column) {
-//            case 1:
-//                fixed = view.findViewById(R.id.cicoTV);
-//                break;
-//            case 2:
-//                fixed = view.findViewById(R.id.priceTV);
-//                break;
-//            default:
-//                fixed = view.findViewById(R.id.deleteTV);
-//                break;
-//        }
-//
-//        // Set TextView properties (optional)
-//        TableRow.LayoutParams layoutParams = new TableRow.LayoutParams(
-//                TableRow.LayoutParams.WRAP_CONTENT,
-//                TableRow.LayoutParams.WRAP_CONTENT
-//        );
-//        textView.setLayoutParams(layoutParams);
-//        textView.setPadding(16, 8, 16, 8);
-//        textView.setText(text);
-//        textView.setGravity(Gravity.CENTER);
-//
-//        if (textView.getWidth() > fixed.getWidth()) {
-//            fixed.setWidth(textView.getWidth());
-//        } else {
-//            textView.setWidth(fixed.getWidth());
-//        }
-//
-//        return textView;
-//    }
 }
