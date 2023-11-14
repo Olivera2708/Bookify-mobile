@@ -70,8 +70,6 @@ public class AccommodationFragmentLocation extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-        new ReverseGeocodingTask().execute();
     }
 
     View view;
@@ -86,49 +84,12 @@ public class AccommodationFragmentLocation extends Fragment {
         mapView.getMapAsync(googleMap -> {
             // You can customize the map here
             // For example, add a marker
-            LatLng markerLatLng = new LatLng(45.2453834, 19.7917393);
+            LatLng markerLatLng = new LatLng(45.267136, 19.833549);
             googleMap.addMarker(new MarkerOptions().position(markerLatLng).title("Marker Title"));
 
             // Move the camera to the marker
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markerLatLng, 12));
         });
         return view;
-    }
-
-    private double latitude = 37.7749;  // Example: San Francisco
-    private double longitude = -122.4194;
-
-    private class ReverseGeocodingTask extends AsyncTask<Void, Void, String> {
-
-        @Override
-        protected String doInBackground(Void... params) {
-            Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
-            String result = null;
-
-            try {
-                List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
-                if (addresses != null && addresses.size() > 0) {
-                    Address address = addresses.get(0);
-                    // Construct a human-readable address
-                    result = address.getAddressLine(0);
-                }
-            } catch (IOException e) {
-                Log.e("", "Error in reverse geocoding: " + e.getMessage());
-            }
-
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(String address) {
-            if (address != null) {
-                Log.d("TAG", "Address: " + address);
-                TextInputEditText city = view.findViewById(R.id.cityInput);
-                city.setText(address);
-                // Use the address as needed (e.g., display it in a TextView)
-            } else {
-                Log.d("TAG", "Unable to retrieve address");
-            }
-        }
     }
 }
