@@ -116,14 +116,17 @@ public class LandingActivity extends AppCompatActivity {
                 } else if (item.getItemId() == R.id.navigation_account) {
                     Intent intent = new Intent(LandingActivity.this, AccountDetailsActivity.class);
                     startActivity(intent);
+                    overridePendingTransition(0,0);
                     finish();
                 } else if (item.getItemId() == R.id.navigation_reservations) {
                     Intent intent = new Intent(LandingActivity.this, RequestsActivity.class);
                     startActivity(intent);
+                    overridePendingTransition(0,0);
                     finish();
                 } else if (item.getItemId() == R.id.navigation_favorites) {
                     Intent intent = new Intent(LandingActivity.this, FavoritesActivity.class);
                     startActivity(intent);
+                    overridePendingTransition(0,0);
                     finish();
                 } else if (item.getItemId() == R.id.navigation_notifications) {
                     return true;
