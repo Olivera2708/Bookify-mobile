@@ -63,17 +63,6 @@ public class AccommodationFragmentPaymentDetails extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_accommodation_payment_details, container, false);
-
-        String[] sort = new String[] {"USD", "EUR", "RSD"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.dropdown_item, sort);
-        AutoCompleteTextView autoCompleteTextView = view.findViewById(R.id.currencyDropDown);
-        autoCompleteTextView.setAdapter(adapter);
-        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //code when something is selected
-            }
-        });
         return view;
     }
 }

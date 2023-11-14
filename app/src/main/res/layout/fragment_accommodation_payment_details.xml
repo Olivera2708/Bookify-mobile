@@ -56,25 +56,6 @@
                     android:text="@string/room" />
             </RadioGroup>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayout"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <AutoCompleteTextView
-                    android:id="@+id/currencyDropDown"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="10dp"
-                    android:hint="@string/currency"
-                    android:inputType="none"
-                    android:padding="0dp">
-
-                </AutoCompleteTextView>
-            </com.google.android.material.textfield.TextInputLayout>
-
-
         </LinearLayout>
     </LinearLayout>
 
