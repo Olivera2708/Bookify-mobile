@@ -21,6 +21,7 @@ import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -85,6 +86,17 @@ public class AccommodationFragmentAvailability extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_accommodation_availability, container, false);
+
+        //OVO SAM JA DODAVALA
+        List<CalendarDay> datesList = new ArrayList<>();
+        datesList.add(CalendarDay.today());
+        datesList.add(CalendarDay.from(2023, 11, 13));
+        datesList.add(CalendarDay.from(2023, 11, 12));
+
+        com.prolificinteractive.materialcalendarview.MaterialCalendarView calendarView = view.findViewById(R.id.calendarView);
+        calendarView.addDecorators(new PriceDecorator(datesList, "121€"));
+        calendarView.invalidateDecorators();
+        //KRAJ MOG
 
         Button dates = view.findViewById(R.id.datesInput);
 
