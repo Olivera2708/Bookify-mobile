@@ -124,4 +124,10 @@
     <string name="check_dates">Check in - Check out</string>
     <string name="delete">Delete</string>
     <string name="price_eur">Price (€)</string>
+    <string name="title_activity_notification_settings">NotificationSettingsActivity</string>
+    <string name="notification_category">Notifications Category</string>
+    <string name="new_reservations_requests">New Reservations Requests</string>
+    <string name="new_profile_rating">New Profile Rating</string>
+    <string name="reservation_cancellation">Reservation Cancellation</string>
+    <string name="new_accommodation_rating">New Accommodation Rating</string>
 </resources>

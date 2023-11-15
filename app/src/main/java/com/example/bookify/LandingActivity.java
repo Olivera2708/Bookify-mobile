@@ -129,6 +129,10 @@ public class LandingActivity extends AppCompatActivity {
                     overridePendingTransition(0,0);
                     finish();
                 } else if (item.getItemId() == R.id.navigation_notifications) {
+                    Intent intent = new Intent(LandingActivity.this, NotificationActivity.class);
+                    startActivity(intent);
+                    overridePendingTransition(0,0);
+                    finish();
                     return true;
                 }
                 return false;
