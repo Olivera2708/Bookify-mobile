@@ -123,4 +123,5 @@
     <string name="add">Add</string>
     <string name="check_dates">Check in - Check out</string>
     <string name="delete">Delete</string>
+    <string name="price_eur">Price (€)</string>
 </resources>

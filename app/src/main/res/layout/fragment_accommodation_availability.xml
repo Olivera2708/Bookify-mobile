@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_marginBottom="100dp"
     android:layout_height="match_parent"
+    android:layout_marginBottom="150dp"
     tools:context=".AccommodationFragmentAvailability">
 
     <LinearLayout
@@ -19,19 +20,10 @@
             android:gravity="left"
             android:orientation="vertical">
 
-            <Button
-                android:id="@+id/datesInput"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/caribbean"
-                android:hint="@string/check_dates"
-                android:padding="0dp"
-                android:textSize="16sp" />
-
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
-                android:hint="@string/price">
+                android:hint="@string/price_eur">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/priceInput"
@@ -44,86 +36,47 @@
                     tools:layout_editor_absoluteY="142dp" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <Button
-                android:id="@+id/btnAdd"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/caribbean"
-                android:hint="@string/add" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/btnAdd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/caribbean"
+                    android:text="@string/add"
+                    android:textColor="@color/off_white"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/btnDelete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/caribbean"
+                    android:text="@string/delete"
+                    android:textColor="@color/off_white"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         </LinearLayout>
 
-        <ScrollView
+        <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+            android:id="@+id/calendarView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxHeight="50dp">
-
-            <TableLayout
-                android:id="@+id/tableLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:background="@drawable/border_background"
-                android:stretchColumns="*">
-
-                <TableRow android:background="@drawable/border_background">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/border_background"
-                        android:gravity="center"
-                        android:padding="10dp"
-                        android:text="@string/check_dates" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/border_background"
-                        android:gravity="center"
-                        android:padding="10dp"
-                        android:text="@string/price" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/border_background"
-                        android:gravity="center"
-                        android:padding="10dp"
-                        android:text="@string/delete" />
-
-                </TableRow>
-
-                <TableRow android:background="@drawable/border_background">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/border_background"
-                        android:gravity="center"
-                        android:padding="10dp"
-                        android:text="Data 1" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/border_background"
-                        android:gravity="center"
-                        android:padding="10dp"
-                        android:text="Data 2" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/border_background"
-                        android:gravity="center"
-                        android:padding="10dp"
-                        android:text="@string/delete" />
-
-                </TableRow>
-
-            </TableLayout>
-        </ScrollView>
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            app:mcv_dateTextAppearance="?attr/textFillColor"
+            app:mcv_leftArrow="@drawable/left_arrow"
+            app:mcv_rightArrow="@drawable/right_arrow"
+            app:mcv_selectionColor="@color/caribbean"
+            app:mcv_selectionMode="range"
+            app:mcv_weekDayTextAppearance="?attr/textFillColor" />
     </LinearLayout>
 
 </FrameLayout>

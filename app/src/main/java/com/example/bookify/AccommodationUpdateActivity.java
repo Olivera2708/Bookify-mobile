@@ -58,6 +58,6 @@ public class AccommodationUpdateActivity extends AppCompatActivity {
             }
         });
 
-//        Toast.makeText(AccommodationUpdateActivity.this, "" + counter, Toast.LENGTH_SHORT);
+        Toast.makeText(AccommodationUpdateActivity.this, "" + counter, Toast.LENGTH_SHORT);
     }
 }

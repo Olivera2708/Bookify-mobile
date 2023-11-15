@@ -86,7 +86,7 @@ public class LandingActivity extends AppCompatActivity {
         details.setOnClickListener(v -> {
             ShowDialog(R.layout.report);
         });
-        
+
         accoLayout = findViewById(R.id.acco3);
         details = accoLayout.findViewById(R.id.details);
         details.setOnClickListener(v -> {
@@ -98,7 +98,9 @@ public class LandingActivity extends AppCompatActivity {
         details = accoLayout.findViewById(R.id.details);
         details.setOnClickListener(v -> {
             Intent intent = new Intent(LandingActivity.this, ReportsActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(intent);
+            overridePendingTransition(0, 0);
         });
 
     }
@@ -114,14 +116,17 @@ public class LandingActivity extends AppCompatActivity {
                 } else if (item.getItemId() == R.id.navigation_account) {
                     Intent intent = new Intent(LandingActivity.this, AccountDetailsActivity.class);
                     startActivity(intent);
+                    overridePendingTransition(0,0);
                     finish();
                 } else if (item.getItemId() == R.id.navigation_reservations) {
                     Intent intent = new Intent(LandingActivity.this, RequestsActivity.class);
                     startActivity(intent);
+                    overridePendingTransition(0,0);
                     finish();
                 } else if (item.getItemId() == R.id.navigation_favorites) {
                     Intent intent = new Intent(LandingActivity.this, FavoritesActivity.class);
                     startActivity(intent);
+                    overridePendingTransition(0,0);
                     finish();
                 } else if (item.getItemId() == R.id.navigation_notifications) {
                     return true;

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- res/values/styles.xml -->
+    <style name="stil" parent="TextAppearance.MaterialCalendarWidget.WeekDay">
+        <!-- Define custom text color for normal days -->
+        <item name="android:textColor">@color/caribbean</item>
+<!--        &lt;!&ndash; Define other custom attributes as needed &ndash;&gt;-->
+<!--        <item name="android:color">@color/caribbean</item>-->
+    </style>
+
+</resources>
