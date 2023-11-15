@@ -12,9 +12,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:cardCornerRadius="20dp">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="?attr/colorSurfaceContainerHighest">
             <include
                 android:id="@+id/acc_details"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -29,24 +31,29 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp">
+
                 <Button
                     android:id="@+id/button_reject"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="100dp"
+                    android:layout_height="36dp"
+                    android:padding="0sp"
                     android:text="@string/reject"
-                    />
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <Button
                     android:id="@+id/button_approve"
-                    app:layout_constraintEnd_toStartOf="@id/button_reject"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/approve"
+                    android:layout_width="100dp"
+                    android:layout_height="36dp"
+                    android:layout_marginEnd="10dp"
                     android:backgroundTint="?attr/colorPrimaryDark"
+                    android:padding="0sp"
+                    android:text="@string/approve"
                     android:textColor="?attr/colorPrimary"
-                    android:layout_marginEnd="10dp"/>
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/button_reject"
+                    app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

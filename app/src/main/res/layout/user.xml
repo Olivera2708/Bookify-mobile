@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingHorizontal="14dp"
-    android:paddingVertical="7dp">
+    android:paddingHorizontal="14dp">
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,8 +17,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:background="?attr/colorPrimaryDark"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingVertical="14dp"
+            android:layout_height="wrap_content"
+            android:paddingVertical="8dp"
             android:paddingHorizontal="12dp">
 
             <ImageView
@@ -27,16 +27,14 @@
                 android:layout_height="60dp"
                 android:layout_centerVertical="true"
                 android:src="@drawable/account_round"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:tint="?attr/iconTint"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <LinearLayout
                 android:id="@+id/user_info"
-                android:layout_width="0dp"
+                android:layout_width="280dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/button_block"
                 app:layout_constraintStart_toEndOf="@id/notification_icon"
                 app:layout_constraintTop_toTopOf="parent"
                 android:orientation="vertical"
@@ -63,14 +61,13 @@
 
             <Button
                 android:id="@+id/button_block"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="100dp"
+                android:layout_height="36dp"
+                android:padding="0sp"
                 android:layout_centerVertical="true"
                 android:text="@string/block"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/user_info"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/user_info" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
