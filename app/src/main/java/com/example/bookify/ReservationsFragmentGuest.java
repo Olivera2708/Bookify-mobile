@@ -1,12 +1,18 @@
 package com.example.bookify;
 
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,6 +65,30 @@ public class ReservationsFragmentGuest extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_reservations_guest, container, false);
+        View view = inflater.inflate(R.layout.fragment_reservations_guest, container, false);
+
+        Button comment = view.findViewById(R.id.btnComment);
+        Button report = view.findViewById(R.id.btnReport);
+
+        comment.setOnClickListener(v -> {
+            ShowDialog(R.layout.new_comment);
+        });
+
+        report.setOnClickListener(v -> {
+            ShowDialog(R.layout.report);
+        });
+        return view;
+    }
+
+    private void ShowDialog(int id) {
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(id);
+
+        dialog.show();
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().setGravity(Gravity.CENTER_VERTICAL);
     }
 }

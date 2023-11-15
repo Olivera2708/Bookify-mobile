@@ -78,13 +78,11 @@ public class LandingActivity extends AppCompatActivity {
         View accoLayout = findViewById(R.id.acco1);
         Button details = accoLayout.findViewById(R.id.details);
         details.setOnClickListener(v -> {
-            ShowDialog(R.layout.new_comment);
         });
 
         accoLayout = findViewById(R.id.acco2);
         details = accoLayout.findViewById(R.id.details);
         details.setOnClickListener(v -> {
-            ShowDialog(R.layout.report);
         });
 
         accoLayout = findViewById(R.id.acco3);
