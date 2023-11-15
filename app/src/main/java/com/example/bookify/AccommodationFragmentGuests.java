@@ -1,5 +1,6 @@
 package com.example.bookify;
 
+import android.annotation.SuppressLint;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 
@@ -62,31 +63,35 @@ public class AccommodationFragmentGuests extends Fragment {
         }
     }
 
+    boolean selected = true;
+    View view;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_accommodation_guests, container, false);
+        view = inflater.inflate(R.layout.fragment_accommodation_guests, container, false);
 
-        MaterialButton left = view.findViewById(R.id.leftButton);
-        MaterialButton right = view.findViewById(R.id.rightButton);
+//        MaterialButton left = view.findViewById(R.id.leftButton);
+//        MaterialButton right = view.findViewById(R.id.rightButton);
+//
+//        ColorStateList colorStateListSelected = right.getBackgroundTintList();
+//        ColorStateList colorStateList = left.getBackgroundTintList();
 
-        ColorStateList colorStateListSelected = right.getBackgroundTintList();
-        ColorStateList colorStateList = left.getBackgroundTintList();
+//        left.setOnClickListener(v -> {
+//            left.setBackgroundTintList(colorStateListSelected);
+//            right.setBackgroundTintList(colorStateList);
+//        });
+//
+//        right.setOnClickListener(v -> {
+//            left.setBackgroundTintList(colorStateList);
+//            right.setBackgroundTintList(colorStateListSelected);
+//        });
 
-        left.setOnClickListener(v -> {
-            left.setBackgroundTintList(colorStateListSelected);
-            right.setBackgroundTintList(colorStateList);
-        });
+//        right.setChecked(true);
 
-        right.setOnClickListener(v->{
-            left.setBackgroundTintList(colorStateList);
-            right.setBackgroundTintList(colorStateListSelected);
-        });
 
-        right.setChecked(true);
-
-        String[] sort = new String[] {"studio", "room", "apartment"};
+        String[] sort = new String[]{"studio", "room", "apartment"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.dropdown_item, sort);
         AutoCompleteTextView autoCompleteTextView = view.findViewById(R.id.typeDropDown);
         autoCompleteTextView.setAdapter(adapter);
@@ -98,5 +103,57 @@ public class AccommodationFragmentGuests extends Fragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        MaterialButton left = view.findViewById(R.id.leftButton);
+        MaterialButton right = view.findViewById(R.id.rightButton);
+
+        ColorStateList colorStateListSelected = right.getBackgroundTintList();
+        ColorStateList colorStateList = left.getBackgroundTintList();
+
+        left.setOnClickListener(v -> {
+            left.setBackgroundTintList(colorStateListSelected);
+            right.setBackgroundTintList(colorStateList);
+            selected = false;
+            left.setChecked(true);
+        });
+
+        right.setOnClickListener(v -> {
+            left.setBackgroundTintList(colorStateList);
+            right.setBackgroundTintList(colorStateListSelected);
+            selected = true;
+            right.setChecked(true);
+        });
+
+        left.setChecked(!selected);
+        right.setChecked(selected);
+
+        if (left.isChecked()) {
+            left.setBackgroundTintList(colorStateListSelected);
+            right.setBackgroundTintList(colorStateList);
+        }
+        if (right.isChecked()) {
+            right.setBackgroundTintList(colorStateListSelected);
+            left.setBackgroundTintList(colorStateList);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+//        MaterialButton left = view.findViewById(R.id.leftButton);
+//        MaterialButton right = view.findViewById(R.id.rightButton);
+//
+//        if (left.isChecked()) {
+//            left.setBackgroundTintList(selected);
+//            right.setBackgroundTintList(color);
+//        }
+//        if (right.isChecked()) {
+//            right.setBackgroundTintList(color);
+//            left.setBackgroundTintList(selected);
+//        }
     }
 }
