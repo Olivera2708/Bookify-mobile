@@ -138,4 +138,5 @@
     <string name="ignore">Ignore</string>
     <string name="reported_users">Reported Users</string>
     <string name="block">Block</string>
+    <string name="search_user">Search User</string>
 </resources>
