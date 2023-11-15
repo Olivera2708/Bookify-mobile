@@ -130,4 +130,7 @@
     <string name="new_profile_rating">New Profile Rating</string>
     <string name="reservation_cancellation">Reservation Cancellation</string>
     <string name="new_accommodation_rating">New Accommodation Rating</string>
+    <string name="created_accommodations_requests">Created Accommodations</string>
+    <string name="edited_accommodations_requests">Edited Accommodations</string>
+    <string name="approve">Approve</string>
 </resources>
