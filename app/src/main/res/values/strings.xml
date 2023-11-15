@@ -133,4 +133,7 @@
     <string name="created_accommodations_requests">Created Accommodations</string>
     <string name="edited_accommodations_requests">Edited Accommodations</string>
     <string name="approve">Approve</string>
+    <string name="new_reviews">New Reviews</string>
+    <string name="reported_reviews">Reported Reviews</string>
+    <string name="ignore">Ignore</string>
 </resources>
