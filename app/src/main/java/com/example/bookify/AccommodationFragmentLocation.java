@@ -1,12 +1,27 @@
 package com.example.bookify;
 
+import android.location.Address;
+import android.location.Geocoder;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.textfield.TextInputEditText;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -15,6 +30,8 @@ import android.view.ViewGroup;
  */
 public class AccommodationFragmentLocation extends Fragment {
 
+    private MapView mapView;
+    private GoogleMap gMap;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -55,10 +72,24 @@ public class AccommodationFragmentLocation extends Fragment {
         }
     }
 
+    View view;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_accommodation_location, container, false);
+        view = inflater.inflate(R.layout.fragment_accommodation_location, container, false);
+        mapView = view.findViewById(R.id.mapView);
+        mapView.onCreate(savedInstanceState);
+        mapView.getMapAsync(googleMap -> {
+            // You can customize the map here
+            // For example, add a marker
+            LatLng markerLatLng = new LatLng(45.267136, 19.833549);
+            googleMap.addMarker(new MarkerOptions().position(markerLatLng).title("Marker Title"));
+
+            // Move the camera to the marker
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markerLatLng, 12));
+        });
+        return view;
     }
 }
