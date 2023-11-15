@@ -15,6 +15,12 @@ import android.widget.Button;
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
@@ -30,6 +36,8 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
 
     Button reservationDate;
     ImageSlider imageSlider;
+    private MapView mapView;
+    private GoogleMap gMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +80,18 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
 
         imageSlider.setImageList(imageList, ScaleTypes.FIT);
 
+
+        mapView = findViewById(R.id.mapView);
+        mapView.onCreate(savedInstanceState);
+        mapView.getMapAsync(googleMap -> {
+            // You can customize the map here
+            // For example, add a marker
+            LatLng markerLatLng = new LatLng(45.2453834, 19.7917393);
+            googleMap.addMarker(new MarkerOptions().position(markerLatLng).title("Marker Title"));
+
+            // Move the camera to the marker
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markerLatLng, 12));
+        });
     }
     private void setBottomNavigation() {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigaiton);
