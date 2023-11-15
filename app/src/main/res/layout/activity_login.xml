@@ -92,7 +92,7 @@
 
                 <Button
                     android:id="@+id/btnRegister"
-                    android:layout_width="wrap_content"
+                    android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="start|bottom"
                     android:layout_marginTop="30dp"
@@ -111,11 +111,11 @@
 
                 <Button
                     android:id="@+id/btnGuest"
-                    android:layout_width="wrap_content"
+                    android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|end"
                     android:layout_marginTop="30dp"
-                    android:text="@string/continue_guest"
+                    android:text="@string/skip"
                     tools:layout_editor_absoluteX="157dp"
                     tools:layout_editor_absoluteY="390dp" />
             </LinearLayout>

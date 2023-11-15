@@ -59,6 +59,21 @@
                 tools:layout_editor_absoluteY="142dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <RadioGroup
+            android:layout_width="250dp"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/guest" />
+
+            <RadioButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="@string/owner" />
+        </RadioGroup>
 
         <LinearLayout
             android:layout_width="match_parent"
