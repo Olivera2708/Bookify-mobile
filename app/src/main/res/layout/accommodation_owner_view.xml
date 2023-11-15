@@ -68,32 +68,38 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/apartment_image">
+
                 <Button
                     android:id="@+id/remove_accomodation"
-                    android:layout_width="wrap_content"
-                    android:layout_height="42dp"
-                    android:fontFamily="@font/montserrat_medium"
-                    android:text="@string/edit"
-                    android:textSize="14dp"
-                    android:textAlignment="center"
+                    android:layout_width="70dp"
+                    android:layout_height="36dp"
                     android:layout_marginBottom="4dp"
-                    android:layout_marginRight="5dp"
                     android:backgroundTint="@color/charcoal"
-                    android:textColor="@color/white"/>
+                    android:fontFamily="@font/montserrat_medium"
+                    android:padding="0dp"
+                    android:layout_marginEnd="10dp"
+                    android:text="@string/edit"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="12dp" />
 
                 <Button
                     android:id="@+id/details"
-                    android:layout_width="wrap_content"
-                    android:layout_height="42dp"
-                    android:fontFamily="@font/montserrat_medium"
-                    android:text="@string/remove"
-                    android:textSize="14dp"
-                    android:textAlignment="center"
+                    android:layout_width="70dp"
+                    android:layout_height="36dp"
                     android:layout_marginBottom="4dp"
                     android:backgroundTint="?attr/android:windowBackground"
-                    android:textColor="?attr/iconTint"/>
+                    android:fontFamily="@font/montserrat_medium"
+                    android:padding="0sp"
+                    android:text="@string/remove"
+                    android:textAlignment="center"
+                    android:textColor="?attr/iconTint"
+                    android:textSize="12dp" />
 
             </LinearLayout>
 
