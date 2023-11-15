@@ -98,6 +98,13 @@
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="12dp" />
 
+                        <include
+                            android:id="@+id/loc4"
+                            layout="@layout/popular_location"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="12dp" />
+
                     </LinearLayout>
                 </HorizontalScrollView>
             </LinearLayout>

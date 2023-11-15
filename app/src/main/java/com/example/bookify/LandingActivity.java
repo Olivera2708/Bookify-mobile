@@ -174,5 +174,13 @@ public class LandingActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        findViewById(R.id.loc4).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LandingActivity.this, AllUsersActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }

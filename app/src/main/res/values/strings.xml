@@ -136,4 +136,6 @@
     <string name="new_reviews">New Reviews</string>
     <string name="reported_reviews">Reported Reviews</string>
     <string name="ignore">Ignore</string>
+    <string name="reported_users">Reported Users</string>
+    <string name="block">Block</string>
 </resources>
