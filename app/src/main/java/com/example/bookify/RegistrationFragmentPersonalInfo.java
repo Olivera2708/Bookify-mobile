@@ -9,6 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
+
+import com.google.android.material.textfield.TextInputEditText;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -63,13 +66,20 @@ public class RegistrationFragmentPersonalInfo extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_registration_personal_info, container, false);
         Button button = view.findViewById(R.id.btnNext);
+        TextInputEditText firstName = view.findViewById(R.id.inputFirstName);
+        TextInputEditText lastName = view.findViewById(R.id.inputLastName);
+        TextInputEditText phone = view.findViewById(R.id.inputPhoneNumber);
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Replace the current fragment with the SecondFragment
-                Intent intent = new Intent(getActivity(), LoginActivity.class);
-                startActivity(intent);
-                getActivity().finish();
+                if(firstName.getText().toString().equals("") || lastName.getText().toString().equals("") || phone.getText().toString().equals("")){
+                    Toast.makeText(getActivity(), "You must fill in all field", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                FragmentTransition.to(RegistrationFragmentLocation.newInstance("Locationa", "Location"),
+                        getActivity(), false, R.id.registration);
             }
         });
         return view;

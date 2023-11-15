@@ -11,15 +11,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.bookify.databinding.FragmentRegistrationAccountInfoBinding;
 import com.google.android.material.textfield.TextInputEditText;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link RegistrationFragmentAccountInfo#newInstance} factory method to
+ * Use the {@link RegistrationFragmentLocation#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class RegistrationFragmentAccountInfo extends Fragment {
+public class RegistrationFragmentLocation extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -30,7 +29,7 @@ public class RegistrationFragmentAccountInfo extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public RegistrationFragmentAccountInfo() {
+    public RegistrationFragmentLocation() {
         // Required empty public constructor
     }
 
@@ -40,11 +39,11 @@ public class RegistrationFragmentAccountInfo extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment RegistrationFragmentAccountInfo.
+     * @return A new instance of fragment RegistrationFragmentLocation.
      */
     // TODO: Rename and change types and number of parameters
-    public static RegistrationFragmentAccountInfo newInstance(String param1, String param2) {
-        RegistrationFragmentAccountInfo fragment = new RegistrationFragmentAccountInfo();
+    public static RegistrationFragmentLocation newInstance(String param1, String param2) {
+        RegistrationFragmentLocation fragment = new RegistrationFragmentLocation();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -65,27 +64,22 @@ public class RegistrationFragmentAccountInfo extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_registration_account_info, container, false);
+        View view = inflater.inflate(R.layout.fragment_registration_location, container, false);
         Button button = view.findViewById(R.id.btnNext);
-        TextInputEditText email = view.findViewById(R.id.editTextTextEmailAddress);
-        TextInputEditText password = view.findViewById(R.id.editTextTextPassword);
-        TextInputEditText repeatedPassword = view.findViewById(R.id.editTextTextRepeatPassword);
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Replace the current fragment with the SecondFragment
-                if(email.getText().toString().equals("") || password.getText().toString().equals("") || repeatedPassword.getText().toString().equals("")){
-                    Toast.makeText(getActivity(), "You must fill in all field", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if(!password.getText().toString().equals(repeatedPassword.getText().toString())){
-                    Toast.makeText(getActivity(), "Password and repeated password must be the same", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                FragmentTransition.to(RegistrationFragmentPersonalInfo.newInstance("AccInfo", "Account informations"),
-                        getActivity(), false, R.id.registration);
+        TextInputEditText country = view.findViewById(R.id.inputCountry);
+        TextInputEditText city = view.findViewById(R.id.inputCity);
+        TextInputEditText address = view.findViewById(R.id.inputAddress);
+        TextInputEditText zipCode = view.findViewById(R.id.inputZipCode);
+
+        button.setOnClickListener(v -> {
+            if (country.getText().toString().equals("") || city.getText().toString().equals("") || address.getText().toString().equals("") || zipCode.getText().toString().equals("")) {
+                Toast.makeText(getActivity(), "You must fill in all field", Toast.LENGTH_SHORT).show();
+                return;
             }
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            startActivity(intent);
+            getActivity().finish();
         });
         return view;
     }
