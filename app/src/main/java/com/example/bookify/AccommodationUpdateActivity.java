@@ -3,6 +3,7 @@ package com.example.bookify;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -37,6 +38,11 @@ public class AccommodationUpdateActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         binding.next.setOnClickListener(v -> {
+            if (counter == fragments.length - 1 && binding.next.getText().toString().equals("Submit")) {
+                Intent intent = new Intent(AccommodationUpdateActivity.this, OwnerAccommodationsActivity.class);
+                startActivity(intent);
+                finish();
+            }
             if (counter < fragments.length - 1) {
                 binding.previous.setVisibility(View.VISIBLE);
                 FragmentTransition.to(fragments[++counter], AccommodationUpdateActivity.this, false,
