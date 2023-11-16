@@ -76,7 +76,7 @@
     <string name="register">Register</string>
     <string name="send">Send</string>
     <string name="check_email">Check email</string>
-    <string name="continue_guest">Continue as guest</string>
+    <string name="skip">Skip</string>
     <string name="forget_password">Forget your password?</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -139,4 +139,5 @@
     <string name="reported_users">Reported Users</string>
     <string name="block">Block</string>
     <string name="search_user">Search User</string>
+    <string name="guest">Guest</string>
 </resources>

@@ -38,43 +38,56 @@
             android:exported="false" />
         <activity
             android:name=".NotificationSettingsActivity"
+            android:screenOrientation="portrait"
             android:exported="false"
             android:label="@string/title_activity_notification_settings" />
         <activity
             android:name=".NotificationActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".OwnerAccommodationsActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".AccommodationUpdateActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".ReportsActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".AccountDetailsActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".RequestsActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".FavoritesActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".RegistrationActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".ForgotPasswordActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".LoginActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".LandingActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".SplashScreenActivity"
+            android:screenOrientation="portrait"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -84,9 +97,11 @@
         </activity>
         <activity
             android:name=".ResultsActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
         <activity
             android:name=".AccommodationDetailsActivity"
+            android:screenOrientation="portrait"
             android:exported="false" />
 
         <meta-data
