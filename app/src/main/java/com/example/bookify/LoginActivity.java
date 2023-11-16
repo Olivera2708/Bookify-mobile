@@ -20,6 +20,7 @@ public class LoginActivity extends AppCompatActivity {
 
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
         binding.btnGuest.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, LandingActivity.class);
             startActivity(intent);
@@ -32,9 +33,7 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, "You must fill in all field", Toast.LENGTH_SHORT).show();
                 return;
             }
-            Intent intent = new Intent(LoginActivity.this, LandingActivity.class);
-            startActivity(intent);
-            finish();
+            login();
         });
 
         binding.btnRegister.setOnClickListener(v -> {
@@ -42,6 +41,25 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
+    }
+
+    private void login(){
+        //Simulation of login for video
+        String mail = String.valueOf(binding.editTextTextEmailAddress.getText());
+        String password = String.valueOf(binding.editTextTextPassword.getText());
+
+        Intent intent = new Intent(LoginActivity.this, LandingActivity.class);
+        if (mail.equals("o") && password.equals("o"))
+            intent.putExtra("userType", "owner");
+        else if (mail.equals("g") && password.equals("g"))
+            intent.putExtra("userType", "guest");
+        else if (mail.equals("a") && password.equals("a"))
+            intent.putExtra("userType", "admin");
+        else
+            intent.putExtra("userType", "none");
+
+        startActivity(intent);
+        finish();
     }
 
     public void openForgotPasswordActivity(View view) {

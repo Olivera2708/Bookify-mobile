@@ -21,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.TextView;
@@ -176,8 +177,6 @@ public class ResultsActivity extends AppCompatActivity {
             }
         });
 
-
-
         String[] sort = new String[]{"Price lowest first", "Price highest first", "Name"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.dropdown_item, sort);
         AutoCompleteTextView autoCompleteTextView = dialog.findViewById(R.id.filled_exposed);
@@ -186,6 +185,63 @@ public class ResultsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 //code when something is selected
+            }
+        });
+
+        CheckBox hotel = dialog.findViewById(R.id.hotel);
+        CheckBox apartment = dialog.findViewById(R.id.apartment);
+        CheckBox freeWiFi = dialog.findViewById(R.id.freeWiFi);
+        CheckBox airConditioning = dialog.findViewById(R.id.airConditioning);
+        CheckBox terrace = dialog.findViewById(R.id.terrace);
+        CheckBox swimmingPool = dialog.findViewById(R.id.swimmingPool);
+        CheckBox bar = dialog.findViewById(R.id.bar);
+        CheckBox sauna = dialog.findViewById(R.id.sauna);
+        CheckBox luggageStorage = dialog.findViewById(R.id.luggageStorage);
+        CheckBox lunch = dialog.findViewById(R.id.lunch);
+        CheckBox airportShuttle = dialog.findViewById(R.id.airportShuttle);
+        CheckBox wheelchair = dialog.findViewById(R.id.wheelchair);
+        CheckBox non_smoking = dialog.findViewById(R.id.non_smoking);
+        CheckBox freeParking = dialog.findViewById(R.id.freeParking);
+        CheckBox familyRooms = dialog.findViewById(R.id.familyRooms);
+        CheckBox garden = dialog.findViewById(R.id.garden);
+        CheckBox frontDesk = dialog.findViewById(R.id.frontDesk);
+        CheckBox jacuzzi = dialog.findViewById(R.id.jacuzzi);
+        CheckBox heating = dialog.findViewById(R.id.heating);
+        CheckBox breakfast = dialog.findViewById(R.id.breakfast);
+        CheckBox dinner = dialog.findViewById(R.id.dinner);
+        CheckBox privateBathroom = dialog.findViewById(R.id.privateBathroom);
+        CheckBox depositBox = dialog.findViewById(R.id.depositBox);
+        CheckBox cityCenter = dialog.findViewById(R.id.cityCenter);
+
+
+        Button remove = dialog.findViewById(R.id.remove);
+        remove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                hotel.setChecked(false);
+                apartment.setChecked(false);
+                freeWiFi.setChecked(false);
+                airConditioning.setChecked(false);
+                terrace.setChecked(false);
+                swimmingPool.setChecked(false);
+                bar.setChecked(false);
+                sauna.setChecked(false);
+                luggageStorage.setChecked(false);
+                lunch.setChecked(false);
+                airportShuttle.setChecked(false);
+                wheelchair.setChecked(false);
+                non_smoking.setChecked(false);
+                freeParking.setChecked(false);
+                familyRooms.setChecked(false);
+                garden.setChecked(false);
+                frontDesk.setChecked(false);
+                jacuzzi.setChecked(false);
+                heating.setChecked(false);
+                breakfast.setChecked(false);
+                dinner.setChecked(false);
+                privateBathroom.setChecked(false);
+                depositBox.setChecked(false);
+                cityCenter.setChecked(false);
             }
         });
 

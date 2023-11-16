@@ -83,7 +83,6 @@ public class LandingActivity extends AppCompatActivity {
             startActivity(intent);
             overridePendingTransition(0, 0);
         });
-
     }
 
     private void setBottomNavigation() {

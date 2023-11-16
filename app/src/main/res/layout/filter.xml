@@ -454,7 +454,7 @@
                         android:text="@string/wheelchair" />
 
                     <CheckBox
-                        android:id="@+id/deposit_box"
+                        android:id="@+id/depositBox"
                         android:layout_width="170dp"
                         android:layout_height="30dp"
                         android:layout_weight="1"
@@ -477,7 +477,7 @@
                         android:text="@string/non_smoking" />
 
                     <CheckBox
-                        android:id="@+id/city_center"
+                        android:id="@+id/cityCenter"
                         android:layout_width="170dp"
                         android:layout_height="30dp"
                         android:layout_weight="1"
