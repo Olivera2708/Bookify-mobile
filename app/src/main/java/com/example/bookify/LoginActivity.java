@@ -3,6 +3,7 @@ package com.example.bookify;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -12,6 +13,8 @@ import com.example.bookify.databinding.ActivityLoginBinding;
 public class LoginActivity extends AppCompatActivity {
 
     private ActivityLoginBinding binding;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +23,10 @@ public class LoginActivity extends AppCompatActivity {
 
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        sharedPreferences = getSharedPreferences("sharedPref", MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putString("userType", "none");
 
         binding.btnGuest.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, LandingActivity.class);
@@ -50,14 +57,13 @@ public class LoginActivity extends AppCompatActivity {
 
         Intent intent = new Intent(LoginActivity.this, LandingActivity.class);
         if (mail.equals("o") && password.equals("o"))
-            intent.putExtra("userType", "owner");
+            editor.putString("userType", "owner");
         else if (mail.equals("g") && password.equals("g"))
-            intent.putExtra("userType", "guest");
+            editor.putString("userType", "guest");
         else if (mail.equals("a") && password.equals("a"))
-            intent.putExtra("userType", "admin");
-        else
-            intent.putExtra("userType", "none");
+            editor.putString("userType", "admin");
 
+        editor.commit();
         startActivity(intent);
         finish();
     }
