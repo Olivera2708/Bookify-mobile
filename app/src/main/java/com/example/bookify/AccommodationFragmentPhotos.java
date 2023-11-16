@@ -1,8 +1,14 @@
 package com.example.bookify;
 
+import android.app.Activity;
+import android.content.ClipData;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
 
 import android.provider.MediaStore;
@@ -10,6 +16,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+
+import java.io.IOException;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -42,6 +53,9 @@ public class AccommodationFragmentPhotos extends Fragment {
      * @return A new instance of fragment AccommodationFragmentPhotos.
      */
     // TODO: Rename and change types and number of parameters
+
+    ActivityResultLauncher<Intent> launchSomeActivity;
+
     public static AccommodationFragmentPhotos newInstance(String param1, String param2) {
         AccommodationFragmentPhotos fragment = new AccommodationFragmentPhotos();
         Bundle args = new Bundle();
@@ -51,6 +65,8 @@ public class AccommodationFragmentPhotos extends Fragment {
         return fragment;
     }
 
+    View view;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,20 +74,84 @@ public class AccommodationFragmentPhotos extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        launchSomeActivity = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                        // do your operation from here....
+                        ClipData clipData = data.getClipData();
+                        if (data != null && clipData != null) {
+                            for (int i = 0; i < clipData.getItemCount(); i++) {
+                                Uri selectedImageUri = clipData.getItemAt(i).getUri();
+                                setImage(selectedImageUri);
+                            }
+                        } else if(data != null && data.getData() != null){
+                            Uri selectedImageUri = data.getData();
+                            setImage(selectedImageUri);
+                        }
+                    }
+                });
+    }
+
+    private void setImage(Uri selectedImageUri) {
+        Bitmap selectedImageBitmap = null;
+        try {
+            selectedImageBitmap = MediaStore.Images.Media.getBitmap(
+                    requireActivity().getContentResolver(),
+                    selectedImageUri);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        LinearLayout ll = view.findViewById(R.id.photosLayout);
+        ImageView imageView = new ImageView(requireActivity());
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ll.getWidth(), 500);
+        imageView.setImageBitmap(selectedImageBitmap);
+        imageView.setLayoutParams(params);
+
+        ImageView deleteIcon = new ImageView(requireActivity());
+        deleteIcon.setImageResource(R.drawable.clear);
+        RelativeLayout.LayoutParams exitIconLayoutParams = new RelativeLayout.LayoutParams(100, 100);
+        exitIconLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+        exitIconLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_END);
+        deleteIcon.setLayoutParams(exitIconLayoutParams);
+
+        RelativeLayout containerLayout = new RelativeLayout(requireActivity());
+        containerLayout.setLayoutParams(new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.MATCH_PARENT
+        ));
+
+        containerLayout.addView(imageView);
+        containerLayout.addView(deleteIcon);
+
+        deleteIcon.setOnClickListener(v -> {
+            ll.removeView(containerLayout);
+        });
+
+        ll.addView(containerLayout);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_accommodation_photos, container, false);
-//        Button upload = view.findViewById(R.id.btnUpload);
-//
-//        upload.setOnClickListener(v -> {
-//            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//            startActivity(intent, PICK_IMAGE_REQUEST);
-//        });
+        view = inflater.inflate(R.layout.fragment_accommodation_photos, container, false);
+        Button upload = view.findViewById(R.id.btnUpload);
+
+        upload.setOnClickListener(v -> {
+            chooseImage();
+        });
 
         return view;
+    }
+
+    private void chooseImage() {
+        Intent i = new Intent();
+        i.setType("image/*");
+        i.setAction(Intent.ACTION_GET_CONTENT);
+        i.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        launchSomeActivity.launch(i);
     }
 }
