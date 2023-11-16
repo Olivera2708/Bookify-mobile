@@ -15,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import java.io.IOException;
 
@@ -49,6 +51,9 @@ public class AccommodationFragmentPhotos extends Fragment {
      * @return A new instance of fragment AccommodationFragmentPhotos.
      */
     // TODO: Rename and change types and number of parameters
+
+    ActivityResultLauncher<Intent> launchSomeActivity;
+
     public static AccommodationFragmentPhotos newInstance(String param1, String param2) {
         AccommodationFragmentPhotos fragment = new AccommodationFragmentPhotos();
         Bundle args = new Bundle();
@@ -58,6 +63,8 @@ public class AccommodationFragmentPhotos extends Fragment {
         return fragment;
     }
 
+    View view;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,13 +72,38 @@ public class AccommodationFragmentPhotos extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        launchSomeActivity = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                        // do your operation from here....
+                        if (data != null && data.getData() != null) {
+                            Uri selectedImageUri = data.getData();
+                            Bitmap selectedImageBitmap = null;
+                            try {
+                                selectedImageBitmap = MediaStore.Images.Media.getBitmap(
+                                        requireActivity().getContentResolver(),
+                                        selectedImageUri);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            LinearLayout ll = view.findViewById(R.id.photosLayout);
+                            ImageView imageView = new ImageView(requireActivity());
+                            imageView.setImageBitmap(selectedImageBitmap);
+                            ll.setLayoutParams(ll.getLayoutParams());
+                            ll.addView(imageView);
+                        }
+                    }
+                });
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_accommodation_photos, container, false);
+        view = inflater.inflate(R.layout.fragment_accommodation_photos, container, false);
         Button upload = view.findViewById(R.id.btnUpload);
 
         upload.setOnClickListener(v -> {
@@ -81,38 +113,11 @@ public class AccommodationFragmentPhotos extends Fragment {
         return view;
     }
 
-    private void chooseImage(){
+    private void chooseImage() {
         Intent i = new Intent();
         i.setType("image/*");
         i.setAction(Intent.ACTION_GET_CONTENT);
+        i.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         launchSomeActivity.launch(i);
     }
-
-    ActivityResultLauncher<Intent> launchSomeActivity
-            = registerForActivityResult(
-            new ActivityResultContracts
-                    .StartActivityForResult(),
-            result -> {
-                if (result.getResultCode()
-                        == Activity.RESULT_OK) {
-                    Intent data = result.getData();
-                    // do your operation from here....
-                    if (data != null
-                            && data.getData() != null) {
-                        Uri selectedImageUri = data.getData();
-                        Bitmap selectedImageBitmap;
-                        try {
-                            selectedImageBitmap
-                                    = MediaStore.Images.Media.getBitmap(
-                                    getActivity().getContentResolver(),
-                                    selectedImageUri);
-                        }
-                        catch (IOException e) {
-                            e.printStackTrace();
-                        }
-//                        imageView.setImageBitmap(
-//                                selectedImageBitmap);
-                    }
-                }
-            });
 }
