@@ -1,5 +1,6 @@
 package com.example.bookify;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -30,7 +31,9 @@ public class LoginActivity extends AppCompatActivity {
 
         binding.btnGuest.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, LandingActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(intent);
+            overridePendingTransition(0, 0);
             finish();
         });
 
@@ -45,12 +48,23 @@ public class LoginActivity extends AppCompatActivity {
 
         binding.btnRegister.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, RegistrationActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(intent);
+            overridePendingTransition(0, 0);
             finish();
         });
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                finishAffinity();
+                finish();
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
-    private void login(){
+    private void login() {
         //Simulation of login for video
         String mail = String.valueOf(binding.editTextTextEmailAddress.getText());
         String password = String.valueOf(binding.editTextTextPassword.getText());
@@ -64,12 +78,17 @@ public class LoginActivity extends AppCompatActivity {
             editor.putString("userType", "admin");
 
         editor.commit();
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
+        overridePendingTransition(0, 0);
         finish();
     }
 
     public void openForgotPasswordActivity(View view) {
         Intent intent = new Intent(this, ForgotPasswordActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
+        overridePendingTransition(0, 0);
+        finish();
     }
 }

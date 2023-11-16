@@ -1,5 +1,6 @@
 package com.example.bookify;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
@@ -40,7 +41,9 @@ public class AccommodationUpdateActivity extends AppCompatActivity {
         binding.next.setOnClickListener(v -> {
             if (counter == fragments.length - 1 && binding.next.getText().toString().equals("Submit")) {
                 Intent intent = new Intent(AccommodationUpdateActivity.this, OwnerAccommodationsActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
+                overridePendingTransition(0, 0);
                 finish();
             }
             if (counter < fragments.length - 1) {
@@ -72,5 +75,17 @@ public class AccommodationUpdateActivity extends AppCompatActivity {
         });
 
         Toast.makeText(AccommodationUpdateActivity.this, "" + counter, Toast.LENGTH_SHORT);
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Intent intent = new Intent(AccommodationUpdateActivity.this, OwnerAccommodationsActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(intent);
+                overridePendingTransition(0, 0);
+                finish();
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(this, callback);
     }
 }

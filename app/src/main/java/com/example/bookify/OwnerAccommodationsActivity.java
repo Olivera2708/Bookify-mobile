@@ -1,5 +1,6 @@
 package com.example.bookify;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -22,13 +23,29 @@ public class OwnerAccommodationsActivity extends AppCompatActivity {
 
         addAccommodation.setOnClickListener(v -> {
             Intent intent = new Intent(OwnerAccommodationsActivity.this, AccommodationUpdateActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(intent);
+            overridePendingTransition(0, 0);
         });
 
         Button reportButton = findViewById(R.id.reportButton);
         reportButton.setOnClickListener(v -> {
             Intent intent = new Intent(OwnerAccommodationsActivity.this, ReportsActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(intent);
+            overridePendingTransition(0, 0);
         });
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Intent intent = new Intent(OwnerAccommodationsActivity.this, LandingActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(intent);
+                overridePendingTransition(0, 0);
+                finish();
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(this, callback);
     }
 }
