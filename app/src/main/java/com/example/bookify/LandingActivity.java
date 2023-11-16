@@ -6,6 +6,7 @@ import androidx.core.util.Pair;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.bookify.databinding.AccommodationOwnerViewBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -41,6 +43,8 @@ public class LandingActivity extends AppCompatActivity {
 
         setBottomNavigation();
         showAccommodations();
+
+        getUserType();
 
         View searchLayout = findViewById(R.id.searchLayout);
         editDate = searchLayout.findViewById(R.id.dateInput);
@@ -83,7 +87,6 @@ public class LandingActivity extends AppCompatActivity {
             startActivity(intent);
             overridePendingTransition(0, 0);
         });
-
     }
 
     private void setBottomNavigation() {
@@ -163,5 +166,10 @@ public class LandingActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private void getUserType(){
+        SharedPreferences sharedPreferences = getSharedPreferences("sharedPref", MODE_PRIVATE);
+        String user = sharedPreferences.getString("userType", "");
     }
 }
