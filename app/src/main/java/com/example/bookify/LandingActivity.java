@@ -19,7 +19,6 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 
-import com.example.bookify.databinding.AccommodationOwnerViewBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -29,6 +28,7 @@ import com.google.android.material.navigation.NavigationBarView;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.zip.Inflater;
 
 public class LandingActivity extends AppCompatActivity {
     Button editDate;
@@ -88,37 +88,11 @@ public class LandingActivity extends AppCompatActivity {
 
     private void setBottomNavigation() {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigaiton);
+        bottomNavigationView.getMenu().clear();
+
+        bottomNavigationView.inflateMenu(R.menu.bottom_nav_menu_admin);
         bottomNavigationView.setSelectedItemId(R.id.navigation_home);
-        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if (item.getItemId() == R.id.navigation_home) {
-                    return false;
-                } else if (item.getItemId() == R.id.navigation_account) {
-                    Intent intent = new Intent(LandingActivity.this, AccountDetailsActivity.class);
-                    startActivity(intent);
-                    overridePendingTransition(0,0);
-                    finish();
-                } else if (item.getItemId() == R.id.navigation_reservations) {
-                    Intent intent = new Intent(LandingActivity.this, RequestsActivity.class);
-                    startActivity(intent);
-                    overridePendingTransition(0,0);
-                    finish();
-                } else if (item.getItemId() == R.id.navigation_favorites) {
-                    Intent intent = new Intent(LandingActivity.this, FavoritesActivity.class);
-                    startActivity(intent);
-                    overridePendingTransition(0,0);
-                    finish();
-                } else if (item.getItemId() == R.id.navigation_notifications) {
-                    Intent intent = new Intent(LandingActivity.this, NotificationActivity.class);
-                    startActivity(intent);
-                    overridePendingTransition(0,0);
-                    finish();
-                    return true;
-                }
-                return false;
-            }
-        });
+        bottomNavigationView.setOnItemSelectedListener(new AdminNavigation(this));
     }
 
     private void ShowDialog(int id) {
