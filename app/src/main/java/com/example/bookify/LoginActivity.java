@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.bookify.databinding.ActivityLoginBinding;
 
@@ -26,12 +27,17 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         binding.btnLogin.setOnClickListener(v -> {
+            if (binding.editTextTextEmailAddress.getText().toString().equals("") ||
+                    binding.editTextTextPassword.getText().toString().equals("")) {
+                Toast.makeText(LoginActivity.this, "You must fill in all field", Toast.LENGTH_SHORT).show();
+                return;
+            }
             Intent intent = new Intent(LoginActivity.this, LandingActivity.class);
             startActivity(intent);
             finish();
         });
 
-        binding.btnRegister.setOnClickListener(v->{
+        binding.btnRegister.setOnClickListener(v -> {
             Intent intent = new Intent(LoginActivity.this, RegistrationActivity.class);
             startActivity(intent);
             finish();

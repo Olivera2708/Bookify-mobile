@@ -15,7 +15,7 @@
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="left"
             android:orientation="vertical">
 
@@ -86,7 +86,7 @@
             <com.google.android.gms.maps.MapView
                 android:id="@+id/mapView"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="250dp"
                 android:apiKey="AIzaSyCbuvyEduvlNzJTujCCc557cwEGrmbsGoY"
                 app:cameraZoom="12"
                 app:mapType="normal"/>
