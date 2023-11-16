@@ -81,7 +81,6 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
 
         imageSlider.setImageList(imageList, ScaleTypes.FIT);
 
-
         mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(googleMap -> {
