@@ -11,12 +11,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 public class NotificationActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
+        NavigationBar.setNavigationBar(findViewById(R.id.bottom_navigaiton), this, R.id.navigation_notifications);
 
         View buttonSettings = findViewById(R.id.button_settings);
         buttonSettings.setOnClickListener(new View.OnClickListener() {

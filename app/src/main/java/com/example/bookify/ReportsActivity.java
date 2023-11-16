@@ -25,6 +25,7 @@ import com.anychart.enums.Position;
 import com.anychart.enums.TooltipDisplayMode;
 import com.anychart.enums.TooltipPositionMode;
 import com.anychart.graphics.vector.Stroke;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
@@ -36,11 +37,7 @@ public class ReportsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reports);
-//        FragmentTransition.to(ReportOverallFragment.newInstance("", ""),
-//                ReportsActivity.this, false, R.id.charts);
-
-//        FragmentTransition.to(ReportForAccommodationFragment.newInstance("", ""),
-//                ReportsActivity.this, false, R.id.charts);
+        NavigationBar.setNavigationBar(findViewById(R.id.bottom_navigaiton), this, R.id.navigation_account);
 
         TabLayout tabLayout = findViewById(R.id.tabLayout);
         ViewPager2 viewPager2 = findViewById(R.id.view_pager);

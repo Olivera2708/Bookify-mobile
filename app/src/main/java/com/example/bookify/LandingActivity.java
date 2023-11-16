@@ -41,10 +41,8 @@ public class LandingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing);
 
-        setBottomNavigation();
+        NavigationBar.setNavigationBar(findViewById(R.id.bottom_navigaiton), this, R.id.navigation_home);
         showAccommodations();
-
-        getUserType();
 
         View searchLayout = findViewById(R.id.searchLayout);
         editDate = searchLayout.findViewById(R.id.dateInput);
@@ -89,15 +87,6 @@ public class LandingActivity extends AppCompatActivity {
         });
     }
 
-    private void setBottomNavigation() {
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigaiton);
-        bottomNavigationView.getMenu().clear();
-
-        bottomNavigationView.inflateMenu(R.menu.bottom_nav_menu_admin);
-        bottomNavigationView.setSelectedItemId(R.id.navigation_home);
-        bottomNavigationView.setOnItemSelectedListener(new AdminNavigation(this));
-    }
-
     private void ShowDialog(int id) {
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -140,10 +129,5 @@ public class LandingActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
-
-    private void getUserType(){
-        SharedPreferences sharedPreferences = getSharedPreferences("sharedPref", MODE_PRIVATE);
-        String user = sharedPreferences.getString("userType", "");
     }
 }

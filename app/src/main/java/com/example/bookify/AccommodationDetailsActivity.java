@@ -43,7 +43,9 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_accommodation_details);
-//        NavigationBar.setNavigationBar(findViewById(R.id.bottom_navigaiton));
+        // Setting navigation bar and selected item in menu
+        NavigationBar.setNavigationBar(findViewById(R.id.bottom_navigaiton), this, R.id.navigation_home);
+
         View reservationTile = findViewById(R.id.reservation);
         reservationDate = reservationTile.findViewById(R.id.editDate);
         reservationDate.setOnClickListener(new View.OnClickListener() {
