@@ -47,6 +47,7 @@
         android:id="@+id/notification_scroller"
         app:layout_constraintTop_toBottomOf="@id/notification_title"
         app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/bottom_navigaiton"
         android:layout_width="match_parent"
