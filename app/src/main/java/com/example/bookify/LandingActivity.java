@@ -21,7 +21,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.bookify.databinding.AccommodationOwnerViewBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -31,6 +30,7 @@ import com.google.android.material.navigation.NavigationBarView;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.zip.Inflater;
 
 public class LandingActivity extends AppCompatActivity {
     Button editDate;
@@ -41,10 +41,8 @@ public class LandingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing);
 
-        setBottomNavigation();
+        NavigationBar.setNavigationBar(findViewById(R.id.bottom_navigaiton), this, R.id.navigation_home);
         showAccommodations();
-
-        getUserType();
 
         View searchLayout = findViewById(R.id.searchLayout);
         editDate = searchLayout.findViewById(R.id.dateInput);
@@ -86,41 +84,6 @@ public class LandingActivity extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(intent);
             overridePendingTransition(0, 0);
-        });
-    }
-
-    private void setBottomNavigation() {
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigaiton);
-        bottomNavigationView.setSelectedItemId(R.id.navigation_home);
-        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if (item.getItemId() == R.id.navigation_home) {
-                    return false;
-                } else if (item.getItemId() == R.id.navigation_account) {
-                    Intent intent = new Intent(LandingActivity.this, AccountDetailsActivity.class);
-                    startActivity(intent);
-                    overridePendingTransition(0,0);
-                    finish();
-                } else if (item.getItemId() == R.id.navigation_reservations) {
-                    Intent intent = new Intent(LandingActivity.this, RequestsActivity.class);
-                    startActivity(intent);
-                    overridePendingTransition(0,0);
-                    finish();
-                } else if (item.getItemId() == R.id.navigation_favorites) {
-                    Intent intent = new Intent(LandingActivity.this, FavoritesActivity.class);
-                    startActivity(intent);
-                    overridePendingTransition(0,0);
-                    finish();
-                } else if (item.getItemId() == R.id.navigation_notifications) {
-                    Intent intent = new Intent(LandingActivity.this, NotificationActivity.class);
-                    startActivity(intent);
-                    overridePendingTransition(0,0);
-                    finish();
-                    return true;
-                }
-                return false;
-            }
         });
     }
 
@@ -166,10 +129,5 @@ public class LandingActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-    }
-
-    private void getUserType(){
-        SharedPreferences sharedPreferences = getSharedPreferences("sharedPref", MODE_PRIVATE);
-        String user = sharedPreferences.getString("userType", "");
     }
 }
