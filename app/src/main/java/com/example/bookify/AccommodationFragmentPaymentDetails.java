@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.RadioButton;
 
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -61,6 +62,7 @@ public class AccommodationFragmentPaymentDetails extends MyFragment {
     }
 
     View view;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -72,7 +74,10 @@ public class AccommodationFragmentPaymentDetails extends MyFragment {
     @Override
     public int isValid() {
         TextInputEditText deadline = view.findViewById(R.id.deadlineInput);
-        if (deadline.getText().toString().equals("")) {
+        RadioButton person = view.findViewById(R.id.rbtPerson);
+        RadioButton room = view.findViewById(R.id.rbtRoom);
+
+        if (deadline.getText().toString().equals("") || (!person.isChecked() && !room.isChecked())) {
             return 1;
         }
         return 0;

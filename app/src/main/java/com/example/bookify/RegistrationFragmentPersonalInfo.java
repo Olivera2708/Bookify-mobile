@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -69,12 +70,16 @@ public class RegistrationFragmentPersonalInfo extends Fragment {
         TextInputEditText firstName = view.findViewById(R.id.inputFirstName);
         TextInputEditText lastName = view.findViewById(R.id.inputLastName);
         TextInputEditText phone = view.findViewById(R.id.inputPhoneNumber);
+        RadioButton guest = view.findViewById(R.id.rbtGuest);
+        RadioButton owner = view.findViewById(R.id.rbtOwner);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Replace the current fragment with the SecondFragment
-                if(firstName.getText().toString().equals("") || lastName.getText().toString().equals("") || phone.getText().toString().equals("")){
+
+                if(firstName.getText().toString().equals("") || lastName.getText().toString().equals("") ||
+                        phone.getText().toString().equals("") || (!guest.isChecked() && !owner.isChecked())){
                     Toast.makeText(getActivity(), "You must fill in all field", Toast.LENGTH_SHORT).show();
                     return;
                 }
