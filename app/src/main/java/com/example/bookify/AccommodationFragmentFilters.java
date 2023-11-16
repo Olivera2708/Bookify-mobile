@@ -13,7 +13,7 @@ import android.view.ViewGroup;
  * Use the {@link AccommodationFragmentFilters#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AccommodationFragmentFilters extends Fragment {
+public class AccommodationFragmentFilters extends MyFragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -60,5 +60,10 @@ public class AccommodationFragmentFilters extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_accommodation_filters, container, false);
+    }
+
+    @Override
+    public int isValid() {
+        return 0;
     }
 }

@@ -15,13 +15,14 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link AccommodationFragmentGuests#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AccommodationFragmentGuests extends Fragment {
+public class AccommodationFragmentGuests extends MyFragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -71,25 +72,6 @@ public class AccommodationFragmentGuests extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_accommodation_guests, container, false);
-
-//        MaterialButton left = view.findViewById(R.id.leftButton);
-//        MaterialButton right = view.findViewById(R.id.rightButton);
-//
-//        ColorStateList colorStateListSelected = right.getBackgroundTintList();
-//        ColorStateList colorStateList = left.getBackgroundTintList();
-
-//        left.setOnClickListener(v -> {
-//            left.setBackgroundTintList(colorStateListSelected);
-//            right.setBackgroundTintList(colorStateList);
-//        });
-//
-//        right.setOnClickListener(v -> {
-//            left.setBackgroundTintList(colorStateList);
-//            right.setBackgroundTintList(colorStateListSelected);
-//        });
-
-//        right.setChecked(true);
-
 
         String[] sort = new String[]{"studio", "room", "apartment"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.dropdown_item, sort);
@@ -144,16 +126,19 @@ public class AccommodationFragmentGuests extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-//        MaterialButton left = view.findViewById(R.id.leftButton);
-//        MaterialButton right = view.findViewById(R.id.rightButton);
-//
-//        if (left.isChecked()) {
-//            left.setBackgroundTintList(selected);
-//            right.setBackgroundTintList(color);
-//        }
-//        if (right.isChecked()) {
-//            right.setBackgroundTintList(color);
-//            left.setBackgroundTintList(selected);
-//        }
+    }
+
+    @Override
+    public int isValid() {
+        TextInputEditText min = view.findViewById(R.id.minGuestsInput);
+        TextInputEditText max = view.findViewById(R.id.maxGuestsInput);
+        AutoCompleteTextView autoCompleteTextView = view.findViewById(R.id.typeDropDown);
+        if (min.getText().toString().equals("") || max.getText().toString().equals("") || autoCompleteTextView.getText().toString().trim().length() <= 0) {
+            return 1;
+        }
+        if(Integer.parseInt(min.getText().toString()) > Integer.parseInt(max.getText().toString())){
+            return 2;
+        }
+        return 0;
     }
 }

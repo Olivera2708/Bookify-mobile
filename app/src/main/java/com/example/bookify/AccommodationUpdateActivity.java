@@ -15,7 +15,7 @@ public class AccommodationUpdateActivity extends AppCompatActivity {
 
     ActivityAccommodationUpdateBinding binding;
 
-    Fragment[] fragments = new Fragment[]{
+    MyFragment[] fragments = new MyFragment[]{
             AccommodationFragmentBasicInformation.newInstance("", ""),
             AccommodationFragmentLocation.newInstance("", ""),
             AccommodationFragmentFilters.newInstance("", ""),
@@ -44,6 +44,13 @@ public class AccommodationUpdateActivity extends AppCompatActivity {
                 finish();
             }
             if (counter < fragments.length - 1) {
+                if (fragments[counter].isValid() == 1) {
+                    Toast.makeText(this, "You must fill in all field", Toast.LENGTH_SHORT).show();
+                    return;
+                } else if (fragments[counter].isValid() == 2) {
+                    Toast.makeText(this, "Max must be greater than min", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 binding.previous.setVisibility(View.VISIBLE);
                 FragmentTransition.to(fragments[++counter], AccommodationUpdateActivity.this, false,
                         R.id.accommodationFragment);

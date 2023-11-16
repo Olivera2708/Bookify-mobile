@@ -44,7 +44,7 @@ import java.util.Map;
  * Use the {@link AccommodationFragmentAvailability#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AccommodationFragmentAvailability extends Fragment {
+public class AccommodationFragmentAvailability extends MyFragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -140,5 +140,10 @@ public class AccommodationFragmentAvailability extends Fragment {
         });
 
         return view;
+    }
+
+    @Override
+    public int isValid() {
+        return 0;
     }
 }

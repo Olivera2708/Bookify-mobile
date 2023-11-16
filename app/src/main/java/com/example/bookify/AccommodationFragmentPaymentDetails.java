@@ -11,12 +11,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 
+import com.google.android.material.textfield.TextInputEditText;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link AccommodationFragmentPaymentDetails#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AccommodationFragmentPaymentDetails extends Fragment {
+public class AccommodationFragmentPaymentDetails extends MyFragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -58,11 +60,21 @@ public class AccommodationFragmentPaymentDetails extends Fragment {
         }
     }
 
+    View view;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_accommodation_payment_details, container, false);
+        view = inflater.inflate(R.layout.fragment_accommodation_payment_details, container, false);
         return view;
+    }
+
+    @Override
+    public int isValid() {
+        TextInputEditText deadline = view.findViewById(R.id.deadlineInput);
+        if (deadline.getText().toString().equals("")) {
+            return 1;
+        }
+        return 0;
     }
 }

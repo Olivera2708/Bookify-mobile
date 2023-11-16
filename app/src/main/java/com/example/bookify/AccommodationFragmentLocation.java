@@ -28,7 +28,7 @@ import java.util.Locale;
  * Use the {@link AccommodationFragmentLocation#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AccommodationFragmentLocation extends Fragment {
+public class AccommodationFragmentLocation extends MyFragment {
 
     private MapView mapView;
     private GoogleMap gMap;
@@ -91,5 +91,18 @@ public class AccommodationFragmentLocation extends Fragment {
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markerLatLng, 12));
         });
         return view;
+    }
+
+    @Override
+    public int isValid() {
+        TextInputEditText country = view.findViewById(R.id.countryInput);
+        TextInputEditText city = view.findViewById(R.id.cityInput);
+        TextInputEditText address = view.findViewById(R.id.streetAddressInput);
+        TextInputEditText zipCode = view.findViewById(R.id.zipCodeInput);
+        if (country.getText().toString().equals("") || city.getText().toString().equals("") ||
+                address.getText().toString().equals("") || zipCode.getText().toString().equals("")) {
+            return 1;
+        }
+        return 0;
     }
 }
