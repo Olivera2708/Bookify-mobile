@@ -64,7 +64,7 @@ public class ResultsActivity extends AppCompatActivity {
         details.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ResultsActivity.this, FavoritesActivity.class);
+                Intent intent = new Intent(ResultsActivity.this, AccommodationDetailsActivity.class);
                 startActivity(intent);
             }
         });
@@ -74,7 +74,7 @@ public class ResultsActivity extends AppCompatActivity {
         details.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ResultsActivity.this, RequestsActivity.class);
+                Intent intent = new Intent(ResultsActivity.this, AccommodationDetailsActivity.class);
                 startActivity(intent);
             }
         });
