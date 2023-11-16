@@ -1,8 +1,13 @@
 package com.example.bookify;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
 
 import android.provider.MediaStore;
@@ -10,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import java.io.IOException;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -65,13 +72,47 @@ public class AccommodationFragmentPhotos extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_accommodation_photos, container, false);
-//        Button upload = view.findViewById(R.id.btnUpload);
-//
-//        upload.setOnClickListener(v -> {
-//            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//            startActivity(intent, PICK_IMAGE_REQUEST);
-//        });
+        Button upload = view.findViewById(R.id.btnUpload);
+
+        upload.setOnClickListener(v -> {
+            chooseImage();
+        });
 
         return view;
     }
+
+    private void chooseImage(){
+        Intent i = new Intent();
+        i.setType("image/*");
+        i.setAction(Intent.ACTION_GET_CONTENT);
+        launchSomeActivity.launch(i);
+    }
+
+    ActivityResultLauncher<Intent> launchSomeActivity
+            = registerForActivityResult(
+            new ActivityResultContracts
+                    .StartActivityForResult(),
+            result -> {
+                if (result.getResultCode()
+                        == Activity.RESULT_OK) {
+                    Intent data = result.getData();
+                    // do your operation from here....
+                    if (data != null
+                            && data.getData() != null) {
+                        Uri selectedImageUri = data.getData();
+                        Bitmap selectedImageBitmap;
+                        try {
+                            selectedImageBitmap
+                                    = MediaStore.Images.Media.getBitmap(
+                                    getActivity().getContentResolver(),
+                                    selectedImageUri);
+                        }
+                        catch (IOException e) {
+                            e.printStackTrace();
+                        }
+//                        imageView.setImageBitmap(
+//                                selectedImageBitmap);
+                    }
+                }
+            });
 }
