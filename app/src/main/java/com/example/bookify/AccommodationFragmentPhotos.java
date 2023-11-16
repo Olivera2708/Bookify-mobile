@@ -27,7 +27,7 @@ import java.io.IOException;
  * Use the {@link AccommodationFragmentPhotos#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AccommodationFragmentPhotos extends Fragment {
+public class AccommodationFragmentPhotos extends MyFragment {
 
     private static final int PICK_IMAGE_REQUEST = 1;
 
@@ -153,5 +153,10 @@ public class AccommodationFragmentPhotos extends Fragment {
         i.setAction(Intent.ACTION_GET_CONTENT);
         i.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         launchSomeActivity.launch(i);
+    }
+
+    @Override
+    public int isValid() {
+        return 0;
     }
 }

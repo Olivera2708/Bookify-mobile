@@ -8,12 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.textfield.TextInputEditText;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link AccommodationFragmentBasicInformation#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AccommodationFragmentBasicInformation extends Fragment {
+public class AccommodationFragmentBasicInformation extends MyFragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -55,10 +57,23 @@ public class AccommodationFragmentBasicInformation extends Fragment {
         }
     }
 
+    View view;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_accommodation_basic_information, container, false);
+        view = inflater.inflate(R.layout.fragment_accommodation_basic_information, container, false);
+        return view;
+    }
+
+    @Override
+    public int isValid() {
+        TextInputEditText name = view.findViewById(R.id.propertyNameInput);
+        TextInputEditText description = view.findViewById(R.id.descriptionInput);
+        if (name.getText().toString().equals("") || description.getText().toString().equals("")) {
+            return 1;
+        }
+        return 0;
     }
 }
