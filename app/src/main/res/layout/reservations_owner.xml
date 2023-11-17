@@ -1,45 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <androidx.cardview.widget.CardView
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:cardCornerRadius="20dp">
 
         <LinearLayout
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:background="?attr/colorSecondary"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="?attr/colorSecondary">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/apartment_image"
                 android:layout_width="match_parent"
                 android:layout_height="170dp"
-                android:layout_margin="10dp"
-                app:cardCornerRadius="16dp">
+                app:cardCornerRadius="16dp"
+                android:layout_margin="10dp" >
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:contentDescription="@string/room_picture"
+                    android:src="@drawable/apartment"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/apartment" />
+                    android:contentDescription="@string/room_picture" />
             </androidx.cardview.widget.CardView>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/stars"
                 android:layout_width="180dp"
+                android:layout_marginTop="10dp"
                 android:layout_height="20dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp">
+                android:layout_gravity="center">
 
                 <RatingBar
                     android:id="@+id/starsRating"
@@ -52,19 +53,19 @@
                     android:rating="4"
                     android:scaleX="1.7"
                     android:scaleY="1.7"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
                 android:id="@+id/apartment_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
                 android:fontFamily="@font/montserrat_medium"
                 android:text="Test Apartman"
+                android:layout_marginTop="6dp"
                 android:textAlignment="center"
                 android:textColor="?attr/textFillColor"
                 android:textSize="18sp" />
@@ -74,73 +75,115 @@
                 style="@style/TextAppearance.MaterialComponents.Subtitle2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="10dp"
-                android:text="Guest: Luka Petrovic (3.75/5)"
+                android:text="Owner: Luka Petrovic (3.75/5)"
                 android:textAlignment="center"
                 android:textColor="?attr/textFillColor"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:paddingHorizontal="10dp" />
 
             <TextView
                 android:id="@+id/date"
                 style="@style/TextAppearance.MaterialComponents.Subtitle2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:paddingHorizontal="10dp"
                 android:text="Date: 14.3.2024. - 26.3.2024."
                 android:textAlignment="center"
                 android:textColor="?attr/textFillColor"
-                android:textSize="14sp" />
+                android:layout_marginTop="10dp"
+                android:textSize="14sp"
+                android:paddingHorizontal="10dp"/>
 
             <TextView
                 android:id="@+id/persons"
                 style="@style/TextAppearance.MaterialComponents.Subtitle2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="10dp"
                 android:text="Persons: 2"
                 android:textAlignment="center"
                 android:textColor="?attr/textFillColor"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:paddingHorizontal="10dp"/>
 
             <TextView
                 android:id="@+id/price"
                 style="@style/TextAppearance.MaterialComponents.Subtitle2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="10dp"
                 android:text="Profit: 2085 EUR"
                 android:textAlignment="center"
                 android:textColor="?attr/textFillColor"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:paddingHorizontal="10dp"/>
+
+            <TextView
+
+                android:id="@+id/cancellation_time"
+                style="@style/TextAppearance.MaterialComponents.Subtitle2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cancellation due: 13.3.2024."
+                android:textAlignment="center"
+                android:textColor="?attr/textFillColor"
+                android:textSize="14sp"
+                android:layout_marginTop="10dp"
+                android:paddingHorizontal="10dp"/>
 
             <TextView
                 android:id="@+id/status"
                 style="@style/TextAppearance.MaterialComponents.Subtitle2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="0dp"
-                android:layout_marginBottom="10dp"
-                android:paddingHorizontal="10dp"
                 android:text="Status: Accepted"
                 android:textAlignment="center"
                 android:textColor="?attr/textFillColor"
-                android:textSize="16sp" />
+                android:layout_marginTop="0dp"
+                android:textSize="16sp"
+                android:paddingHorizontal="10dp"/>
+
+            <Button
+                android:id="@+id/cancel"
+                android:layout_width="100dp"
+                android:layout_height="36dp"
+                android:backgroundTint="@color/charcoal"
+                android:fontFamily="@font/montserrat_medium"
+                android:text="@string/cancel"
+                android:padding="0dp"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="6dp" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <Button
+                    android:id="@+id/btnComment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/charcoal"
+                    android:textColor="@color/white"
+                    android:drawableLeft="@drawable/comment"
+                    android:text="@string/comment"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:scaleX="0.8"
+                    android:scaleY="0.8"/>
+
+                <Button
                     android:id="@+id/btnReport"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:backgroundTint="@color/charcoal"
                     android:drawableLeft="@drawable/report"
-                    android:scaleX="0.8"
-                    android:scaleY="0.8"
                     android:text="@string/report"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:scaleX="0.8"
+                    android:scaleY="0.8"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>

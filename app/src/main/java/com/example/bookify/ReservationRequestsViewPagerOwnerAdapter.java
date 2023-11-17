@@ -20,7 +20,7 @@ public class ReservationRequestsViewPagerOwnerAdapter extends FragmentStateAdapt
             case 1:
                 return new RequestFragmentOwner();
         }
-        return new ReservationsFragmentGuest();
+        return new ReservationsFragmentOwner();
     }
 
     @Override

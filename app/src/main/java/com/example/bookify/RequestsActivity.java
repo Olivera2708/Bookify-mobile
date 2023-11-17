@@ -31,7 +31,7 @@ public class RequestsActivity extends AppCompatActivity {
             ReservationRequestsViewPagerGuestAdapter reportsViewPagerAdapter = new ReservationRequestsViewPagerGuestAdapter(this);
             viewPager2.setAdapter(reportsViewPagerAdapter);
         }
-        else{
+        else {
             ReservationRequestsViewPagerOwnerAdapter requestsViewPagerOwnerAdapter = new ReservationRequestsViewPagerOwnerAdapter(this);
             viewPager2.setAdapter(requestsViewPagerOwnerAdapter);
         }

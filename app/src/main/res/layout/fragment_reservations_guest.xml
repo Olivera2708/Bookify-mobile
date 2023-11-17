@@ -23,15 +23,15 @@
                 android:paddingVertical="15dp"
                 android:layout_marginHorizontal="20dp">
 
-                <include layout="@layout/reservations_guest"
+                <include layout="@layout/reservations_owner"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="10dp"/>
-                <include layout="@layout/reservations_guest"
+                <include layout="@layout/reservations_owner"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="10dp"/>
-                <include layout="@layout/reservations_guest"
+                <include layout="@layout/reservations_owner"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="10dp"/>

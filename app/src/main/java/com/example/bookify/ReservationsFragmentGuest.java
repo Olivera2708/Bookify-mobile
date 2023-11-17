@@ -67,15 +67,16 @@ public class ReservationsFragmentGuest extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_reservations_guest, container, false);
 
-        Button comment = view.findViewById(R.id.btnComment);
         Button report = view.findViewById(R.id.btnReport);
-
-        comment.setOnClickListener(v -> {
-            ShowDialog(R.layout.new_comment);
-        });
 
         report.setOnClickListener(v -> {
             ShowDialog(R.layout.report);
+        });
+
+        Button comment = view.findViewById(R.id.btnComment);
+
+        comment.setOnClickListener(v -> {
+            ShowDialog(R.layout.new_comment);
         });
         return view;
     }
