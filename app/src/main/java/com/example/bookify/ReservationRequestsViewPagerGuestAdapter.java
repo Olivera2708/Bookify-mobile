@@ -5,9 +5,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-public class ReservationRequestsViewPagerAdapter extends FragmentStateAdapter {
+public class ReservationRequestsViewPagerGuestAdapter extends FragmentStateAdapter {
 
-    public ReservationRequestsViewPagerAdapter(@NonNull FragmentActivity fragmentActivity){
+    public ReservationRequestsViewPagerGuestAdapter(@NonNull FragmentActivity fragmentActivity){
         super(fragmentActivity);
     }
 
