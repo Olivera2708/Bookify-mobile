@@ -64,12 +64,13 @@
             android:layout_height="wrap_content">
 
             <RadioButton
+                android:id="@+id/rbtGuest"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:checked="true"
                 android:text="@string/guest" />
 
             <RadioButton
+                android:id="@+id/rbtOwner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/owner" />

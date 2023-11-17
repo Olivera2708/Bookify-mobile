@@ -46,11 +46,13 @@
                 android:layout_marginBottom="10dp">
 
                 <RadioButton
+                    android:id="@+id/rbtPerson"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/person" />
 
                 <RadioButton
+                    android:id="@+id/rbtRoom"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/room" />
