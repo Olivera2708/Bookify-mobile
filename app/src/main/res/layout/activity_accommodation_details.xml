@@ -306,7 +306,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="More..." />
+                            android:text="@string/more" />
                     </LinearLayout>
 
                 </androidx.cardview.widget.CardView>
@@ -333,7 +333,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
-                    android:id="@+id/userPicture"
+                    android:id="@+id/ownerPicture"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_centerHorizontal="true"
@@ -346,11 +346,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    app:layout_constraintBottom_toBottomOf="@+id/userPicture"
+                    app:layout_constraintBottom_toBottomOf="@+id/ownerPicture"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toEndOf="@+id/userPicture"
-                    app:layout_constraintTop_toTopOf="@+id/userPicture">
+                    app:layout_constraintStart_toEndOf="@+id/ownerPicture"
+                    app:layout_constraintTop_toTopOf="@+id/ownerPicture">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
