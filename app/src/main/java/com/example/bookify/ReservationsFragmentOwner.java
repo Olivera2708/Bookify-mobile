@@ -68,7 +68,6 @@ public class ReservationsFragmentOwner extends Fragment {
         View view = inflater.inflate(R.layout.fragment_reservations_owner, container, false);
 
         Button report = view.findViewById(R.id.btnReport);
-
         report.setOnClickListener(v -> {
             ShowDialog(R.layout.report);
         });

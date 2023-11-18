@@ -145,30 +145,18 @@
                 android:layout_height="wrap_content">
 
                 <Button
-                    android:id="@+id/btnComment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/charcoal"
-                    android:textColor="@color/white"
-                    android:drawableLeft="@drawable/comment"
-                    android:text="@string/comment"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:scaleX="0.8"
-                    android:scaleY="0.8"/>
-
-                <Button
                     android:id="@+id/btnReport"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
                     android:backgroundTint="@color/charcoal"
                     android:drawableLeft="@drawable/report"
-                    android:text="@string/report"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
                     android:scaleX="0.8"
-                    android:scaleY="0.8"/>
+                    android:scaleY="0.8"
+                    android:text="@string/report"
+                    android:textColor="@color/white"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
