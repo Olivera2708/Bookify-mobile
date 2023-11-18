@@ -2,6 +2,7 @@ package com.example.bookify;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.util.Pair;
 
 import android.content.Intent;
@@ -12,6 +13,7 @@ import android.transition.Slide;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -47,18 +49,22 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_accommodation_details);
         NavigationBar.setNavigationBar(findViewById(R.id.bottom_navigaiton), this, R.id.navigation_home);
 
-
+        View view1 = findViewById(R.id.include1);
+        View view2 = findViewById(R.id.include2);
+        View view3 = findViewById(R.id.include3);
         SharedPreferences sharedPreferences = getSharedPreferences("sharedPref", MODE_PRIVATE);
         if (sharedPreferences.getString("userType", "none").equals("guest")) {
             showReservationOption();
         }
         if (sharedPreferences.getString("userType", "none").equals("owner")) {
-            View view1 = findViewById(R.id.include1);
-            View view2 = findViewById(R.id.include2);
-            View view3 = findViewById(R.id.include3);
             setReportButton(view1);
             setReportButton(view2);
             setReportButton(view3);
+        }
+        if (sharedPreferences.getString("userType", "none").equals("guest")) {
+            setDeleteIcon(view1);
+            setDeleteIcon(view2);
+            setDeleteIcon(view3);
         }
 
 
@@ -84,7 +90,16 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
         });
     }
 
+    private static void setDeleteIcon(View view1) {
+        ImageView delete = view1.findViewById(R.id.deleteComment);
+        delete.setVisibility(View.VISIBLE);
+        delete.setOnClickListener(v -> {
+            //brisanje komentara
+        });
+    }
+
     private void setReportButton(View view1) {
+
         Button report = view1.findViewById(R.id.btnReport);
         report.setVisibility(View.VISIBLE);
         report.setOnClickListener(v -> {
