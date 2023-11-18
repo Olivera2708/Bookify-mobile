@@ -8,10 +8,16 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
+
+import java.util.Arrays;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -67,13 +73,29 @@ public class RegistrationFragmentLocation extends Fragment {
         View view = inflater.inflate(R.layout.fragment_registration_location, container, false);
         Button button = view.findViewById(R.id.btnNext);
 
-        TextInputEditText country = view.findViewById(R.id.inputCountry);
+        String[] sort =  Locale.getISOCountries();
+        String[] countries = new String[sort.length];
+        for(int i = 0; i<sort.length; i++){
+            Locale locale = new Locale("", sort[i]);
+            countries[i] = locale.getDisplayCountry();
+        }
+        Arrays.sort(countries);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.dropdown_item, countries);
+        AutoCompleteTextView autoCompleteTextView = view.findViewById(R.id.typeDropDown);
+        autoCompleteTextView.setAdapter(adapter);
+        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //code when something is selected
+            }
+        });
+
         TextInputEditText city = view.findViewById(R.id.inputCity);
         TextInputEditText address = view.findViewById(R.id.inputAddress);
         TextInputEditText zipCode = view.findViewById(R.id.inputZipCode);
 
         button.setOnClickListener(v -> {
-            if (country.getText().toString().equals("") || city.getText().toString().equals("") || address.getText().toString().equals("") || zipCode.getText().toString().equals("")) {
+            if (autoCompleteTextView.getText().toString().trim().length() <= 0 || city.getText().toString().equals("") || address.getText().toString().equals("") || zipCode.getText().toString().equals("")) {
                 Toast.makeText(getActivity(), "You must fill in all field", Toast.LENGTH_SHORT).show();
                 return;
             }

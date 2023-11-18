@@ -11,6 +11,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -20,6 +23,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -79,6 +83,24 @@ public class AccommodationFragmentLocation extends MyFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_accommodation_location, container, false);
+
+        String[] sort =  Locale.getISOCountries();
+        String[] countries = new String[sort.length];
+        for(int i = 0; i<sort.length; i++){
+            Locale locale = new Locale("", sort[i]);
+            countries[i] = locale.getDisplayCountry();
+        }
+        Arrays.sort(countries);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.dropdown_item, countries);
+        AutoCompleteTextView autoCompleteTextView = view.findViewById(R.id.typeDropDown);
+        autoCompleteTextView.setAdapter(adapter);
+        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //code when something is selected
+            }
+        });
+
         mapView = view.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(googleMap -> {
@@ -95,11 +117,12 @@ public class AccommodationFragmentLocation extends MyFragment {
 
     @Override
     public int isValid() {
-        TextInputEditText country = view.findViewById(R.id.countryInput);
         TextInputEditText city = view.findViewById(R.id.cityInput);
         TextInputEditText address = view.findViewById(R.id.streetAddressInput);
         TextInputEditText zipCode = view.findViewById(R.id.zipCodeInput);
-        if (country.getText().toString().equals("") || city.getText().toString().equals("") ||
+        AutoCompleteTextView autoCompleteTextView = view.findViewById(R.id.typeDropDown);
+
+        if (city.getText().toString().equals("") || autoCompleteTextView.getText().toString().trim().length() <= 0 ||
                 address.getText().toString().equals("") || zipCode.getText().toString().equals("")) {
             return 1;
         }
