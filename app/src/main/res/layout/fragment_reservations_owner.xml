@@ -8,17 +8,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/filterButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="96dp"
-            android:src="@drawable/filter"
-            app:fabSize="normal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+
         <ScrollView
             android:id="@+id/accommodation_scroll"
             android:layout_width="match_parent"
@@ -33,15 +23,15 @@
                 android:orientation="vertical"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="10dp">
-                <include layout="@layout/reservations_owner"
+                <include layout="@layout/reservations_guest"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="10dp"/>
-                <include layout="@layout/reservations_owner"
+                <include layout="@layout/reservations_guest"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="10dp"/>
-                <include layout="@layout/reservations_owner"
+                <include layout="@layout/reservations_guest"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="10dp"/>

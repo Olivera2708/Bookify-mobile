@@ -5,9 +5,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-public class ReservationRequestsViewPagerAdapter extends FragmentStateAdapter {
+public class ReservationRequestsViewPagerOwnerAdapter extends FragmentStateAdapter {
 
-    public ReservationRequestsViewPagerAdapter(@NonNull FragmentActivity fragmentActivity){
+    public ReservationRequestsViewPagerOwnerAdapter(@NonNull FragmentActivity fragmentActivity){
         super(fragmentActivity);
     }
 
@@ -16,11 +16,11 @@ public class ReservationRequestsViewPagerAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         switch (position){
             case 0:
-                return new ReservationsFragmentGuest();
+                return new ReservationsFragmentOwner();
             case 1:
-                return new RequestFragmentGuest();
+                return new RequestFragmentOwner();
         }
-        return new ReservationsFragmentGuest();
+        return new ReservationsFragmentOwner();
     }
 
     @Override

@@ -116,7 +116,6 @@
                 android:paddingHorizontal="10dp"/>
 
             <TextView
-
                 android:id="@+id/cancellation_time"
                 style="@style/TextAppearance.MaterialComponents.Subtitle2"
                 android:layout_width="match_parent"
@@ -138,22 +137,8 @@
                 android:textColor="?attr/textFillColor"
                 android:layout_marginTop="0dp"
                 android:textSize="16sp"
+                android:paddingBottom="10dp"
                 android:paddingHorizontal="10dp"/>
-
-            <Button
-                android:id="@+id/cancel"
-                android:layout_width="100dp"
-                android:layout_height="36dp"
-                android:backgroundTint="@color/charcoal"
-                android:fontFamily="@font/montserrat_medium"
-                android:text="@string/cancel"
-                android:padding="0dp"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="14sp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="6dp" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
