@@ -142,4 +142,5 @@
     <string name="guest">Guest</string>
     <string name="owner_info">Owner</string>
     <string name="more">More...</string>
+    <string name="change">Change</string>
 </resources>

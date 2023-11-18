@@ -99,6 +99,7 @@ public class RegistrationFragmentLocation extends Fragment {
                 Toast.makeText(getActivity(), "You must fill in all field", Toast.LENGTH_SHORT).show();
                 return;
             }
+            Toast.makeText(getActivity(), getString(R.string.check_email), Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(getActivity(), LoginActivity.class);
             startActivity(intent);
             getActivity().finish();
