@@ -52,6 +52,17 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
         View view1 = findViewById(R.id.include1);
         View view2 = findViewById(R.id.include2);
         View view3 = findViewById(R.id.include3);
+        Button ownerDetailsInfo = findViewById(R.id.ownerPicture);
+        ownerDetailsInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AccommodationDetailsActivity.this, OwnerDetailsActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(intent);
+                overridePendingTransition(0, 0);
+            }
+        });
+
         SharedPreferences sharedPreferences = getSharedPreferences("sharedPref", MODE_PRIVATE);
         if (sharedPreferences.getString("userType", "none").equals("guest")) {
             showReservationOption();

@@ -30,6 +30,10 @@
             <include layout="@layout/account_information" />
             <include layout="@layout/user_information" />
 
+            <include
+                android:id="@+id/comment_section_account"
+                layout="@layout/account_rating_and_comments"/>
+
             <Button
                 android:id="@+id/btnLogout"
                 android:layout_width="match_parent"

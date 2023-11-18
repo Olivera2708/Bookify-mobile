@@ -35,13 +35,23 @@ public class AccountDetailsActivity extends AppCompatActivity {
         setEditButtonAction();
         setSaveButtonAction();
         NavigationBar.setNavigationBar(findViewById(R.id.bottom_navigaiton), this, R.id.navigation_account);
-
+        isCommentSectionVisible();
         setAccountPictureChange();
         setChangePasswordAction();
 
+        View view1 = findViewById(R.id.include1);
+        View view2 = findViewById(R.id.include2);
+        View view3 = findViewById(R.id.include3);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("sharedPref", MODE_PRIVATE);
+        if (sharedPreferences.getString("userType", "none").equals("owner")) {
+            setReportButton(view1);
+            setReportButton(view2);
+            setReportButton(view3);
+        }
+
         Button logout = findViewById(R.id.btnLogout);
         logout.setOnClickListener(v -> {
-            SharedPreferences sharedPreferences = getSharedPreferences("sharedPref", MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString("userType", "none");
             editor.commit();
@@ -63,6 +73,22 @@ public class AccountDetailsActivity extends AppCompatActivity {
             }
         };
         getOnBackPressedDispatcher().addCallback(this, callback);
+    }
+
+    private void setReportButton(View view1) {
+
+        Button report = view1.findViewById(R.id.btnReport);
+        report.setVisibility(View.VISIBLE);
+        report.setOnClickListener(v -> {
+            Toast.makeText(AccountDetailsActivity.this, "Your report will be processed", Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    private void isCommentSectionVisible() {
+        String role = getSharedPreferences("sharedPref", Context.MODE_PRIVATE).getString("userType", "none");
+        if(!role.equals("owner")){
+            findViewById(R.id.comment_section_account).setVisibility(View.GONE);
+        }
     }
 
     private void setAccountPictureChange() {
