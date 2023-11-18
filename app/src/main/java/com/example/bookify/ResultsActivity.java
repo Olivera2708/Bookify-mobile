@@ -232,6 +232,7 @@ public class ResultsActivity extends AppCompatActivity {
         CheckBox privateBathroom = dialog.findViewById(R.id.privateBathroom);
         CheckBox depositBox = dialog.findViewById(R.id.depositBox);
         CheckBox cityCenter = dialog.findViewById(R.id.cityCenter);
+        CheckBox room = dialog.findViewById(R.id.room);
 
 
         Button remove = dialog.findViewById(R.id.remove);
@@ -262,6 +263,7 @@ public class ResultsActivity extends AppCompatActivity {
                 privateBathroom.setChecked(false);
                 depositBox.setChecked(false);
                 cityCenter.setChecked(false);
+                room.setChecked(false);
             }
         });
 
