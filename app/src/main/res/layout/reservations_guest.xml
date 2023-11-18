@@ -75,7 +75,7 @@
                 style="@style/TextAppearance.MaterialComponents.Subtitle2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Guest: Luka Petrovic (3.75/5)"
+                android:text="Guest: Luka Petrovic"
                 android:textAlignment="center"
                 android:textColor="?attr/textFillColor"
                 android:textSize="16sp"
