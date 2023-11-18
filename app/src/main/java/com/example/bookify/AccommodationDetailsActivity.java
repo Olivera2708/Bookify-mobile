@@ -47,6 +47,14 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_accommodation_details);
         NavigationBar.setNavigationBar(findViewById(R.id.bottom_navigaiton), this, R.id.navigation_home);
 
+        Button ownerDetailsInfo = findViewById(R.id.ownerPicture);
+        ownerDetailsInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AccommodationDetailsActivity.this, OwnerDetailsActivity.class);
+                startActivity(intent);
+            }
+        });
 
         SharedPreferences sharedPreferences = getSharedPreferences("sharedPref", MODE_PRIVATE);
         if (sharedPreferences.getString("userType", "none").equals("guest")) {

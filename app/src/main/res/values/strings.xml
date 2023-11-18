@@ -140,4 +140,6 @@
     <string name="block">Block</string>
     <string name="search_user">Search User</string>
     <string name="guest">Guest</string>
+    <string name="owner_info">Owner</string>
+    <string name="more">More...</string>
 </resources>

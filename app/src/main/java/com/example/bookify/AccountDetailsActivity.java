@@ -35,7 +35,7 @@ public class AccountDetailsActivity extends AppCompatActivity {
         setEditButtonAction();
         setSaveButtonAction();
         NavigationBar.setNavigationBar(findViewById(R.id.bottom_navigaiton), this, R.id.navigation_account);
-
+        isCommentSectionVisible();
         setAccountPictureChange();
         setChangePasswordAction();
 
@@ -63,6 +63,13 @@ public class AccountDetailsActivity extends AppCompatActivity {
             }
         };
         getOnBackPressedDispatcher().addCallback(this, callback);
+    }
+
+    private void isCommentSectionVisible() {
+        String role = getSharedPreferences("sharedPref", Context.MODE_PRIVATE).getString("userType", "none");
+        if(!role.equals("owner")){
+            findViewById(R.id.comment_section_account).setVisibility(View.GONE);
+        }
     }
 
     private void setAccountPictureChange() {

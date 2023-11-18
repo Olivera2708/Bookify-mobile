@@ -16,49 +16,49 @@
             android:orientation="vertical">
 
             <include
-                layout="@layout/user"
+                layout="@layout/reported_user"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 />
             <include
-                layout="@layout/user"
+                layout="@layout/reported_user"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 />
             <include
-                layout="@layout/user"
+                layout="@layout/reported_user"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 />
             <include
-                layout="@layout/user"
+                layout="@layout/reported_user"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 />
             <include
-                layout="@layout/user"
+                layout="@layout/reported_user"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 />
             <include
-                layout="@layout/user"
+                layout="@layout/reported_user"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 />
             <include
-                layout="@layout/user"
+                layout="@layout/reported_user"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 />
             <include
-                layout="@layout/user"
+                layout="@layout/reported_user"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
