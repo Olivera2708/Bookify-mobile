@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
@@ -51,6 +52,15 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
         if (sharedPreferences.getString("userType", "none").equals("guest")) {
             showReservationOption();
         }
+        if (sharedPreferences.getString("userType", "none").equals("owner")) {
+            View view1 = findViewById(R.id.include1);
+            View view2 = findViewById(R.id.include2);
+            View view3 = findViewById(R.id.include3);
+            setReportButton(view1);
+            setReportButton(view2);
+            setReportButton(view3);
+        }
+
 
         imageSlider = findViewById(R.id.imageSlider);
         ArrayList<SlideModel> imageList = new ArrayList<>();
@@ -74,7 +84,15 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
         });
     }
 
-    private void showReservationOption(){
+    private void setReportButton(View view1) {
+        Button report = view1.findViewById(R.id.btnReport);
+        report.setVisibility(View.VISIBLE);
+        report.setOnClickListener(v -> {
+            Toast.makeText(AccommodationDetailsActivity.this, "Your report will be processed", Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    private void showReservationOption() {
         LinearLayout layout = findViewById(R.id.reservationLayout);
         View reservation = getLayoutInflater().inflate(R.layout.reservation, layout, false);
         layout.addView(reservation);

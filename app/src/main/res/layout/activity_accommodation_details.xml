@@ -296,11 +296,17 @@
                         android:background="?android:windowBackground"
                         android:orientation="vertical">
 
-                        <include layout="@layout/comment" />
+                        <include
+                            android:id="@+id/include1"
+                            layout="@layout/comment" />
 
-                        <include layout="@layout/comment" />
+                        <include
+                            android:id="@+id/include2"
+                            layout="@layout/comment" />
 
-                        <include layout="@layout/comment" />
+                        <include
+                            android:id="@+id/include3"
+                            layout="@layout/comment" />
 
                         <TextView
                             android:layout_width="match_parent"
