@@ -27,9 +27,10 @@ public class LoginActivity extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences("sharedPref", MODE_PRIVATE);
         editor = sharedPreferences.edit();
-        editor.putString("userType", "none");
 
         binding.btnGuest.setOnClickListener(v -> {
+            editor.putString("userType", "none");
+            editor.commit();
             Intent intent = new Intent(LoginActivity.this, LandingActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(intent);
