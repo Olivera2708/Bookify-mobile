@@ -28,68 +28,63 @@
         android:theme="@style/Theme.Bookify"
         tools:targetApi="31">
         <activity
-            android:name=".OwnerDetailsActivity"
+            android:name=".activities.user.OwnerDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".AllUsersActivity"
+            android:name=".activities.user.AllUsersActivity"
             android:exported="false" />
         <activity
-            android:name=".FeedbackAdminActivity"
+            android:name=".activities.FeedbackAdminActivity"
             android:exported="false" />
         <activity
-            android:name=".AccommodationRequestsActivity"
+            android:name=".activities.accommodation.AccommodationRequestsActivity"
             android:exported="false" />
         <activity
-            android:name=".NotificationSettingsActivity"
-            android:exported="false"
-            android:label="@string/title_activity_notification_settings"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".NotificationActivity"
+            android:name=".activities.user.NotificationActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".OwnerAccommodationsActivity"
+            android:name=".activities.accommodation.OwnerAccommodationsActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".AccommodationUpdateActivity"
+            android:name=".activities.accommodation.AccommodationUpdateActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ReportsActivity"
+            android:name=".activities.ReportsActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".AccountDetailsActivity"
+            android:name=".activities.user.AccountDetailsActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".RequestsActivity"
+            android:name=".activities.reservation.RequestsActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".FavoritesActivity"
+            android:name=".activities.accommodation.FavoritesActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".RegistrationActivity"
+            android:name=".activities.user.RegistrationActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ForgotPasswordActivity"
+            android:name=".activities.user.ForgotPasswordActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".activities.LoginActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".LandingActivity"
+            android:name=".activities.LandingActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".SplashScreenActivity"
+            android:name=".activities.SplashScreenActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -99,11 +94,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ResultsActivity"
+            android:name=".activities.accommodation.ResultsActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".AccommodationDetailsActivity"
+            android:name=".activities.accommodation.AccommodationDetailsActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
 
