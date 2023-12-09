@@ -6,7 +6,7 @@
     android:layout_marginHorizontal="6dp"
     android:gravity="end"
     android:orientation="vertical"
-    tools:context=".ReportForAccommodationFragment">
+    tools:context=".fragments.feedback.ReportForAccommodationFragment">
 
         <LinearLayout
             android:layout_width="match_parent"

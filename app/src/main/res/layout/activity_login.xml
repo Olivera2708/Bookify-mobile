@@ -7,7 +7,7 @@
     android:background="?colorPrimaryContainer"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".LoginActivity">
+    tools:context=".activities.LoginActivity">
 
     <ImageView
         android:id="@+id/imageView"
