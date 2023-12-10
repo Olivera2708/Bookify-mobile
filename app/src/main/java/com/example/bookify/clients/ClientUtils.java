@@ -43,5 +43,5 @@ public class ClientUtils {
      * Definisemo konkretnu instancu servisa na intnerntu sa kojim
      * vrsimo komunikaciju
      * */
-//    public static ProductService productService = retrofit.create(ProductService.class);
+    public static AccommodationService accommodationService = retrofit.create(AccommodationService.class);
 }

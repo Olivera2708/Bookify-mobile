@@ -9,25 +9,36 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.example.bookify.activities.accommodation.ResultsActivity;
+import com.example.bookify.clients.ClientUtils;
+import com.example.bookify.model.SearchResponseDTO;
 import com.example.bookify.navigation.NavigationBar;
 import com.example.bookify.R;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LandingActivity extends AppCompatActivity {
     Button editDate;
     Button search;
+    int currentPage = 1;
+    int pageSize = 5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,9 +76,35 @@ public class LandingActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(LandingActivity.this, ResultsActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(intent);
-                overridePendingTransition(0, 0);
+
+                //get all entered data
+                EditText location = searchLayout.findViewById(R.id.locationInput);
+                Button date = searchLayout.findViewById(R.id.dateInput);
+                EditText persons = searchLayout.findViewById(R.id.personInput);
+
+                Call<SearchResponseDTO> call = ClientUtils.accommodationService.getForSearch(String.valueOf(location.getText()),
+                                                                                             String.valueOf(date.getText()).split(" - ")[0],
+                                                                                             String.valueOf(date.getText()).split(" - ")[1],
+                                                                                             Integer.parseInt(String.valueOf(persons.getText())), 1, 5);
+                call.enqueue(new Callback<SearchResponseDTO>() {
+                    @Override
+                    public void onResponse(Call<SearchResponseDTO> call, Response<SearchResponseDTO> response) {
+                        if (response.code() == 200){
+                            SearchResponseDTO result = response.body();
+                            Log.d("MyDebugT", String.valueOf(result.getMaxPrice()));
+                        }
+                        Log.d("MyDebugT", String.valueOf(response.code()));
+                    }
+                    @Override
+                    public void onFailure(Call<SearchResponseDTO> call, Throwable t) {
+                        Log.d("Error", "Search");
+                    }
+                });
+
+
+//                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+//                startActivity(intent);
+//                overridePendingTransition(0, 0);
             }
         });
 
