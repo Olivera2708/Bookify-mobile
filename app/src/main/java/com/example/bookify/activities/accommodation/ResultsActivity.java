@@ -13,6 +13,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -25,6 +26,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.bookify.activities.LandingActivity;
 import com.example.bookify.adapters.pagers.AccommodationListAdapter;
@@ -68,6 +70,7 @@ public class ResultsActivity extends AppCompatActivity {
     int page = 0;
     int totalResults = 0;
     SimpleDateFormat format;
+    boolean isChanged = false;
 
 
     @Override
@@ -105,10 +108,37 @@ public class ResultsActivity extends AppCompatActivity {
                         } catch (ParseException e) {
                             throw new RuntimeException(e);
                         }
+
+                        isChanged = true;
+                        searchData();
                     }
                 });
 
                 materialDatePicker.show(getSupportFragmentManager(), "tag");
+            }
+        });
+
+        personsInput.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    persons = Integer.valueOf(personsInput.getText().toString());
+                    isChanged = true;
+                    searchData();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        locationInput.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    search = locationInput.getText().toString();
+                    isChanged = true;
+                    searchData();
+                    return true;
+                }
+                return false;
             }
         });
 
@@ -162,8 +192,13 @@ public class ResultsActivity extends AppCompatActivity {
             adapter = new AccommodationListAdapter(this, accommodations);
             listView = findViewById(R.id.resultList);
             listView.setAdapter(adapter);
-        } else {
+        } else if (!isChanged) {
             adapter.addData(accommodations);
+        } else {
+            isChanged = false;
+            adapter.clear();
+            adapter.addData(accommodations);
+            listView.invalidateViews();
         }
 
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
