@@ -13,6 +13,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -25,6 +26,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.bookify.activities.LandingActivity;
 import com.example.bookify.adapters.pagers.AccommodationListAdapter;
@@ -67,6 +69,8 @@ public class ResultsActivity extends AppCompatActivity {
     float maxPrice = 1000;
     int page = 0;
     int totalResults = 0;
+    SimpleDateFormat format;
+    boolean isChanged = false;
 
 
     @Override
@@ -75,6 +79,7 @@ public class ResultsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_results);
         NavigationBar.setNavigationBar(findViewById(R.id.bottom_navigaiton), this, R.id.navigation_home);
 
+        format = new SimpleDateFormat("dd.MM.yyyy.");
         editDate = findViewById(R.id.dateButton);
         locationInput = findViewById(R.id.locationText);
         personsInput = findViewById(R.id.peopleText);
@@ -82,28 +87,58 @@ public class ResultsActivity extends AppCompatActivity {
         getSearchData();
         searchData();
 
-        //paginacija?? preko strelica cu dodati
-
-
-
         editDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 MaterialDatePicker<Pair<Long, Long>> materialDatePicker = MaterialDatePicker.Builder.dateRangePicker().setSelection(new Pair<>(
-                        begin.getTime(),
-                        end.getTime())).build();
+                        begin.getTime() + 24 * 60 * 60 * 1000,
+                        end.getTime() + 24 * 60 * 60 * 1000)).build();
 
                 materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Pair<Long, Long>>() {
                     @Override
                     public void onPositiveButtonClick(Pair<Long, Long> selection) {
                         String startDate = new SimpleDateFormat("dd.MM.yyyy.", Locale.getDefault()).format(new Date(selection.first));
                         String endDate = new SimpleDateFormat("dd.MM.yyyy.", Locale.getDefault()).format(new Date(selection.second));
+                        dates = startDate + " - " + endDate;
+                        editDate.setText(dates);
 
-                        editDate.setText(startDate + " - " + endDate);
+                        try {
+                            begin = format.parse(dates.split(" - ")[0]);
+                            end = format.parse(dates.split(" - ")[1]);
+                        } catch (ParseException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                        isChanged = true;
+                        searchData();
                     }
                 });
 
                 materialDatePicker.show(getSupportFragmentManager(), "tag");
+            }
+        });
+
+        personsInput.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    persons = Integer.valueOf(personsInput.getText().toString());
+                    isChanged = true;
+                    searchData();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        locationInput.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    search = locationInput.getText().toString();
+                    isChanged = true;
+                    searchData();
+                    return true;
+                }
+                return false;
             }
         });
 
@@ -129,27 +164,32 @@ public class ResultsActivity extends AppCompatActivity {
     }
 
     private void searchData(){
-        Call<SearchResponseDTO> call = ClientUtils.accommodationService.getForSearch(this.search,
-                                                                                     this.dates.split(" - ")[0],
-                                                                                     this.dates.split(" - ")[1],
-                                                                                     this.persons, page, 10);
-        call.enqueue(new Callback<SearchResponseDTO>() {
-            @Override
-            public void onResponse(Call<SearchResponseDTO> call, Response<SearchResponseDTO> response) {
-                if (response.code() == 200 && response.body() != null){
-                    SearchResponseDTO result = response.body();
-                    minPrice = result.getMinPrice();
-                    maxPrice = result.getMaxPrice();
-                    totalResults = result.getResults();
+        if (this.persons > 1 && begin.after(new Date()) && !begin.equals(end)) {
+            Call<SearchResponseDTO> call = ClientUtils.accommodationService.getForSearch(this.search,
+                    this.dates.split(" - ")[0],
+                    this.dates.split(" - ")[1],
+                    this.persons, page, 10);
+            call.enqueue(new Callback<SearchResponseDTO>() {
+                @Override
+                public void onResponse(Call<SearchResponseDTO> call, Response<SearchResponseDTO> response) {
+                    if (response.code() == 200 && response.body() != null) {
+                        SearchResponseDTO result = response.body();
+                        minPrice = result.getMinPrice();
+                        maxPrice = result.getMaxPrice();
+                        totalResults = result.getResults();
 
-                    showResults(result.getAccommodations());
+                        showResults(result.getAccommodations());
+                    }
                 }
-            }
-            @Override
-            public void onFailure(Call<SearchResponseDTO> call, Throwable t) {
-                Log.d("Error", "Search");
-            }
-        });
+
+                @Override
+                public void onFailure(Call<SearchResponseDTO> call, Throwable t) {
+                    Log.d("Error", "Search");
+                }
+            });
+        }
+        else
+            Toast.makeText(ResultsActivity.this, "Please enter correct parameters", Toast.LENGTH_SHORT).show();
     }
 
     private void showResults(List<AccommodationBasicDTO> accommodations){
@@ -157,8 +197,13 @@ public class ResultsActivity extends AppCompatActivity {
             adapter = new AccommodationListAdapter(this, accommodations);
             listView = findViewById(R.id.resultList);
             listView.setAdapter(adapter);
-        } else {
+        } else if (!isChanged) {
             adapter.addData(accommodations);
+        } else {
+            isChanged = false;
+            adapter.clear();
+            adapter.addData(accommodations);
+            listView.invalidateViews();
         }
 
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -186,7 +231,6 @@ public class ResultsActivity extends AppCompatActivity {
         search = intent.getStringExtra("location");
         persons = intent.getIntExtra("persons", 2);
         dates = intent.getStringExtra("dates");
-        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy.");
         try {
             begin = format.parse(dates.split(" - ")[0]);
             end = format.parse(dates.split(" - ")[1]);
