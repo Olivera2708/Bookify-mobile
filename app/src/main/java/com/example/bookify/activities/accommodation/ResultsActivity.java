@@ -289,62 +289,55 @@ public class ResultsActivity extends AppCompatActivity {
 
         RangeSlider priceSlider = dialog.findViewById(R.id.priceBar);
         priceSlider.setValueFrom(Math.round(this.minPrice));
+
         if (Math.round(this.minPrice) == Math.round(this.maxPrice)) {
             priceSlider.setValueTo(Math.round(this.maxPrice) + 1);
             priceSlider.setValues((float) Math.round(this.minPrice), (float) Math.round(this.maxPrice) + 1);
         }
         else {
             priceSlider.setValueTo(Math.round(this.maxPrice));
-            priceSlider.setValues((float) Math.round(this.minPrice), (float) Math.round(this.maxPrice));
+            if (filter.getMaxPrice() == -1)
+                priceSlider.setValues((float) Math.round(this.minPrice), (float) Math.round(this.maxPrice));
+            else
+                priceSlider.setValues((float) Math.round(filter.getMinPrice()), (float) Math.round(filter.getMaxPrice()));
         }
 
         EditText minPriceEdit = dialog.findViewById(R.id.minPrice);
-        minPriceEdit.setText(String.valueOf(Math.round(this.minPrice)), TextView.BufferType.EDITABLE);
-        minPriceEdit.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
+        if (filter.getMinPrice() == -1)
+            minPriceEdit.setText(String.valueOf(Math.round(this.minPrice)), TextView.BufferType.EDITABLE);
+        else
+            minPriceEdit.setText(String.valueOf(filter.getMinPrice()), TextView.BufferType.EDITABLE);
+        EditText maxPriceEdit = dialog.findViewById(R.id.maxPrice);
+        if (filter.getMaxPrice() == -1)
+            maxPriceEdit.setText(String.valueOf(Math.round(this.maxPrice)), TextView.BufferType.EDITABLE);
+        else
+            maxPriceEdit.setText(String.valueOf(filter.getMaxPrice()), TextView.BufferType.EDITABLE);
 
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (editable.toString().length() > 0) {
-                    if (Integer.parseInt(editable.toString()) > 1000 || editable.toString().equals("-")){
-                        minPriceEdit.setText(editable.toString().substring(0, minPriceEdit.getText().length() - 1));
-                    }
-                    else {
-                        float minValue = Float.valueOf(editable.toString());
-                        priceSlider.setValues(minValue, priceSlider.getValues().get(1));
-                        minPriceEdit.setSelection(minPriceEdit.getText().length());
-                    }
+        minPriceEdit.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    if (minPriceEdit.getText().toString().equals("") || Integer.valueOf(minPriceEdit.getText().toString()) < minPrice || Integer.valueOf(minPriceEdit.getText().toString()) > maxPrice || Integer.valueOf(minPriceEdit.getText().toString()) > Integer.valueOf(maxPriceEdit.getText().toString()))
+                        minPriceEdit.setText(String.valueOf(Math.round(minPrice)));
+                    float minValue = Float.valueOf(minPriceEdit.getText().toString());
+                    priceSlider.setValues(minValue, priceSlider.getValues().get(1));
+                    minPriceEdit.setSelection(minPriceEdit.getText().length());
+                    return true;
                 }
+                return false;
             }
         });
 
-        EditText maxPriceEdit = dialog.findViewById(R.id.maxPrice);
-        maxPriceEdit.setText(String.valueOf(Math.round(this.maxPrice)), TextView.BufferType.EDITABLE);
-        maxPriceEdit.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (editable.toString().length() > 0) {
-                    if (Integer.parseInt(editable.toString()) > 1000 || editable.toString().equals("-")){
-                        maxPriceEdit.setText(editable.toString().substring(0, maxPriceEdit.getText().length() - 1));
-                    }
-                    else {
-                        float maxValue = Float.valueOf(editable.toString());
-                        priceSlider.setValues(priceSlider.getValues().get(0), maxValue);
-                        maxPriceEdit.setSelection(maxPriceEdit.getText().length());
-                    }
+        maxPriceEdit.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    if (maxPriceEdit.getText().toString().equals("") || Integer.valueOf(maxPriceEdit.getText().toString()) < minPrice || Integer.valueOf(maxPriceEdit.getText().toString()) > maxPrice || Integer.valueOf(minPriceEdit.getText().toString()) > Integer.valueOf(maxPriceEdit.getText().toString()))
+                        maxPriceEdit.setText(String.valueOf(Math.round(maxPrice)));
+                    float maxVal = Float.valueOf(maxPriceEdit.getText().toString());
+                    priceSlider.setValues(priceSlider.getValues().get(0), maxVal);
+                    maxPriceEdit.setSelection(maxPriceEdit.getText().length());
+                    return true;
                 }
+                return false;
             }
         });
 
@@ -440,6 +433,12 @@ public class ResultsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 isChanged = true;
+
+                if (Integer.valueOf(minPriceEdit.getText().toString()) != Math.round(minPrice) || Integer.valueOf(maxPriceEdit.getText().toString()) != Math.round(maxPrice)){
+                    filter.setMaxPrice(Integer.valueOf(maxPriceEdit.getText().toString()));
+                    filter.setMinPrice(Integer.valueOf(minPriceEdit.getText().toString()));
+                }
+
                 filterData();
                 dialog.cancel();
             }
