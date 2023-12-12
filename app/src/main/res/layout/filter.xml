@@ -188,21 +188,24 @@
                     android:layout_width="150dp"
                     android:layout_height="30dp"
                     android:layout_weight="1"
-                    android:text="@string/room" />
+                    android:text="@string/room"
+                    android:checked="true"/>
 
                 <CheckBox
                     android:id="@+id/hotel"
                     android:layout_width="150dp"
                     android:layout_height="30dp"
                     android:layout_weight="1"
-                    android:text="@string/hotel" />
+                    android:text="@string/hotel"
+                    android:checked="true" />
 
                 <CheckBox
                     android:id="@+id/apartment"
                     android:layout_width="160dp"
                     android:layout_height="30dp"
                     android:layout_weight="1"
-                    android:text="@string/apartment" />
+                    android:text="@string/apartment"
+                    android:checked="true" />
             </LinearLayout>
 
             <TextView

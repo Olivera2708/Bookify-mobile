@@ -66,6 +66,7 @@ public class AccommodationListAdapter extends ArrayAdapter<AccommodationBasicDTO
 
         TextView name = convertView.findViewById(R.id.apartment_name);
         TextView address = convertView.findViewById(R.id.apartment_address);
+        TextView type = convertView.findViewById(R.id.acc_type);
         RatingBar start = convertView.findViewById(R.id.stars);
         TextView price = convertView.findViewById(R.id.price);
         TextView pricePer = convertView.findViewById(R.id.priceperday);
@@ -78,6 +79,7 @@ public class AccommodationListAdapter extends ArrayAdapter<AccommodationBasicDTO
             price.setText(String.valueOf(accommodation.getTotalPrice()));
             pricePer.setText(accommodation.getPriceOne() + " per " + accommodation.getPricePer().toString().toLowerCase());
             start.setRating(accommodation.getAvgRating());
+            type.setText(accommodation.getType().toString().substring(0, 1) + accommodation.getType().toString().substring(1, accommodation.getType().toString().length()).toLowerCase());
 
             details.setOnClickListener(v -> {
                 Log.i("Test", "Otvori aaccommodation broj " + accommodation.getId());

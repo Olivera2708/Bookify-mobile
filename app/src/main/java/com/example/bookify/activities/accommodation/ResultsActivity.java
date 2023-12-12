@@ -369,8 +369,9 @@ public class ResultsActivity extends AppCompatActivity {
             }
         });
 
-        CheckBox hotel = dialog.findViewById(R.id.hotel);
-        CheckBox apartment = dialog.findViewById(R.id.apartment);
+        setTypeCheckboxes();
+        setAmenitiesCheckboxes();
+
         CheckBox freeWiFi = dialog.findViewById(R.id.freeWiFi);
         CheckBox airConditioning = dialog.findViewById(R.id.airConditioning);
         CheckBox terrace = dialog.findViewById(R.id.terrace);
@@ -393,7 +394,6 @@ public class ResultsActivity extends AppCompatActivity {
         CheckBox privateBathroom = dialog.findViewById(R.id.privateBathroom);
         CheckBox depositBox = dialog.findViewById(R.id.depositBox);
         CheckBox cityCenter = dialog.findViewById(R.id.cityCenter);
-        CheckBox room = dialog.findViewById(R.id.room);
 
 
         Button remove = dialog.findViewById(R.id.remove);
@@ -401,8 +401,6 @@ public class ResultsActivity extends AppCompatActivity {
         remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                hotel.setChecked(false);
-                apartment.setChecked(false);
                 freeWiFi.setChecked(false);
                 airConditioning.setChecked(false);
                 terrace.setChecked(false);
@@ -425,7 +423,6 @@ public class ResultsActivity extends AppCompatActivity {
                 privateBathroom.setChecked(false);
                 depositBox.setChecked(false);
                 cityCenter.setChecked(false);
-                room.setChecked(false);
             }
         });
 
@@ -439,6 +436,8 @@ public class ResultsActivity extends AppCompatActivity {
                     filter.setMinPrice(Integer.valueOf(minPriceEdit.getText().toString()));
                 }
 
+                setFilterTypes();
+
                 filterData();
                 dialog.cancel();
             }
@@ -449,6 +448,51 @@ public class ResultsActivity extends AppCompatActivity {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
+    }
+
+    private void setFilterTypes(){
+        CheckBox hotel = dialog.findViewById(R.id.hotel);
+        CheckBox apartment = dialog.findViewById(R.id.apartment);
+        CheckBox room = dialog.findViewById(R.id.room);
+
+        List<AccommodationType> types = new ArrayList<>();
+        if (hotel.isChecked())
+            types.add(AccommodationType.HOTEL);
+        if (apartment.isChecked())
+            types.add(AccommodationType.APARTMENT);
+        if (room.isChecked())
+            types.add(AccommodationType.ROOM);
+
+        filter.setTypes(types);
+    }
+
+    private void setAmenitiesCheckboxes(){
+        
+    }
+
+    private void setTypeCheckboxes(){
+        CheckBox hotel = dialog.findViewById(R.id.hotel);
+        CheckBox apartment = dialog.findViewById(R.id.apartment);
+        CheckBox room = dialog.findViewById(R.id.room);
+
+        if (filter.getTypes().size() != 3){
+            if (!filter.getTypes().contains(AccommodationType.ROOM))
+                room.setChecked(false);
+            if (!filter.getTypes().contains(AccommodationType.HOTEL))
+                hotel.setChecked(false);
+            if (!filter.getTypes().contains(AccommodationType.APARTMENT))
+                apartment.setChecked(false);
+        }
+
+        List<AccommodationType> types = new ArrayList<>();
+        if (hotel.isChecked())
+            types.add(AccommodationType.HOTEL);
+        if (apartment.isChecked())
+            types.add(AccommodationType.APARTMENT);
+        if (room.isChecked())
+            types.add(AccommodationType.ROOM);
+
+        filter.setTypes(types);
     }
 
     private String getSortValue(){
