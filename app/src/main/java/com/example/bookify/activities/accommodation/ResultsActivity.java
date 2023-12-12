@@ -67,6 +67,7 @@ public class ResultsActivity extends AppCompatActivity {
     float maxPrice = 1000;
     int page = 0;
     int totalResults = 0;
+    SimpleDateFormat format;
 
 
     @Override
@@ -75,6 +76,7 @@ public class ResultsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_results);
         NavigationBar.setNavigationBar(findViewById(R.id.bottom_navigaiton), this, R.id.navigation_home);
 
+        format = new SimpleDateFormat("dd.MM.yyyy.");
         editDate = findViewById(R.id.dateButton);
         locationInput = findViewById(R.id.locationText);
         personsInput = findViewById(R.id.peopleText);
@@ -82,24 +84,27 @@ public class ResultsActivity extends AppCompatActivity {
         getSearchData();
         searchData();
 
-        //paginacija?? preko strelica cu dodati
-
-
-
         editDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 MaterialDatePicker<Pair<Long, Long>> materialDatePicker = MaterialDatePicker.Builder.dateRangePicker().setSelection(new Pair<>(
-                        begin.getTime(),
-                        end.getTime())).build();
+                        begin.getTime() + 24 * 60 * 60 * 1000,
+                        end.getTime() + 24 * 60 * 60 * 1000)).build();
 
                 materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Pair<Long, Long>>() {
                     @Override
                     public void onPositiveButtonClick(Pair<Long, Long> selection) {
                         String startDate = new SimpleDateFormat("dd.MM.yyyy.", Locale.getDefault()).format(new Date(selection.first));
                         String endDate = new SimpleDateFormat("dd.MM.yyyy.", Locale.getDefault()).format(new Date(selection.second));
+                        dates = startDate + " - " + endDate;
+                        editDate.setText(dates);
 
-                        editDate.setText(startDate + " - " + endDate);
+                        try {
+                            begin = format.parse(dates.split(" - ")[0]);
+                            end = format.parse(dates.split(" - ")[1]);
+                        } catch (ParseException e) {
+                            throw new RuntimeException(e);
+                        }
                     }
                 });
 
@@ -186,7 +191,6 @@ public class ResultsActivity extends AppCompatActivity {
         search = intent.getStringExtra("location");
         persons = intent.getIntExtra("persons", 2);
         dates = intent.getStringExtra("dates");
-        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy.");
         try {
             begin = format.parse(dates.split(" - ")[0]);
             end = format.parse(dates.split(" - ")[1]);

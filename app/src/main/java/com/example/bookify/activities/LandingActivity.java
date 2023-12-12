@@ -53,8 +53,8 @@ public class LandingActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 MaterialDatePicker<Pair<Long, Long>> materialDatePicker = MaterialDatePicker.Builder.dateRangePicker().setSelection(new Pair<>(
-                        MaterialDatePicker.thisMonthInUtcMilliseconds(),
-                        MaterialDatePicker.todayInUtcMilliseconds()
+                        MaterialDatePicker.todayInUtcMilliseconds(),
+                        MaterialDatePicker.todayInUtcMilliseconds() + 5 * 24 * 60 * 60 * 1000
                 )).build();
 
                 materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Pair<Long, Long>>() {
