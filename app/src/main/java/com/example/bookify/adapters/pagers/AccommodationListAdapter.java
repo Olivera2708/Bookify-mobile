@@ -1,6 +1,8 @@
 package com.example.bookify.adapters.pagers;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,9 +17,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.bookify.R;
+import com.example.bookify.clients.ClientUtils;
 import com.example.bookify.model.AccommodationBasicDTO;
 
 import java.util.List;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AccommodationListAdapter extends ArrayAdapter<AccommodationBasicDTO> {
     private List<AccommodationBasicDTO> accommodations;
@@ -91,7 +99,22 @@ public class AccommodationListAdapter extends ArrayAdapter<AccommodationBasicDTO
                 Log.i("Test", "Otvori aaccommodation broj " + accommodation.getId());
             });
 
+            Log.d("Image", "Moja slika je " +accommodation.getId());
+            Call<ResponseBody> call = ClientUtils.accommodationService.getImage(accommodation.getImageId());
+            call.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        Bitmap bitmap = BitmapFactory.decodeStream(response.body().byteStream());
+                        image.setImageBitmap(bitmap);
+                    }
+                }
 
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Log.d("Image", "Basic accommodation image");
+                }
+            });
         }
         return convertView;
     }
