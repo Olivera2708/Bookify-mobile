@@ -9,8 +9,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -78,6 +76,17 @@ public class ResultsActivity extends AppCompatActivity {
     String sort = "";
     FilterDTO filter;
 
+    String[] allAmenities = new String[]{
+            "Free WiFi", "Air conditioning", "Terrace", "Swimming pool", "Bar", "Sauna", "Luggage storage",
+            "Lunch", "Airport shuttle", "Wheelchair", "Non smoking", "Free parking",
+            "Family rooms", "Garden", "24-hour front desk", "Jacuzzi", "Heating",
+            "Breakfast", "Diner", "Private bathroom", "Deposit box", "City center"};
+    private int[] checkboxIds = new int[]{
+            R.id.freeWiFi, R.id.airConditioning, R.id.terrace, R.id.swimmingPool, R.id.bar, R.id.sauna, R.id.luggageStorage,
+            R.id.lunch, R.id.airportShuttle, R.id.wheelchair, R.id.non_smoking, R.id.freeParking,
+            R.id.familyRooms, R.id.garden, R.id.frontDesk, R.id.jacuzzi, R.id.heating,
+            R.id.breakfast, R.id.dinner, R.id.privateBathroom, R.id.depositBox, R.id.cityCenter};
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,13 +99,7 @@ public class ResultsActivity extends AppCompatActivity {
         locationInput = findViewById(R.id.locationText);
         personsInput = findViewById(R.id.peopleText);
 
-        List<Filter> listF = new ArrayList<>();
-        List<AccommodationType> type = new ArrayList<>();
-        type.add(AccommodationType.HOTEL);
-        type.add(AccommodationType.APARTMENT);
-        type.add(AccommodationType.ROOM);
-        filter = new FilterDTO(listF, type, -1, -1);
-
+        resetFilter();
         getSearchData();
         searchData();
 
@@ -122,6 +125,7 @@ public class ResultsActivity extends AppCompatActivity {
                         }
 
                         isChanged = true;
+                        resetFilter();
                         searchData();
                     }
                 });
@@ -135,6 +139,7 @@ public class ResultsActivity extends AppCompatActivity {
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     persons = Integer.valueOf(personsInput.getText().toString());
                     isChanged = true;
+                    resetFilter();
                     searchData();
                     return true;
                 }
@@ -147,6 +152,7 @@ public class ResultsActivity extends AppCompatActivity {
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     search = locationInput.getText().toString();
                     isChanged = true;
+                    resetFilter();
                     searchData();
                     return true;
                 }
@@ -289,62 +295,55 @@ public class ResultsActivity extends AppCompatActivity {
 
         RangeSlider priceSlider = dialog.findViewById(R.id.priceBar);
         priceSlider.setValueFrom(Math.round(this.minPrice));
+
         if (Math.round(this.minPrice) == Math.round(this.maxPrice)) {
             priceSlider.setValueTo(Math.round(this.maxPrice) + 1);
             priceSlider.setValues((float) Math.round(this.minPrice), (float) Math.round(this.maxPrice) + 1);
         }
         else {
             priceSlider.setValueTo(Math.round(this.maxPrice));
-            priceSlider.setValues((float) Math.round(this.minPrice), (float) Math.round(this.maxPrice));
+            if (filter.getMaxPrice() == -1)
+                priceSlider.setValues((float) Math.round(this.minPrice), (float) Math.round(this.maxPrice));
+            else
+                priceSlider.setValues((float) Math.round(filter.getMinPrice()), (float) Math.round(filter.getMaxPrice()));
         }
 
         EditText minPriceEdit = dialog.findViewById(R.id.minPrice);
-        minPriceEdit.setText(String.valueOf(Math.round(this.minPrice)), TextView.BufferType.EDITABLE);
-        minPriceEdit.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
+        if (filter.getMinPrice() == -1)
+            minPriceEdit.setText(String.valueOf(Math.round(this.minPrice)), TextView.BufferType.EDITABLE);
+        else
+            minPriceEdit.setText(String.valueOf(filter.getMinPrice()), TextView.BufferType.EDITABLE);
+        EditText maxPriceEdit = dialog.findViewById(R.id.maxPrice);
+        if (filter.getMaxPrice() == -1)
+            maxPriceEdit.setText(String.valueOf(Math.round(this.maxPrice)), TextView.BufferType.EDITABLE);
+        else
+            maxPriceEdit.setText(String.valueOf(filter.getMaxPrice()), TextView.BufferType.EDITABLE);
 
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (editable.toString().length() > 0) {
-                    if (Integer.parseInt(editable.toString()) > 1000 || editable.toString().equals("-")){
-                        minPriceEdit.setText(editable.toString().substring(0, minPriceEdit.getText().length() - 1));
-                    }
-                    else {
-                        float minValue = Float.valueOf(editable.toString());
-                        priceSlider.setValues(minValue, priceSlider.getValues().get(1));
-                        minPriceEdit.setSelection(minPriceEdit.getText().length());
-                    }
+        minPriceEdit.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    if (minPriceEdit.getText().toString().equals("") || Integer.valueOf(minPriceEdit.getText().toString()) < minPrice || Integer.valueOf(minPriceEdit.getText().toString()) > maxPrice || Integer.valueOf(minPriceEdit.getText().toString()) > Integer.valueOf(maxPriceEdit.getText().toString()))
+                        minPriceEdit.setText(String.valueOf(Math.round(minPrice)));
+                    float minValue = Float.valueOf(minPriceEdit.getText().toString());
+                    priceSlider.setValues(minValue, priceSlider.getValues().get(1));
+                    minPriceEdit.setSelection(minPriceEdit.getText().length());
+                    return true;
                 }
+                return false;
             }
         });
 
-        EditText maxPriceEdit = dialog.findViewById(R.id.maxPrice);
-        maxPriceEdit.setText(String.valueOf(Math.round(this.maxPrice)), TextView.BufferType.EDITABLE);
-        maxPriceEdit.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (editable.toString().length() > 0) {
-                    if (Integer.parseInt(editable.toString()) > 1000 || editable.toString().equals("-")){
-                        maxPriceEdit.setText(editable.toString().substring(0, maxPriceEdit.getText().length() - 1));
-                    }
-                    else {
-                        float maxValue = Float.valueOf(editable.toString());
-                        priceSlider.setValues(priceSlider.getValues().get(0), maxValue);
-                        maxPriceEdit.setSelection(maxPriceEdit.getText().length());
-                    }
+        maxPriceEdit.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    if (maxPriceEdit.getText().toString().equals("") || Integer.valueOf(maxPriceEdit.getText().toString()) < minPrice || Integer.valueOf(maxPriceEdit.getText().toString()) > maxPrice || Integer.valueOf(minPriceEdit.getText().toString()) > Integer.valueOf(maxPriceEdit.getText().toString()))
+                        maxPriceEdit.setText(String.valueOf(Math.round(maxPrice)));
+                    float maxVal = Float.valueOf(maxPriceEdit.getText().toString());
+                    priceSlider.setValues(priceSlider.getValues().get(0), maxVal);
+                    maxPriceEdit.setSelection(maxPriceEdit.getText().length());
+                    return true;
                 }
+                return false;
             }
         });
 
@@ -376,63 +375,15 @@ public class ResultsActivity extends AppCompatActivity {
             }
         });
 
-        CheckBox hotel = dialog.findViewById(R.id.hotel);
-        CheckBox apartment = dialog.findViewById(R.id.apartment);
-        CheckBox freeWiFi = dialog.findViewById(R.id.freeWiFi);
-        CheckBox airConditioning = dialog.findViewById(R.id.airConditioning);
-        CheckBox terrace = dialog.findViewById(R.id.terrace);
-        CheckBox swimmingPool = dialog.findViewById(R.id.swimmingPool);
-        CheckBox bar = dialog.findViewById(R.id.bar);
-        CheckBox sauna = dialog.findViewById(R.id.sauna);
-        CheckBox luggageStorage = dialog.findViewById(R.id.luggageStorage);
-        CheckBox lunch = dialog.findViewById(R.id.lunch);
-        CheckBox airportShuttle = dialog.findViewById(R.id.airportShuttle);
-        CheckBox wheelchair = dialog.findViewById(R.id.wheelchair);
-        CheckBox non_smoking = dialog.findViewById(R.id.non_smoking);
-        CheckBox freeParking = dialog.findViewById(R.id.freeParking);
-        CheckBox familyRooms = dialog.findViewById(R.id.familyRooms);
-        CheckBox garden = dialog.findViewById(R.id.garden);
-        CheckBox frontDesk = dialog.findViewById(R.id.frontDesk);
-        CheckBox jacuzzi = dialog.findViewById(R.id.jacuzzi);
-        CheckBox heating = dialog.findViewById(R.id.heating);
-        CheckBox breakfast = dialog.findViewById(R.id.breakfast);
-        CheckBox dinner = dialog.findViewById(R.id.dinner);
-        CheckBox privateBathroom = dialog.findViewById(R.id.privateBathroom);
-        CheckBox depositBox = dialog.findViewById(R.id.depositBox);
-        CheckBox cityCenter = dialog.findViewById(R.id.cityCenter);
-        CheckBox room = dialog.findViewById(R.id.room);
-
+        setTypeCheckboxes();
+        setAmenitiesCheckboxes();
 
         Button remove = dialog.findViewById(R.id.remove);
         Button save = dialog.findViewById(R.id.save);
         remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                hotel.setChecked(false);
-                apartment.setChecked(false);
-                freeWiFi.setChecked(false);
-                airConditioning.setChecked(false);
-                terrace.setChecked(false);
-                swimmingPool.setChecked(false);
-                bar.setChecked(false);
-                sauna.setChecked(false);
-                luggageStorage.setChecked(false);
-                lunch.setChecked(false);
-                airportShuttle.setChecked(false);
-                wheelchair.setChecked(false);
-                non_smoking.setChecked(false);
-                freeParking.setChecked(false);
-                familyRooms.setChecked(false);
-                garden.setChecked(false);
-                frontDesk.setChecked(false);
-                jacuzzi.setChecked(false);
-                heating.setChecked(false);
-                breakfast.setChecked(false);
-                dinner.setChecked(false);
-                privateBathroom.setChecked(false);
-                depositBox.setChecked(false);
-                cityCenter.setChecked(false);
-                room.setChecked(false);
+                deleteAllAmenities();
             }
         });
 
@@ -440,6 +391,15 @@ public class ResultsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 isChanged = true;
+
+                if (Integer.valueOf(minPriceEdit.getText().toString()) != Math.round(minPrice) || Integer.valueOf(maxPriceEdit.getText().toString()) != Math.round(maxPrice)){
+                    filter.setMaxPrice(Integer.valueOf(maxPriceEdit.getText().toString()));
+                    filter.setMinPrice(Integer.valueOf(minPriceEdit.getText().toString()));
+                }
+
+                setFilterTypes();
+                setAmenities();
+
                 filterData();
                 dialog.cancel();
             }
@@ -452,11 +412,102 @@ public class ResultsActivity extends AppCompatActivity {
         dialog.getWindow().setGravity(Gravity.BOTTOM);
     }
 
+    private void setFilterTypes(){
+        CheckBox hotel = dialog.findViewById(R.id.hotel);
+        CheckBox apartment = dialog.findViewById(R.id.apartment);
+        CheckBox room = dialog.findViewById(R.id.room);
+
+        List<AccommodationType> types = new ArrayList<>();
+        if (hotel.isChecked())
+            types.add(AccommodationType.HOTEL);
+        if (apartment.isChecked())
+            types.add(AccommodationType.APARTMENT);
+        if (room.isChecked())
+            types.add(AccommodationType.ROOM);
+
+        filter.setTypes(types);
+    }
+
+    private void setAmenities(){
+        List<Filter> filterAmenities = new ArrayList<>();
+        for (int i = 0; i < checkboxIds.length; i++) {
+            CheckBox checkbox = dialog.findViewById(checkboxIds[i]);
+            if (checkbox.isChecked())
+                filterAmenities.add(Filter.valueOf(transformLabel(allAmenities[i])));
+        }
+        filter.setFilters(filterAmenities);
+    }
+
+    private void setAmenitiesCheckboxes(){
+        if (filter.getFilters().size() != 0) {
+            for (int i = 0; i < checkboxIds.length; i++) {
+                if (filter.getFilters().contains(Filter.valueOf(transformLabel(allAmenities[i])))){
+                    CheckBox checkbox = dialog.findViewById(checkboxIds[i]);
+                    checkbox.setChecked(true);
+                }
+            }
+        }
+    }
+
+    private void deleteAllAmenities(){
+        for (int id : checkboxIds){
+            CheckBox checkBox = dialog.findViewById(id);
+            checkBox.setChecked(false);
+        }
+
+        CheckBox hotel = dialog.findViewById(R.id.hotel);
+        CheckBox apartment = dialog.findViewById(R.id.apartment);
+        CheckBox room = dialog.findViewById(R.id.room);
+        hotel.setChecked(true);
+        apartment.setChecked(true);
+        room.setChecked(true);
+    }
+
+    private void setTypeCheckboxes(){
+        CheckBox hotel = dialog.findViewById(R.id.hotel);
+        CheckBox apartment = dialog.findViewById(R.id.apartment);
+        CheckBox room = dialog.findViewById(R.id.room);
+
+        if (filter.getTypes().size() != 3){
+            if (!filter.getTypes().contains(AccommodationType.ROOM))
+                room.setChecked(false);
+            if (!filter.getTypes().contains(AccommodationType.HOTEL))
+                hotel.setChecked(false);
+            if (!filter.getTypes().contains(AccommodationType.APARTMENT))
+                apartment.setChecked(false);
+        }
+
+        List<AccommodationType> types = new ArrayList<>();
+        if (hotel.isChecked())
+            types.add(AccommodationType.HOTEL);
+        if (apartment.isChecked())
+            types.add(AccommodationType.APARTMENT);
+        if (room.isChecked())
+            types.add(AccommodationType.ROOM);
+
+        filter.setTypes(types);
+    }
+
     private String getSortValue(){
         if (sort.equals("Lowest"))
             return "Price lowest first";
         else if (sort.equals("Highest"))
             return "Price highest first";
         return sort;
+    }
+
+    private String transformLabel(String label){
+        if (label.equals("24-hour front desk"))
+            return "FRONT_DESK";
+        return label.toUpperCase().replace(' ', '_');
+    }
+
+    private void resetFilter(){
+        List<Filter> listF = new ArrayList<>();
+        List<AccommodationType> type = new ArrayList<>();
+        type.add(AccommodationType.HOTEL);
+        type.add(AccommodationType.APARTMENT);
+        type.add(AccommodationType.ROOM);
+        filter = new FilterDTO(listF, type, -1, -1);
     }
 }
