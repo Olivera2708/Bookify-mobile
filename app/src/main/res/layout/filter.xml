@@ -138,14 +138,11 @@
                 android:id="@+id/priceBar"
                 android:layout_width="330dp"
                 android:layout_height="wrap_content"
-                android:valueFrom="0"
-                android:valueTo="1000"
                 app:labelBehavior="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/priceInput"
-                app:trackColorInactive="?attr/colorSurfaceContainerHighest"
-                app:values="@array/initial_price_values" />
+                app:trackColorInactive="?attr/colorSurfaceContainerHighest"/>
 
             <View
                 android:id="@+id/linePrice"

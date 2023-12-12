@@ -1,5 +1,7 @@
 package com.example.bookify.model;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 
 public class Address {
@@ -52,5 +54,11 @@ public class Address {
 
     public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
+    }
+
+    @NonNull
+    @Override
+    public String toString(){
+        return this.address + ", " + this.city + ", " + this.country;
     }
 }

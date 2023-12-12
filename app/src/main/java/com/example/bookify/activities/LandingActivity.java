@@ -77,34 +77,17 @@ public class LandingActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(LandingActivity.this, ResultsActivity.class);
 
-                //get all entered data
                 EditText location = searchLayout.findViewById(R.id.locationInput);
-                Button date = searchLayout.findViewById(R.id.dateInput);
+                Button dates = searchLayout.findViewById(R.id.dateInput);
                 EditText persons = searchLayout.findViewById(R.id.personInput);
 
-                Call<SearchResponseDTO> call = ClientUtils.accommodationService.getForSearch(String.valueOf(location.getText()),
-                                                                                             String.valueOf(date.getText()).split(" - ")[0],
-                                                                                             String.valueOf(date.getText()).split(" - ")[1],
-                                                                                             Integer.parseInt(String.valueOf(persons.getText())), 1, 5);
-                call.enqueue(new Callback<SearchResponseDTO>() {
-                    @Override
-                    public void onResponse(Call<SearchResponseDTO> call, Response<SearchResponseDTO> response) {
-                        if (response.code() == 200){
-                            SearchResponseDTO result = response.body();
-                            Log.d("MyDebugT", String.valueOf(result.getMaxPrice()));
-                        }
-                        Log.d("MyDebugT", String.valueOf(response.code()));
-                    }
-                    @Override
-                    public void onFailure(Call<SearchResponseDTO> call, Throwable t) {
-                        Log.d("Error", "Search");
-                    }
-                });
+                intent.putExtra("location", String.valueOf(location.getText()));
+                intent.putExtra("dates", String.valueOf(dates.getText()));
+                intent.putExtra("persons", Integer.parseInt(String.valueOf(persons.getText())));
 
-
-//                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-//                startActivity(intent);
-//                overridePendingTransition(0, 0);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(intent);
+                overridePendingTransition(0, 0);
             }
         });
 
