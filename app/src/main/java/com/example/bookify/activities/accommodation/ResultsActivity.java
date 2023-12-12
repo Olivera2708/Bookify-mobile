@@ -31,7 +31,10 @@ import android.widget.Toast;
 import com.example.bookify.activities.LandingActivity;
 import com.example.bookify.adapters.pagers.AccommodationListAdapter;
 import com.example.bookify.clients.ClientUtils;
+import com.example.bookify.enumerations.AccommodationType;
+import com.example.bookify.enumerations.Filter;
 import com.example.bookify.model.AccommodationBasicDTO;
+import com.example.bookify.model.FilterDTO;
 import com.example.bookify.model.SearchResponseDTO;
 import com.example.bookify.navigation.NavigationBar;
 import com.example.bookify.R;
@@ -43,6 +46,7 @@ import com.google.android.material.slider.RangeSlider;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -71,6 +75,8 @@ public class ResultsActivity extends AppCompatActivity {
     int totalResults = 0;
     SimpleDateFormat format;
     boolean isChanged = false;
+    String sort = "";
+    FilterDTO filter;
 
 
     @Override
@@ -83,6 +89,13 @@ public class ResultsActivity extends AppCompatActivity {
         editDate = findViewById(R.id.dateButton);
         locationInput = findViewById(R.id.locationText);
         personsInput = findViewById(R.id.peopleText);
+
+        List<Filter> listF = new ArrayList<>();
+        List<AccommodationType> type = new ArrayList<>();
+        type.add(AccommodationType.HOTEL);
+        type.add(AccommodationType.APARTMENT);
+        type.add(AccommodationType.ROOM);
+        filter = new FilterDTO(listF, type, -1, -1);
 
         getSearchData();
         searchData();
@@ -106,7 +119,6 @@ public class ResultsActivity extends AppCompatActivity {
                             begin = format.parse(dates.split(" - ")[0]);
                             end = format.parse(dates.split(" - ")[1]);
                         } catch (ParseException e) {
-                            throw new RuntimeException(e);
                         }
 
                         isChanged = true;
@@ -163,6 +175,29 @@ public class ResultsActivity extends AppCompatActivity {
         getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
+    private void filterData(){
+        Call<SearchResponseDTO> call = ClientUtils.accommodationService.getForFilter(this.search,
+                this.dates.split(" - ")[0],
+                this.dates.split(" - ")[1],
+                this.persons, page, 10, this.sort, this.filter);
+        call.enqueue(new Callback<SearchResponseDTO>() {
+            @Override
+            public void onResponse(Call<SearchResponseDTO> call, Response<SearchResponseDTO> response) {
+                if (response.code() == 200 && response.body() != null) {
+                    SearchResponseDTO result = response.body();
+                    totalResults = result.getResults();
+
+                    showResults(result.getAccommodations());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<SearchResponseDTO> call, Throwable t) {
+                Log.d("Error", "Search");
+            }
+        });
+    }
+
     private void searchData(){
         if (this.persons > 1 && begin.after(new Date()) && !begin.equals(end)) {
             Call<SearchResponseDTO> call = ClientUtils.accommodationService.getForSearch(this.search,
@@ -217,9 +252,11 @@ public class ResultsActivity extends AppCompatActivity {
                 if (totalItemCount > 0) {
                     int lastInScreen = firstVisibleItem + visibleItemCount;
                     if (lastInScreen == totalItemCount && (page+1) * 10 <= totalResults) {
-                        Log.i("Info", "Dosao do kraja");
                         page ++;
-                        searchData();
+                        if (!sort.equals("") || filter.getMaxPrice() != -1 || filter.getFilters().size() != 0 || filter.getTypes().size() != 3)
+                            filterData();
+                        else
+                            searchData();
                     }
                 }
             }
@@ -235,7 +272,6 @@ public class ResultsActivity extends AppCompatActivity {
             begin = format.parse(dates.split(" - ")[0]);
             end = format.parse(dates.split(" - ")[1]);
         } catch (ParseException e) {
-            throw new RuntimeException(e);
         }
         setSearchValues(dates);
     }
@@ -323,14 +359,20 @@ public class ResultsActivity extends AppCompatActivity {
             }
         });
 
-        String[] sort = new String[]{"Name", "Price lowest first", "Price highest first"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.dropdown_item, sort);
+        String[] sortVal = new String[]{"Name", "Price lowest first", "Price highest first"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.dropdown_item, sortVal);
         AutoCompleteTextView autoCompleteTextView = dialog.findViewById(R.id.filled_exposed);
         autoCompleteTextView.setAdapter(adapter);
+        if (!sort.equals(""))
+            autoCompleteTextView.setText(getSortValue(), false);
         autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //code when something is selected
+                switch (i) {
+                    case 0: sort = "Name"; break;
+                    case 1: sort = "Lowest"; break;
+                    case 2: sort = "Highest"; break;
+                }
             }
         });
 
@@ -362,6 +404,7 @@ public class ResultsActivity extends AppCompatActivity {
 
 
         Button remove = dialog.findViewById(R.id.remove);
+        Button save = dialog.findViewById(R.id.save);
         remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -393,10 +436,27 @@ public class ResultsActivity extends AppCompatActivity {
             }
         });
 
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                isChanged = true;
+                filterData();
+                dialog.cancel();
+            }
+        });
+
         dialog.show();
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
+    }
+
+    private String getSortValue(){
+        if (sort.equals("Lowest"))
+            return "Price lowest first";
+        else if (sort.equals("Highest"))
+            return "Price highest first";
+        return sort;
     }
 }

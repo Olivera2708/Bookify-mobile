@@ -88,7 +88,7 @@ public class LandingActivity extends AppCompatActivity {
                     start = format.parse(dates.getText().toString().split(" - ")[0]);
                     end = format.parse(dates.getText().toString().split(" - ")[1]);
                 } catch (ParseException e) {
-                    throw new RuntimeException(e);
+
                 }
 
                 if (String.valueOf(dates.getText()).equals("") || String.valueOf(persons.getText()).equals("") || start.before(new Date())
