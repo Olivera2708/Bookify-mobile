@@ -11,7 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ClientUtils {
 
     //EXAMPLE: http://192.168.43.73:8080/api/
-    public static final String SERVICE_API_PATH = "http://"+ BuildConfig.IP_ADDR +":8080/api/";
+    public static final String SERVICE_API_PATH = "http://"+ BuildConfig.IP_ADDR +":8080/api/v1/";
 
     /*
      * Ovo ce nam sluziti za debug, da vidimo da li zahtevi i odgovori idu
@@ -43,5 +43,5 @@ public class ClientUtils {
      * Definisemo konkretnu instancu servisa na intnerntu sa kojim
      * vrsimo komunikaciju
      * */
-//    public static ProductService productService = retrofit.create(ProductService.class);
+    public static AccommodationService accommodationService = retrofit.create(AccommodationService.class);
 }

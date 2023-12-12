@@ -102,7 +102,7 @@
                 app:layout_constraintTop_toBottomOf="@id/locationIcon"/>
 
             <Button
-                android:id="@+id/editButton"
+                android:id="@+id/dateButton"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:background="@android:color/transparent"
@@ -117,46 +117,18 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
-    <FrameLayout
-        android:id="@+id/f1"
-        android:layout_marginTop="12dp"
+    <ListView
+        android:id="@+id/resultList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/searchInfo">
-
-        <include
-            android:id="@+id/tile"
-            layout="@layout/accomodation_view" />
-    </FrameLayout>
-
-    <FrameLayout
-        android:id="@+id/f2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/f1">
-
-        <include
-            android:id="@+id/tile2"
-            layout="@layout/accomodation_view" />
-    </FrameLayout>
-
-    <FrameLayout
-        android:id="@+id/f3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/f2">
-
-        <include
-            android:id="@+id/tile3"
-            layout="@layout/accomodation_view" />
-    </FrameLayout>
-
-    <!--    <ListView-->
-<!--        android:id="@+id/resultList"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:paddingTop="12dp"-->
-<!--        tools:listitem="@layout/tile_component"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/appBarLayout"/>-->
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:paddingTop="12dp"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigaiton"
+        app:layout_constraintTop_toBottomOf="@+id/searchInfo"
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_editor_absoluteX="0dp"
+        tools:listitem="@layout/accomodation_view" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

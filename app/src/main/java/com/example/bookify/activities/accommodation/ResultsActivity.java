@@ -11,19 +11,26 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.bookify.activities.LandingActivity;
+import com.example.bookify.adapters.pagers.AccommodationListAdapter;
+import com.example.bookify.clients.ClientUtils;
+import com.example.bookify.model.AccommodationBasicDTO;
+import com.example.bookify.model.SearchResponseDTO;
 import com.example.bookify.navigation.NavigationBar;
 import com.example.bookify.R;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -32,14 +39,35 @@ import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClic
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.slider.RangeSlider;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ResultsActivity extends AppCompatActivity {
 
     FloatingActionButton filterButton;
+    private AccommodationListAdapter adapter;
+    ListView listView;
     Button editDate;
+    EditText locationInput;
+    EditText personsInput;
+    String search = "";
+    String dates;
+    Date begin;
+    Date end;
+    int persons;
+    BottomSheetDialog dialog;
+    float minPrice = 0;
+    float maxPrice = 1000;
+    int page = 0;
+    int totalResults = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,50 +75,23 @@ public class ResultsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_results);
         NavigationBar.setNavigationBar(findViewById(R.id.bottom_navigaiton), this, R.id.navigation_home);
 
-        View tile = findViewById(R.id.tile);
-        Button details = tile.findViewById(R.id.details);
-        details.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ResultsActivity.this, AccommodationDetailsActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(intent);
-                overridePendingTransition(0, 0);
-            }
-        });
+        editDate = findViewById(R.id.dateButton);
+        locationInput = findViewById(R.id.locationText);
+        personsInput = findViewById(R.id.peopleText);
 
-        tile = findViewById(R.id.tile2);
-        details = tile.findViewById(R.id.details);
-        details.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ResultsActivity.this, AccommodationDetailsActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(intent);
-                overridePendingTransition(0, 0);
-            }
-        });
+        getSearchData();
+        searchData();
 
-        tile = findViewById(R.id.tile3);
-        details = tile.findViewById(R.id.details);
-        details.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ResultsActivity.this, AccommodationDetailsActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(intent);
-                overridePendingTransition(0, 0);
-            }
-        });
+        //paginacija?? preko strelica cu dodati
 
-        editDate = findViewById(R.id.editButton);
+
+
         editDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 MaterialDatePicker<Pair<Long, Long>> materialDatePicker = MaterialDatePicker.Builder.dateRangePicker().setSelection(new Pair<>(
-                        MaterialDatePicker.thisMonthInUtcMilliseconds(),
-                        MaterialDatePicker.todayInUtcMilliseconds()
-                )).build();
+                        begin.getTime(),
+                        end.getTime())).build();
 
                 materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Pair<Long, Long>>() {
                     @Override
@@ -127,15 +128,99 @@ public class ResultsActivity extends AppCompatActivity {
         getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
+    private void searchData(){
+        Call<SearchResponseDTO> call = ClientUtils.accommodationService.getForSearch(this.search,
+                                                                                     this.dates.split(" - ")[0],
+                                                                                     this.dates.split(" - ")[1],
+                                                                                     this.persons, page, 10);
+        call.enqueue(new Callback<SearchResponseDTO>() {
+            @Override
+            public void onResponse(Call<SearchResponseDTO> call, Response<SearchResponseDTO> response) {
+                if (response.code() == 200 && response.body() != null){
+                    SearchResponseDTO result = response.body();
+                    minPrice = result.getMinPrice();
+                    maxPrice = result.getMaxPrice();
+                    totalResults = result.getResults();
+
+                    showResults(result.getAccommodations());
+                }
+            }
+            @Override
+            public void onFailure(Call<SearchResponseDTO> call, Throwable t) {
+                Log.d("Error", "Search");
+            }
+        });
+    }
+
+    private void showResults(List<AccommodationBasicDTO> accommodations){
+        if (adapter == null) {
+            adapter = new AccommodationListAdapter(this, accommodations);
+            listView = findViewById(R.id.resultList);
+            listView.setAdapter(adapter);
+        } else {
+            adapter.addData(accommodations);
+        }
+
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView arg0, int arg1) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, final int totalItemCount) {
+                if (totalItemCount > 0) {
+                    int lastInScreen = firstVisibleItem + visibleItemCount;
+                    if (lastInScreen == totalItemCount && (page+1) * 10 <= totalResults) {
+                        Log.i("Info", "Dosao do kraja");
+                        page ++;
+                        searchData();
+                    }
+                }
+            }
+        });
+    }
+
+    private void getSearchData(){
+        Intent intent = getIntent();
+        search = intent.getStringExtra("location");
+        persons = intent.getIntExtra("persons", 2);
+        dates = intent.getStringExtra("dates");
+        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy.");
+        try {
+            begin = format.parse(dates.split(" - ")[0]);
+            end = format.parse(dates.split(" - ")[1]);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        setSearchValues(dates);
+    }
+
+    private void setSearchValues(String dates){
+        this.locationInput.setText(this.search);
+        this.personsInput.setText(String.valueOf(this.persons));
+        this.editDate.setText(dates);
+    }
+
     private void showBottomDialog() {
-        final BottomSheetDialog dialog = new BottomSheetDialog(this);
+        dialog = new BottomSheetDialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.filter);
 
         RangeSlider priceSlider = dialog.findViewById(R.id.priceBar);
-        EditText minPrice = dialog.findViewById(R.id.minPrice);
-        minPrice.setText("0", TextView.BufferType.EDITABLE);
-        minPrice.addTextChangedListener(new TextWatcher() {
+        priceSlider.setValueFrom(Math.round(this.minPrice));
+        if (Math.round(this.minPrice) == Math.round(this.maxPrice)) {
+            priceSlider.setValueTo(Math.round(this.maxPrice) + 1);
+            priceSlider.setValues((float) Math.round(this.minPrice), (float) Math.round(this.maxPrice) + 1);
+        }
+        else {
+            priceSlider.setValueTo(Math.round(this.maxPrice));
+            priceSlider.setValues((float) Math.round(this.minPrice), (float) Math.round(this.maxPrice));
+        }
+
+        EditText minPriceEdit = dialog.findViewById(R.id.minPrice);
+        minPriceEdit.setText(String.valueOf(Math.round(this.minPrice)), TextView.BufferType.EDITABLE);
+        minPriceEdit.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
@@ -147,20 +232,20 @@ public class ResultsActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().length() > 0) {
                     if (Integer.parseInt(editable.toString()) > 1000 || editable.toString().equals("-")){
-                        minPrice.setText(editable.toString().substring(0, minPrice.getText().length() - 1));
+                        minPriceEdit.setText(editable.toString().substring(0, minPriceEdit.getText().length() - 1));
                     }
                     else {
                         float minValue = Float.valueOf(editable.toString());
                         priceSlider.setValues(minValue, priceSlider.getValues().get(1));
-                        minPrice.setSelection(minPrice.getText().length());
+                        minPriceEdit.setSelection(minPriceEdit.getText().length());
                     }
                 }
             }
         });
 
-        EditText maxPrice = dialog.findViewById(R.id.maxPrice);
-        maxPrice.setText("1000", TextView.BufferType.EDITABLE);
-        maxPrice.addTextChangedListener(new TextWatcher() {
+        EditText maxPriceEdit = dialog.findViewById(R.id.maxPrice);
+        maxPriceEdit.setText(String.valueOf(Math.round(this.maxPrice)), TextView.BufferType.EDITABLE);
+        maxPriceEdit.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
@@ -172,12 +257,12 @@ public class ResultsActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
                 if (editable.toString().length() > 0) {
                     if (Integer.parseInt(editable.toString()) > 1000 || editable.toString().equals("-")){
-                        maxPrice.setText(editable.toString().substring(0, maxPrice.getText().length() - 1));
+                        maxPriceEdit.setText(editable.toString().substring(0, maxPriceEdit.getText().length() - 1));
                     }
                     else {
                         float maxValue = Float.valueOf(editable.toString());
                         priceSlider.setValues(priceSlider.getValues().get(0), maxValue);
-                        maxPrice.setSelection(maxPrice.getText().length());
+                        maxPriceEdit.setSelection(maxPriceEdit.getText().length());
                     }
                 }
             }
@@ -187,14 +272,14 @@ public class ResultsActivity extends AppCompatActivity {
             @Override
             public void onValueChange(@NonNull RangeSlider slider, float value, boolean fromUser) {
                 int valueMin = Math.round(slider.getValues().get(0));
-                minPrice.setText(Integer.toString(valueMin));
+                minPriceEdit.setText(Integer.toString(valueMin));
 
                 int valueMax = Math.round(slider.getValues().get(1));
-                maxPrice.setText(Integer.toString(valueMax));
+                maxPriceEdit.setText(Integer.toString(valueMax));
             }
         });
 
-        String[] sort = new String[]{"Price lowest first", "Price highest first", "Name"};
+        String[] sort = new String[]{"Name", "Price lowest first", "Price highest first"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.dropdown_item, sort);
         AutoCompleteTextView autoCompleteTextView = dialog.findViewById(R.id.filled_exposed);
         autoCompleteTextView.setAdapter(adapter);

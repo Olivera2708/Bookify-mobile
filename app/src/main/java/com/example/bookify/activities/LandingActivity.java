@@ -9,25 +9,36 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.example.bookify.activities.accommodation.ResultsActivity;
+import com.example.bookify.clients.ClientUtils;
+import com.example.bookify.model.SearchResponseDTO;
 import com.example.bookify.navigation.NavigationBar;
 import com.example.bookify.R;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LandingActivity extends AppCompatActivity {
     Button editDate;
     Button search;
+    int currentPage = 1;
+    int pageSize = 5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +76,15 @@ public class LandingActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(LandingActivity.this, ResultsActivity.class);
+
+                EditText location = searchLayout.findViewById(R.id.locationInput);
+                Button dates = searchLayout.findViewById(R.id.dateInput);
+                EditText persons = searchLayout.findViewById(R.id.personInput);
+
+                intent.putExtra("location", String.valueOf(location.getText()));
+                intent.putExtra("dates", String.valueOf(dates.getText()));
+                intent.putExtra("persons", Integer.parseInt(String.valueOf(persons.getText())));
+
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
                 overridePendingTransition(0, 0);
