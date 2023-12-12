@@ -164,27 +164,32 @@ public class ResultsActivity extends AppCompatActivity {
     }
 
     private void searchData(){
-        Call<SearchResponseDTO> call = ClientUtils.accommodationService.getForSearch(this.search,
-                                                                                     this.dates.split(" - ")[0],
-                                                                                     this.dates.split(" - ")[1],
-                                                                                     this.persons, page, 10);
-        call.enqueue(new Callback<SearchResponseDTO>() {
-            @Override
-            public void onResponse(Call<SearchResponseDTO> call, Response<SearchResponseDTO> response) {
-                if (response.code() == 200 && response.body() != null){
-                    SearchResponseDTO result = response.body();
-                    minPrice = result.getMinPrice();
-                    maxPrice = result.getMaxPrice();
-                    totalResults = result.getResults();
+        if (this.persons > 1 && begin.after(new Date()) && !begin.equals(end)) {
+            Call<SearchResponseDTO> call = ClientUtils.accommodationService.getForSearch(this.search,
+                    this.dates.split(" - ")[0],
+                    this.dates.split(" - ")[1],
+                    this.persons, page, 10);
+            call.enqueue(new Callback<SearchResponseDTO>() {
+                @Override
+                public void onResponse(Call<SearchResponseDTO> call, Response<SearchResponseDTO> response) {
+                    if (response.code() == 200 && response.body() != null) {
+                        SearchResponseDTO result = response.body();
+                        minPrice = result.getMinPrice();
+                        maxPrice = result.getMaxPrice();
+                        totalResults = result.getResults();
 
-                    showResults(result.getAccommodations());
+                        showResults(result.getAccommodations());
+                    }
                 }
-            }
-            @Override
-            public void onFailure(Call<SearchResponseDTO> call, Throwable t) {
-                Log.d("Error", "Search");
-            }
-        });
+
+                @Override
+                public void onFailure(Call<SearchResponseDTO> call, Throwable t) {
+                    Log.d("Error", "Search");
+                }
+            });
+        }
+        else
+            Toast.makeText(ResultsActivity.this, "Please enter correct parameters", Toast.LENGTH_SHORT).show();
     }
 
     private void showResults(List<AccommodationBasicDTO> accommodations){

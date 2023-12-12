@@ -16,15 +16,18 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.bookify.activities.accommodation.ResultsActivity;
 import com.example.bookify.clients.ClientUtils;
 import com.example.bookify.model.SearchResponseDTO;
 import com.example.bookify.navigation.NavigationBar;
 import com.example.bookify.R;
+import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,8 +40,6 @@ import retrofit2.Response;
 public class LandingActivity extends AppCompatActivity {
     Button editDate;
     Button search;
-    int currentPage = 1;
-    int pageSize = 5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +53,10 @@ public class LandingActivity extends AppCompatActivity {
         editDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MaterialDatePicker<Pair<Long, Long>> materialDatePicker = MaterialDatePicker.Builder.dateRangePicker().setSelection(new Pair<>(
-                        MaterialDatePicker.todayInUtcMilliseconds(),
-                        MaterialDatePicker.todayInUtcMilliseconds() + 5 * 24 * 60 * 60 * 1000
+                MaterialDatePicker<Pair<Long, Long>> materialDatePicker = MaterialDatePicker.Builder.dateRangePicker()
+                        .setSelection(new Pair<>(
+                        MaterialDatePicker.todayInUtcMilliseconds() + 24 * 60 * 60 * 1000,
+                        MaterialDatePicker.todayInUtcMilliseconds() + 6 * 24 * 60 * 60 * 1000
                 )).build();
 
                 materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Pair<Long, Long>>() {
@@ -75,19 +77,33 @@ public class LandingActivity extends AppCompatActivity {
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LandingActivity.this, ResultsActivity.class);
-
                 EditText location = searchLayout.findViewById(R.id.locationInput);
                 Button dates = searchLayout.findViewById(R.id.dateInput);
                 EditText persons = searchLayout.findViewById(R.id.personInput);
 
-                intent.putExtra("location", String.valueOf(location.getText()));
-                intent.putExtra("dates", String.valueOf(dates.getText()));
-                intent.putExtra("persons", Integer.parseInt(String.valueOf(persons.getText())));
+                SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy.");
+                Date start = null;
+                Date end = null;
+                try {
+                    start = format.parse(dates.getText().toString().split(" - ")[0]);
+                    end = format.parse(dates.getText().toString().split(" - ")[1]);
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
 
-                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                startActivity(intent);
-                overridePendingTransition(0, 0);
+                if (String.valueOf(dates.getText()).equals("") || String.valueOf(persons.getText()).equals("") || start.before(new Date())
+                        || Integer.valueOf(persons.getText().toString()) < 1 || start.equals(end))
+                    Toast.makeText(LandingActivity.this, "Please enter correct parameters", Toast.LENGTH_SHORT).show();
+                else {
+                    Intent intent = new Intent(LandingActivity.this, ResultsActivity.class);
+                    intent.putExtra("location", String.valueOf(location.getText()));
+                    intent.putExtra("dates", String.valueOf(dates.getText()));
+                    intent.putExtra("persons", Integer.parseInt(String.valueOf(persons.getText())));
+
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                    startActivity(intent);
+                    overridePendingTransition(0, 0);
+                }
             }
         });
 
