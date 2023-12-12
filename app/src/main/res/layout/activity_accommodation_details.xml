@@ -24,7 +24,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <RatingBar
-                android:id="@+id/stars"
+                android:id="@+id/starRating"
                 style="@style/Widget.AppCompat.RatingBar.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -55,11 +55,11 @@
                     android:id="@+id/favorite"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:background="@drawable/favorite"
+                    android:background="@drawable/favorite_border"
                     android:layout_marginEnd="12dp"/>
 
                 <TextView
-                    android:id="@+id/textView"
+                    android:id="@+id/name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat_medium"
@@ -88,46 +88,32 @@
 
             </androidx.cardview.widget.CardView>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:id="@+id/constraintLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="12dp"
                 android:layout_marginTop="20dp"
+                android:orientation="vertical"
                 android:background="@drawable/all_rounded"
                 app:layout_constraintTop_toBottomOf="@+id/idIVSliderItem"
                 tools:layout_editor_absoluteX="16dp">
 
-                <View
-                    android:id="@+id/separator"
-                    android:layout_width="3dp"
-                    android:layout_height="0dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginVertical="12dp"
-                    android:background="@drawable/all_rounded"
-                    android:backgroundTint="@color/caribbean"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <LinearLayout
-                    android:id="@+id/linearLayout2"
-                    android:layout_width="0sp"
+                <GridLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="left"
+                    android:id="@+id/linearLayout2"
+                    android:columnCount="2"
                     android:minHeight="160dp"
-                    android:orientation="vertical"
-                    android:padding="10dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/separator"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    android:paddingTop="14dp"
+                    android:paddingHorizontal="20dp">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center"
+                        android:layout_gravity="start"
+                        android:layout_columnWeight="1"
                         android:orientation="horizontal">
 
                         <ImageView
@@ -146,6 +132,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center"
+                        android:layout_gravity="start"
+                        android:layout_columnWeight="1"
                         android:orientation="horizontal">
 
                         <ImageView
@@ -164,6 +152,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center"
+                        android:layout_gravity="start"
+                        android:layout_columnWeight="1"
                         android:orientation="horizontal">
 
                         <ImageView
@@ -182,6 +172,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="center"
+                        android:layout_gravity="start"
+                        android:layout_columnWeight="1"
                         android:orientation="horizontal">
 
                         <ImageView
@@ -195,14 +187,26 @@
                             android:layout_marginStart="4dp"
                             android:text="@string/wheelchair" />
                     </LinearLayout>
-                </LinearLayout>
+                </GridLayout>
+
+
+                <View
+                    android:id="@+id/separator"
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    android:layout_marginHorizontal="14dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/all_rounded"
+                    android:backgroundTint="@color/caribbean"/>
 
                 <LinearLayout
-                    android:layout_width="0sp"
-                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:padding="10dp"
+                    android:paddingHorizontal="20dp"
+                    android:paddingTop="14dp"
+                    android:paddingBottom="8dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/separator"
@@ -211,7 +215,7 @@
                     <com.google.android.gms.maps.MapView
                         android:id="@+id/mapView"
                         android:layout_width="match_parent"
-                        android:layout_height="110dp"
+                        android:layout_height="160dp"
                         android:apiKey="AIzaSyCbuvyEduvlNzJTujCCc557cwEGrmbsGoY"
                         app:cameraZoom="12"
                         app:mapType="normal"/>
@@ -220,13 +224,13 @@
                         android:id="@+id/addressText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="6dp"
                         android:text="Bulevar kneza Milosa 45, Novi Sad, Srbija"
                         android:textAlignment="center"
                         android:textSize="12sp" />
 
                 </LinearLayout>
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/descriptionLayout"
@@ -236,6 +240,7 @@
                 android:gravity="left"
                 android:orientation="vertical"
                 android:minWidth="280dp"
+                android:paddingHorizontal="10dp"
                 app:layout_constraintBottom_toBottomOf="@+id/userPicture"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -257,66 +262,66 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/ratingLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="0dp"
-                android:orientation="vertical"
-                android:padding="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/descriptionLayout">
+<!--            <LinearLayout-->
+<!--                android:id="@+id/ratingLayout"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginHorizontal="0dp"-->
+<!--                android:orientation="vertical"-->
+<!--                android:padding="10dp"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/descriptionLayout">-->
 
-                <include
-                    android:id="@+id/rating_acc"
-                    layout="@layout/rating" />
-            </LinearLayout>
+<!--                <include-->
+<!--                    android:id="@+id/rating_acc"-->
+<!--                    layout="@layout/rating" />-->
+<!--            </LinearLayout>-->
 
-            <LinearLayout
-                android:id="@+id/commentsLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="12dp"
-                android:gravity="left"
-                android:orientation="vertical"
-                android:padding="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ratingLayout">
+<!--            <LinearLayout-->
+<!--                android:id="@+id/commentsLayout"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginHorizontal="12dp"-->
+<!--                android:gravity="left"-->
+<!--                android:orientation="vertical"-->
+<!--                android:padding="10dp"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/ratingLayout">-->
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp">
+<!--                <androidx.cardview.widget.CardView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:padding="10dp">-->
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="?android:windowBackground"
-                        android:orientation="vertical">
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:background="?android:windowBackground"-->
+<!--                        android:orientation="vertical">-->
 
-                        <include
-                            android:id="@+id/include1"
-                            layout="@layout/comment" />
+<!--                        <include-->
+<!--                            android:id="@+id/include1"-->
+<!--                            layout="@layout/comment" />-->
 
-                        <include
-                            android:id="@+id/include2"
-                            layout="@layout/comment" />
+<!--                        <include-->
+<!--                            android:id="@+id/include2"-->
+<!--                            layout="@layout/comment" />-->
 
-                        <include
-                            android:id="@+id/include3"
-                            layout="@layout/comment" />
+<!--                        <include-->
+<!--                            android:id="@+id/include3"-->
+<!--                            layout="@layout/comment" />-->
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="@string/more" />
-                    </LinearLayout>
+<!--                        <TextView-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:gravity="center"-->
+<!--                            android:text="@string/more" />-->
+<!--                    </LinearLayout>-->
 
-                </androidx.cardview.widget.CardView>
-            </LinearLayout>
+<!--                </androidx.cardview.widget.CardView>-->
+<!--            </LinearLayout>-->
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/ownerLayout"
@@ -375,6 +380,7 @@
 
                         <RatingBar
                             style="@style/Widget.AppCompat.RatingBar.Small"
+                            android:id="@+id/ownerRating"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="14dp"

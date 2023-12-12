@@ -5,16 +5,24 @@ import androidx.core.util.Pair;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
+import com.example.bookify.clients.ClientUtils;
+import com.example.bookify.model.AccommodationDetailDTO;
+import com.example.bookify.model.SearchResponseDTO;
 import com.example.bookify.navigation.NavigationBar;
 import com.example.bookify.activities.user.OwnerDetailsActivity;
 import com.example.bookify.R;
@@ -28,13 +36,19 @@ import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClic
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AccommodationDetailsActivity extends AppCompatActivity {
 
     Button reservationDate;
     ImageSlider imageSlider;
     private MapView mapView;
+    AccommodationDetailDTO accommodation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +56,15 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_accommodation_details);
         NavigationBar.setNavigationBar(findViewById(R.id.bottom_navigaiton), this, R.id.navigation_home);
 
-        View view1 = findViewById(R.id.include1);
-        View view2 = findViewById(R.id.include2);
-        View view3 = findViewById(R.id.include3);
+        Intent intent = getIntent();
+        Long id = intent.getLongExtra("id", 0);
+
+        getData(id);
+
+
+//        View view1 = findViewById(R.id.include1);
+//        View view2 = findViewById(R.id.include2);
+//        View view3 = findViewById(R.id.include3);
         Button ownerDetailsInfo = findViewById(R.id.ownerPicture);
         ownerDetailsInfo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,20 +76,20 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
             }
         });
 
-        SharedPreferences sharedPreferences = getSharedPreferences("sharedPref", MODE_PRIVATE);
-        if (sharedPreferences.getString("userType", "none").equals("guest")) {
-            showReservationOption();
-        }
-        if (sharedPreferences.getString("userType", "none").equals("owner")) {
-            setReportButton(view1);
-            setReportButton(view2);
-            setReportButton(view3);
-        }
-        if (sharedPreferences.getString("userType", "none").equals("guest")) {
-            setDeleteIcon(view1);
-            setDeleteIcon(view2);
-            setDeleteIcon(view3);
-        }
+//        SharedPreferences sharedPreferences = getSharedPreferences("sharedPref", MODE_PRIVATE);
+//        if (sharedPreferences.getString("userType", "none").equals("guest")) {
+//            showReservationOption();
+//        }
+//        if (sharedPreferences.getString("userType", "none").equals("owner")) {
+//            setReportButton(view1);
+//            setReportButton(view2);
+//            setReportButton(view3);
+//        }
+//        if (sharedPreferences.getString("userType", "none").equals("guest")) {
+//            setDeleteIcon(view1);
+//            setDeleteIcon(view2);
+//            setDeleteIcon(view3);
+//        }
 
 
         imageSlider = findViewById(R.id.imageSlider);
@@ -87,11 +107,49 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
         mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(googleMap -> {
-            LatLng markerLatLng = new LatLng(45.2453834, 19.7917393);
-            googleMap.addMarker(new MarkerOptions().position(markerLatLng).title("Marker Title"));
-
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markerLatLng, 12));
+            LatLng address = getLocationFromAddress(accommodation.getAddress().toString());
+            googleMap.addMarker(new MarkerOptions().position(address));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(address, 12));
         });
+    }
+
+    private void getData(Long id){
+        Call<AccommodationDetailDTO> call = ClientUtils.accommodationService.getAccommodationDetails(id);
+        call.enqueue(new Callback<AccommodationDetailDTO>() {
+            @Override
+            public void onResponse(Call<AccommodationDetailDTO> call, Response<AccommodationDetailDTO> response) {
+                if (response.code() == 200 && response.body() != null) {
+                    accommodation = response.body();
+                    showData();
+                }
+            }
+            @Override
+            public void onFailure(Call<AccommodationDetailDTO> call, Throwable t) {
+                Log.d("Error", "Accommodation details");
+            }
+        });
+    }
+
+    private void showData(){
+        RatingBar stars = findViewById(R.id.starRating);
+        TextView name = findViewById(R.id.name);
+        TextView desc = findViewById(R.id.description);
+        TextView address = findViewById(R.id.addressText);
+        TextView ownerName = findViewById(R.id.ownerName);
+        TextView ownerPhone = findViewById(R.id.ownerPhone);
+        RatingBar ownerRating = findViewById(R.id.ownerRating);
+
+        //slika ownera
+        //carousel
+        //amenities
+
+        name.setText(accommodation.getName());
+        desc.setText(accommodation.getDescription());
+        address.setText(accommodation.getAddress().toString());
+        ownerName.setText(accommodation.getOwner().getFirstName() + " " + accommodation.getOwner().getLastName());
+        ownerPhone.setText(accommodation.getOwner().getPhone());
+        stars.setRating(accommodation.getAvgRating());
+        ownerRating.setRating(accommodation.getOwner().getAvgRating());
     }
 
     private static void setDeleteIcon(View view1) {
@@ -138,5 +196,31 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
                 materialDatePicker.show(getSupportFragmentManager(), "tag");
             }
         });
+    }
+
+    public LatLng getLocationFromAddress(String strAddress)
+    {
+        Geocoder coder= new Geocoder(this);
+        List<Address> address;
+        LatLng p1 = null;
+
+        try
+        {
+            address = coder.getFromLocationName(strAddress, 5);
+            if(address==null)
+            {
+                return null;
+            }
+            Address location = address.get(0);
+            location.getLatitude();
+            location.getLongitude();
+
+            p1 = new LatLng(location.getLatitude(), location.getLongitude());
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return p1;
     }
 }
