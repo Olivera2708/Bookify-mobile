@@ -20,7 +20,9 @@ import com.example.bookify.R;
 import com.example.bookify.clients.ClientUtils;
 import com.example.bookify.model.AccommodationBasicDTO;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -30,11 +32,13 @@ import retrofit2.Response;
 public class AccommodationListAdapter extends ArrayAdapter<AccommodationBasicDTO> {
     private List<AccommodationBasicDTO> accommodations;
     private Activity activity;
+    private Map<Long, Bitmap> imageMap;
 
     public AccommodationListAdapter(Activity context, List<AccommodationBasicDTO> accommodations){
         super(context, R.layout.accomodation_view, accommodations);
         this.accommodations = accommodations;
         this.activity = context;
+        imageMap = new HashMap<>();
     }
 
     @Override
@@ -42,43 +46,23 @@ public class AccommodationListAdapter extends ArrayAdapter<AccommodationBasicDTO
         return accommodations.size();
     }
 
-    /*
-     * Ova metoda vraca pojedinacan element na osnovu pozicije
-     * */
     @Nullable
     @Override
     public AccommodationBasicDTO getItem(int position) {
         return accommodations.get(position);
     }
 
-    /*
-     * Ova metoda vraca jedinstveni identifikator, za adaptere koji prikazuju
-     * listu ili niz, pozicija je dovoljno dobra. Naravno mozemo iskoristiti i
-     * jedinstveni identifikator objekta, ako on postoji.
-     * */
     @Override
     public long getItemId(int position) {
         return position;
     }
 
-    /*
-     * Ova metoda popunjava pojedinacan element ListView-a podacima.
-     * Ako adapter cuva listu od n elemenata, adapter ce u petlji ici
-     * onoliko puta koliko getCount() vrati. Prilikom svake iteracije
-     * uzece java objekat sa odredjene poziciuje (model) koji cuva podatke,
-     * i layout koji treba da prikaze te podatke (view) npr R.layout.product_card.
-     * Kada adapter ima model i view, prosto ce uzeti podatke iz modela,
-     * popuniti view podacima i poslati listview da prikaze, i nastavice
-     * sledecu iteraciju.
-     * */
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         AccommodationBasicDTO accommodation = getItem(position);
-//        if(convertView == null){
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.accomodation_view,
-                    parent, false);
-//        }
+        convertView = LayoutInflater.from(getContext()).inflate(R.layout.accomodation_view,
+                parent, false);
 
         TextView name = convertView.findViewById(R.id.apartment_name);
         TextView address = convertView.findViewById(R.id.apartment_address);
@@ -99,22 +83,27 @@ public class AccommodationListAdapter extends ArrayAdapter<AccommodationBasicDTO
                 Log.i("Test", "Otvori aaccommodation broj " + accommodation.getId());
             });
 
-            Log.d("Image", "Moja slika je " +accommodation.getId());
-            Call<ResponseBody> call = ClientUtils.accommodationService.getImage(accommodation.getImageId());
-            call.enqueue(new Callback<ResponseBody>() {
-                @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    if (response.isSuccessful() && response.body() != null) {
-                        Bitmap bitmap = BitmapFactory.decodeStream(response.body().byteStream());
-                        image.setImageBitmap(bitmap);
+            if (imageMap.containsKey(accommodation.getImageId())){
+                image.setImageBitmap(imageMap.get(accommodation.getImageId()));
+            }
+            else {
+                Call<ResponseBody> call = ClientUtils.accommodationService.getImage(accommodation.getImageId());
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            Bitmap bitmap = BitmapFactory.decodeStream(response.body().byteStream());
+                            imageMap.put(accommodation.getImageId(), bitmap);
+                            image.setImageBitmap(bitmap);
+                        }
                     }
-                }
 
-                @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    Log.d("Image", "Basic accommodation image");
-                }
-            });
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.d("Image", "Basic accommodation image");
+                    }
+                });
+            }
         }
         return convertView;
     }
