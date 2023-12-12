@@ -37,8 +37,6 @@ import retrofit2.Response;
 public class LandingActivity extends AppCompatActivity {
     Button editDate;
     Button search;
-    int currentPage = 1;
-    int pageSize = 5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
