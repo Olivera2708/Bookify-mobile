@@ -75,10 +75,10 @@ public class AccommodationListAdapter extends ArrayAdapter<AccommodationBasicDTO
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         AccommodationBasicDTO accommodation = getItem(position);
-        if(convertView == null){
+//        if(convertView == null){
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.accomodation_view,
                     parent, false);
-        }
+//        }
 
         TextView name = convertView.findViewById(R.id.apartment_name);
         TextView address = convertView.findViewById(R.id.apartment_address);
