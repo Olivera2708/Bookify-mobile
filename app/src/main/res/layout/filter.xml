@@ -510,7 +510,7 @@
                     android:layout_marginStart="30dp"
                     android:layout_weight="1"
                     android:backgroundTint="@color/battleship"
-                    android:text="@string/remove_all"
+                    android:text="@string/remove"
                     android:textColor="@color/charcoal"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/save"
