@@ -44,4 +44,5 @@ public class ClientUtils {
      * vrsimo komunikaciju
      * */
     public static AccommodationService accommodationService = retrofit.create(AccommodationService.class);
+    public static AccountService accountService = retrofit.create(AccountService.class);
 }
