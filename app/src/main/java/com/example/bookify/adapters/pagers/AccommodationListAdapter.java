@@ -1,6 +1,7 @@
 package com.example.bookify.adapters.pagers;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
@@ -17,6 +18,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.bookify.R;
+import com.example.bookify.activities.LandingActivity;
+import com.example.bookify.activities.accommodation.AccommodationDetailsActivity;
+import com.example.bookify.activities.accommodation.ResultsActivity;
 import com.example.bookify.clients.ClientUtils;
 import com.example.bookify.model.AccommodationBasicDTO;
 
@@ -83,6 +87,11 @@ public class AccommodationListAdapter extends ArrayAdapter<AccommodationBasicDTO
 
             details.setOnClickListener(v -> {
                 Log.i("Test", "Otvori aaccommodation broj " + accommodation.getId());
+                Intent intent = new Intent(activity, AccommodationDetailsActivity.class);
+                intent.putExtra("id", accommodation.getId());
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                activity.startActivity(intent);
+                activity.overridePendingTransition(0, 0);
             });
 
             if (imageMap.containsKey(accommodation.getImageId())){

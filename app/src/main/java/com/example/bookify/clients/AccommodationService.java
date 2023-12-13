@@ -1,10 +1,10 @@
 package com.example.bookify.clients;
 
+import android.database.Observable;
+
+import com.example.bookify.model.AccommodationDetailDTO;
 import com.example.bookify.model.FilterDTO;
 import com.example.bookify.model.SearchResponseDTO;
-
-import java.sql.Blob;
-import java.util.ArrayList;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -48,4 +48,19 @@ public interface AccommodationService {
                                          @Query("size") int size,
                                          @Query("sort") String sort,
                                          @Body FilterDTO filter);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("accommodations/details/{id}")
+    Call<AccommodationDetailDTO> getAccommodationDetails(@Path("id") Long id);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("accommodations/images/{accommodationId}")
+    Call<String[]> getImages(@Path("accommodationId") Long accommodationId);
+
 }

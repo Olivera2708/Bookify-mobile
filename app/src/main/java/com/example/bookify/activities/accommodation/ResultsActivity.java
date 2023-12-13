@@ -15,6 +15,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -126,6 +127,7 @@ public class ResultsActivity extends AppCompatActivity {
 
                         isChanged = true;
                         resetFilter();
+                        page = 0;
                         searchData();
                     }
                 });
@@ -140,6 +142,8 @@ public class ResultsActivity extends AppCompatActivity {
                     persons = Integer.valueOf(personsInput.getText().toString());
                     isChanged = true;
                     resetFilter();
+                    hideKeyboard();
+                    page = 0;
                     searchData();
                     return true;
                 }
@@ -153,6 +157,8 @@ public class ResultsActivity extends AppCompatActivity {
                     search = locationInput.getText().toString();
                     isChanged = true;
                     resetFilter();
+                    hideKeyboard();
+                    page = 0;
                     searchData();
                     return true;
                 }
@@ -205,7 +211,7 @@ public class ResultsActivity extends AppCompatActivity {
     }
 
     private void searchData(){
-        if (this.persons > 1 && begin.after(new Date()) && !begin.equals(end)) {
+        if (this.persons > 0 && begin.after(new Date()) && !begin.equals(end)) {
             Call<SearchResponseDTO> call = ClientUtils.accommodationService.getForSearch(this.search,
                     this.dates.split(" - ")[0],
                     this.dates.split(" - ")[1],
@@ -312,16 +318,17 @@ public class ResultsActivity extends AppCompatActivity {
         if (filter.getMinPrice() == -1)
             minPriceEdit.setText(String.valueOf(Math.round(this.minPrice)), TextView.BufferType.EDITABLE);
         else
-            minPriceEdit.setText(String.valueOf(filter.getMinPrice()), TextView.BufferType.EDITABLE);
+            minPriceEdit.setText(String.valueOf(Math.round(filter.getMinPrice())), TextView.BufferType.EDITABLE);
         EditText maxPriceEdit = dialog.findViewById(R.id.maxPrice);
         if (filter.getMaxPrice() == -1)
             maxPriceEdit.setText(String.valueOf(Math.round(this.maxPrice)), TextView.BufferType.EDITABLE);
         else
-            maxPriceEdit.setText(String.valueOf(filter.getMaxPrice()), TextView.BufferType.EDITABLE);
+            maxPriceEdit.setText(String.valueOf(Math.round(filter.getMaxPrice())), TextView.BufferType.EDITABLE);
 
         minPriceEdit.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    hideKeyboard();
                     if (minPriceEdit.getText().toString().equals("") || Integer.valueOf(minPriceEdit.getText().toString()) < minPrice || Integer.valueOf(minPriceEdit.getText().toString()) > maxPrice || Integer.valueOf(minPriceEdit.getText().toString()) > Integer.valueOf(maxPriceEdit.getText().toString()))
                         minPriceEdit.setText(String.valueOf(Math.round(minPrice)));
                     float minValue = Float.valueOf(minPriceEdit.getText().toString());
@@ -336,6 +343,7 @@ public class ResultsActivity extends AppCompatActivity {
         maxPriceEdit.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    hideKeyboard();
                     if (maxPriceEdit.getText().toString().equals("") || Integer.valueOf(maxPriceEdit.getText().toString()) < minPrice || Integer.valueOf(maxPriceEdit.getText().toString()) > maxPrice || Integer.valueOf(minPriceEdit.getText().toString()) > Integer.valueOf(maxPriceEdit.getText().toString()))
                         maxPriceEdit.setText(String.valueOf(Math.round(maxPrice)));
                     float maxVal = Float.valueOf(maxPriceEdit.getText().toString());
@@ -399,7 +407,7 @@ public class ResultsActivity extends AppCompatActivity {
 
                 setFilterTypes();
                 setAmenities();
-
+                page = 0;
                 filterData();
                 dialog.cancel();
             }
@@ -509,5 +517,10 @@ public class ResultsActivity extends AppCompatActivity {
         type.add(AccommodationType.APARTMENT);
         type.add(AccommodationType.ROOM);
         filter = new FilterDTO(listF, type, -1, -1);
+    }
+
+    private void hideKeyboard(){
+        InputMethodManager imm = (InputMethodManager) getSystemService(ResultsActivity.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
     }
 }

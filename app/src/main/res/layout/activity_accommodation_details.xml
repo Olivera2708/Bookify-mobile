@@ -23,51 +23,63 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <RatingBar
-                android:id="@+id/stars"
-                style="@style/Widget.AppCompat.RatingBar.Small"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:isIndicator="true"
-                android:numStars="5"
-                android:progressTint="?attr/colorOnBackground"
-                android:rating="4"
-                android:scaleX="1.6"
-                android:scaleY="1.6"
-                app:layout_constraintEnd_toEndOf="@+id/apartment_image"
-                app:layout_constraintStart_toStartOf="@+id/apartment_image"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <LinearLayout
-                android:id="@+id/titleView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="6dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
                 <Button
                     android:id="@+id/favorite"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:background="@drawable/favorite"
-                    android:layout_marginEnd="12dp"/>
+                    android:background="@drawable/favorite_border"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/starRating"
+                    app:layout_constraintHorizontal_bias="0.12"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <RatingBar
+                    android:id="@+id/starRating"
+                    style="@style/Widget.AppCompat.RatingBar.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:isIndicator="true"
+                    android:numStars="5"
+                    android:progressTint="?attr/colorOnBackground"
+                    android:rating="4"
+                    android:scaleX="1.6"
+                    android:scaleY="1.6"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/titleView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    android:id="@+id/textView"
+                    android:id="@+id/name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat_medium"
-                    android:maxWidth="230dp"
-                    android:text="Test Apartment Name"
-                    android:textSize="20sp" />
+                    android:textAlignment="center"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -77,132 +89,52 @@
                 app:cardCornerRadius="20dp"
                 app:cardElevation="20dp">
 
-                <com.denzcoskun.imageslider.ImageSlider
+                <ViewFlipper
                     android:id="@+id/imageSlider"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    app:iss_auto_cycle="true"
-                    app:iss_corner_radius="20"
-                    app:iss_delay="1000"
-                    app:iss_period="3000" />
-
+                    android:layout_height="match_parent"/>
             </androidx.cardview.widget.CardView>
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:id="@+id/constraintLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="12dp"
                 android:layout_marginTop="20dp"
+                android:orientation="vertical"
                 android:background="@drawable/all_rounded"
                 app:layout_constraintTop_toBottomOf="@+id/idIVSliderItem"
                 tools:layout_editor_absoluteX="16dp">
 
+                <GridLayout
+                    android:id="@+id/amenitiesLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:columnCount="2"
+                    android:layout_gravity="center"
+                    android:useDefaultMargins="true"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="10dp">
+                </GridLayout>
+
+
                 <View
                     android:id="@+id/separator"
-                    android:layout_width="3dp"
-                    android:layout_height="0dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginVertical="12dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    android:layout_marginHorizontal="14dp"
+                    android:layout_gravity="center"
                     android:background="@drawable/all_rounded"
-                    android:backgroundTint="@color/caribbean"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:backgroundTint="@color/caribbean"/>
 
                 <LinearLayout
-                    android:id="@+id/linearLayout2"
-                    android:layout_width="0sp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:minHeight="160dp"
-                    android:orientation="vertical"
-                    android:padding="10dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/separator"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:src="@drawable/bathroom" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp"
-                            android:text="@string/private_bathroom" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:src="@drawable/terrace" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp"
-                            android:text="@string/terrace" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:src="@drawable/smoking" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp"
-                            android:text="@string/non_smoking" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:src="@drawable/wheelchair" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="4dp"
-                            android:text="@string/wheelchair" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0sp"
-                    android:layout_height="match_parent"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:padding="10dp"
+                    android:paddingHorizontal="20dp"
+                    android:paddingTop="14dp"
+                    android:paddingBottom="8dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/separator"
@@ -211,7 +143,7 @@
                     <com.google.android.gms.maps.MapView
                         android:id="@+id/mapView"
                         android:layout_width="match_parent"
-                        android:layout_height="110dp"
+                        android:layout_height="160dp"
                         android:apiKey="AIzaSyCbuvyEduvlNzJTujCCc557cwEGrmbsGoY"
                         app:cameraZoom="12"
                         app:mapType="normal"/>
@@ -220,13 +152,12 @@
                         android:id="@+id/addressText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="Bulevar kneza Milosa 45, Novi Sad, Srbija"
+                        android:layout_marginTop="6dp"
                         android:textAlignment="center"
                         android:textSize="12sp" />
 
                 </LinearLayout>
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/descriptionLayout"
@@ -235,7 +166,7 @@
                 android:layout_marginHorizontal="12dp"
                 android:gravity="left"
                 android:orientation="vertical"
-                android:minWidth="280dp"
+                android:paddingHorizontal="10dp"
                 app:layout_constraintBottom_toBottomOf="@+id/userPicture"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -252,71 +183,69 @@
                 <TextView
                     android:id="@+id/description"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Ovo je jako lep apartman molim vas dodjite. Trebaju mi pare. Imam cak dva kreveta. Grad je na samo 200km, a prva prodavnica odmah prvo skretanje desno posle 24km. Ovo je jako lep apartman molim vas dodjite. Trebaju mi pare. Imam cak dva kreveta. Grad je na samo 200km, a prva prodavnica odmah prvo skretanje desno posle 24km." />
-
+                    android:layout_height="wrap_content"/>
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/ratingLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="0dp"
-                android:orientation="vertical"
-                android:padding="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/descriptionLayout">
+<!--            <LinearLayout-->
+<!--                android:id="@+id/ratingLayout"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginHorizontal="0dp"-->
+<!--                android:orientation="vertical"-->
+<!--                android:padding="10dp"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/descriptionLayout">-->
 
-                <include
-                    android:id="@+id/rating_acc"
-                    layout="@layout/rating" />
-            </LinearLayout>
+<!--                <include-->
+<!--                    android:id="@+id/rating_acc"-->
+<!--                    layout="@layout/rating" />-->
+<!--            </LinearLayout>-->
 
-            <LinearLayout
-                android:id="@+id/commentsLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="12dp"
-                android:gravity="left"
-                android:orientation="vertical"
-                android:padding="10dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ratingLayout">
+<!--            <LinearLayout-->
+<!--                android:id="@+id/commentsLayout"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginHorizontal="12dp"-->
+<!--                android:gravity="left"-->
+<!--                android:orientation="vertical"-->
+<!--                android:padding="10dp"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/ratingLayout">-->
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp">
+<!--                <androidx.cardview.widget.CardView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:padding="10dp">-->
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="?android:windowBackground"
-                        android:orientation="vertical">
+<!--                    <LinearLayout-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:background="?android:windowBackground"-->
+<!--                        android:orientation="vertical">-->
 
-                        <include
-                            android:id="@+id/include1"
-                            layout="@layout/comment" />
+<!--                        <include-->
+<!--                            android:id="@+id/include1"-->
+<!--                            layout="@layout/comment" />-->
 
-                        <include
-                            android:id="@+id/include2"
-                            layout="@layout/comment" />
+<!--                        <include-->
+<!--                            android:id="@+id/include2"-->
+<!--                            layout="@layout/comment" />-->
 
-                        <include
-                            android:id="@+id/include3"
-                            layout="@layout/comment" />
+<!--                        <include-->
+<!--                            android:id="@+id/include3"-->
+<!--                            layout="@layout/comment" />-->
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="@string/more" />
-                    </LinearLayout>
+<!--                        <TextView-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:gravity="center"-->
+<!--                            android:text="@string/more" />-->
+<!--                    </LinearLayout>-->
 
-                </androidx.cardview.widget.CardView>
-            </LinearLayout>
+<!--                </androidx.cardview.widget.CardView>-->
+<!--            </LinearLayout>-->
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/ownerLayout"
@@ -338,25 +267,34 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <Button
-                    android:id="@+id/ownerPicture"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_centerHorizontal="true"
-                    android:background="@drawable/person"
-                    android:scaleType="centerCrop"
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/ownerCard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="100dp"
+                    android:layout_marginTop="4dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView2" />
+                    app:layout_constraintTop_toBottomOf="@+id/textView2" >
+
+                    <ImageView
+                        android:id="@+id/ownerPicture"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_centerHorizontal="true"
+                        android:background="@drawable/person"
+                        android:scaleType="centerCrop" />
+                </androidx.cardview.widget.CardView>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    app:layout_constraintBottom_toBottomOf="@+id/ownerPicture"
+                    android:layout_marginStart="10dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/ownerCard"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toEndOf="@+id/ownerPicture"
-                    app:layout_constraintTop_toTopOf="@+id/ownerPicture">
+                    app:layout_constraintStart_toEndOf="@+id/ownerCard"
+                    app:layout_constraintTop_toTopOf="@+id/ownerCard">
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -370,18 +308,17 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:maxWidth="140dp"
-                            android:text="Radojko Petrovic"
                             android:textSize="16sp" />
 
                         <RatingBar
                             style="@style/Widget.AppCompat.RatingBar.Small"
+                            android:id="@+id/ownerRating"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="14dp"
                             android:isIndicator="true"
                             android:numStars="5"
                             android:progressTint="?attr/colorOnBackground"
-                            android:rating="3.75"
                             android:scaleX="1.2"
                             android:scaleY="1.2"
                             app:layout_constraintEnd_toEndOf="@+id/apartment_image"
@@ -393,8 +330,7 @@
                         android:id="@+id/ownerPhone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:text="065 1234365" />
+                        android:layout_marginTop="2dp"/>
 
                 </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
