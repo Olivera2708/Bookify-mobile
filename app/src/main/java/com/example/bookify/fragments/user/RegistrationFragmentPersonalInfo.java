@@ -3,6 +3,7 @@ package com.example.bookify.fragments.user;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +31,8 @@ public class RegistrationFragmentPersonalInfo extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    RegistrationViewModel viewModel = new ViewModelProvider(requireActivity()).get(RegistrationViewModel.class);
 
     public RegistrationFragmentPersonalInfo() {
         // Required empty public constructor
@@ -84,6 +87,16 @@ public class RegistrationFragmentPersonalInfo extends Fragment {
                     Toast.makeText(getActivity(), "You must fill in all field", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                String role = "";
+                if(guest.isChecked()){
+                    role = "guest";
+                } else if (owner.isChecked()) {
+                    role = "owner";
+                }
+                viewModel.setFirstName(firstName.getText().toString());
+                viewModel.setLastName(lastName.getText().toString());
+                viewModel.setPhone(phone.getText().toString());
+                viewModel.setRole(role);
                 FragmentTransition.to(RegistrationFragmentLocation.newInstance("Locationa", "Location"),
                         getActivity(), false, R.id.registration);
             }

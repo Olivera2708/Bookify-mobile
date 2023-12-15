@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,8 @@ import android.widget.Toast;
 
 import com.example.bookify.R;
 import com.example.bookify.activities.LoginActivity;
+import com.example.bookify.model.Address;
+import com.example.bookify.model.UserRegistrationDTO;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.Arrays;
@@ -36,6 +39,8 @@ public class RegistrationFragmentLocation extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    RegistrationViewModel viewModel = new ViewModelProvider(requireActivity()).get(RegistrationViewModel.class);
 
     public RegistrationFragmentLocation() {
         // Required empty public constructor
@@ -97,11 +102,28 @@ public class RegistrationFragmentLocation extends Fragment {
         TextInputEditText zipCode = view.findViewById(R.id.inputZipCode);
 
         button.setOnClickListener(v -> {
-            if (autoCompleteTextView.getText().toString().trim().length() <= 0 || city.getText().toString().equals("") || address.getText().toString().equals("") || zipCode.getText().toString().equals("")) {
+            if (autoCompleteTextView.getText().toString().trim().length() <= 0 || city.getText().toString().equals("") ||
+                    address.getText().toString().equals("") || zipCode.getText().toString().equals("")) {
                 Toast.makeText(getActivity(), "You must fill in all field", Toast.LENGTH_SHORT).show();
                 return;
             }
             Toast.makeText(getActivity(), getString(R.string.check_email), Toast.LENGTH_SHORT).show();
+
+            UserRegistrationDTO user = new UserRegistrationDTO();
+            user.setEmail(viewModel.getEmail().toString());
+            user.setPassword(viewModel.getPassword().toString());
+            user.setConfirmPassword(viewModel.getConfirmPassword().toString());
+            user.setFirstName(viewModel.getFirstName().toString());
+            user.setLastName(viewModel.getLastName().toString());
+            user.setPhone(viewModel.getPhone().toString());
+            user.setRole(viewModel.getRole().toString());
+            Address a = new Address();
+            a.setCountry(autoCompleteTextView.getText().toString());
+            a.setCity(city.getText().toString());
+            a.setAddress(address.getText().toString());
+            a.setZipCode(zipCode.getText().toString());
+            user.setAddress(a);
+            
             Intent intent = new Intent(getActivity(), LoginActivity.class);
             startActivity(intent);
             getActivity().finish();

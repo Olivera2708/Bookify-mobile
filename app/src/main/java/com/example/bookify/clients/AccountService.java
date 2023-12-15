@@ -14,4 +14,6 @@ public interface AccountService {
     })
     @GET("users/image/{imageId}")
     Call<ResponseBody> getImage(@Path("imageId") Long imageId);
+
+
 }
