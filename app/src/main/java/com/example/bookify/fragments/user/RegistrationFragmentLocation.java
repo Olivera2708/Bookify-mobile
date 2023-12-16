@@ -118,7 +118,6 @@ public class RegistrationFragmentLocation extends Fragment {
                 Toast.makeText(getActivity(), "You must fill in all field", Toast.LENGTH_SHORT).show();
                 return;
             }
-            Toast.makeText(getActivity(), getString(R.string.check_email), Toast.LENGTH_SHORT).show();
 
             UserRegistrationDTO user = new UserRegistrationDTO();
             user.setEmail(viewModel.getEmail().getValue());
@@ -135,25 +134,25 @@ public class RegistrationFragmentLocation extends Fragment {
             a.setZipCode(zipCode.getText().toString());
             user.setAddress(a);
 
-//            ClientUtils.test();
-
             Call<MessageDTO> call = ClientUtils.accountService.register(user);
             call.enqueue(new Callback<MessageDTO>() {
                 @Override
                 public void onResponse(Call<MessageDTO> call, Response<MessageDTO> response) {
-                    Log.d("BOOKIFYT", "");
                     if (response.code() == 200) {
+                        Toast.makeText(getActivity(), getString(R.string.check_email), Toast.LENGTH_SHORT).show();
                         MessageDTO result = response.body();
-                        Toast.makeText(getActivity(), result.getToken(), Toast.LENGTH_SHORT);
                         Intent intent = new Intent(getActivity(), LoginActivity.class);
                         startActivity(intent);
                         getActivity().finish();
+                    }
+                    if(response.code() == 400){
+                        Toast.makeText(getActivity(), "Already have account", Toast.LENGTH_SHORT).show();
                     }
                 }
 
                 @Override
                 public void onFailure(Call<MessageDTO> call, Throwable t) {
-                    Log.d("BOOKIFYT", t.getCause().getMessage());
+                    Toast.makeText(getActivity(), "Fail", Toast.LENGTH_SHORT).show();
                 }
             });
 
