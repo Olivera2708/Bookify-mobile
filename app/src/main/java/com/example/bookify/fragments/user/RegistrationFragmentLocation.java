@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,12 +18,19 @@ import android.widget.Toast;
 
 import com.example.bookify.R;
 import com.example.bookify.activities.LoginActivity;
+import com.example.bookify.clients.ClientUtils;
 import com.example.bookify.model.Address;
+import com.example.bookify.model.MessageDTO;
+import com.example.bookify.model.SearchResponseDTO;
 import com.example.bookify.model.UserRegistrationDTO;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.Arrays;
 import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -40,7 +48,7 @@ public class RegistrationFragmentLocation extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    RegistrationViewModel viewModel = new ViewModelProvider(requireActivity()).get(RegistrationViewModel.class);
+    RegistrationViewModel viewModel;
 
     public RegistrationFragmentLocation() {
         // Required empty public constructor
@@ -78,6 +86,9 @@ public class RegistrationFragmentLocation extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_registration_location, container, false);
+
+        viewModel = new ViewModelProvider(requireActivity()).get(RegistrationViewModel.class);
+
         Button button = view.findViewById(R.id.btnNext);
 
         String[] sort =  Locale.getISOCountries();
@@ -110,23 +121,42 @@ public class RegistrationFragmentLocation extends Fragment {
             Toast.makeText(getActivity(), getString(R.string.check_email), Toast.LENGTH_SHORT).show();
 
             UserRegistrationDTO user = new UserRegistrationDTO();
-            user.setEmail(viewModel.getEmail().toString());
-            user.setPassword(viewModel.getPassword().toString());
-            user.setConfirmPassword(viewModel.getConfirmPassword().toString());
-            user.setFirstName(viewModel.getFirstName().toString());
-            user.setLastName(viewModel.getLastName().toString());
-            user.setPhone(viewModel.getPhone().toString());
-            user.setRole(viewModel.getRole().toString());
+            user.setEmail(viewModel.getEmail().getValue());
+            user.setPassword(viewModel.getPassword().getValue());
+            user.setConfirmPassword(viewModel.getConfirmPassword().getValue());
+            user.setFirstName(viewModel.getFirstName().getValue());
+            user.setLastName(viewModel.getLastName().getValue());
+            user.setPhone(viewModel.getPhone().getValue());
+            user.setRole(viewModel.getRole().getValue());
             Address a = new Address();
             a.setCountry(autoCompleteTextView.getText().toString());
             a.setCity(city.getText().toString());
             a.setAddress(address.getText().toString());
             a.setZipCode(zipCode.getText().toString());
             user.setAddress(a);
-            
-            Intent intent = new Intent(getActivity(), LoginActivity.class);
-            startActivity(intent);
-            getActivity().finish();
+
+//            ClientUtils.test();
+
+            Call<MessageDTO> call = ClientUtils.accountService.register(user);
+            call.enqueue(new Callback<MessageDTO>() {
+                @Override
+                public void onResponse(Call<MessageDTO> call, Response<MessageDTO> response) {
+                    Log.d("BOOKIFYT", response.code);
+                    if (response.code() == 200) {
+                        MessageDTO result = response.body();
+                        Toast.makeText(getActivity(), result.getToken(), Toast.LENGTH_SHORT);
+                        Intent intent = new Intent(getActivity(), LoginActivity.class);
+                        startActivity(intent);
+                        getActivity().finish();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<MessageDTO> call, Throwable t) {
+                    Log.d("BOOKIFYT", t.getMessage());
+                }
+            });
+
         });
         return view;
     }

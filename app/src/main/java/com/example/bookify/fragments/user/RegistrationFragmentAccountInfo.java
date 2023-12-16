@@ -35,7 +35,7 @@ public class RegistrationFragmentAccountInfo extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    RegistrationViewModel viewModel = new ViewModelProvider(requireActivity()).get(RegistrationViewModel.class);
+    RegistrationViewModel viewModel;
 
     public RegistrationFragmentAccountInfo() {
         // Required empty public constructor
@@ -73,6 +73,9 @@ public class RegistrationFragmentAccountInfo extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_registration_account_info, container, false);
+
+        viewModel = new ViewModelProvider(requireActivity()).get(RegistrationViewModel.class);
+
         Button button = view.findViewById(R.id.btnNext);
         TextInputEditText email = view.findViewById(R.id.editTextTextEmailAddress);
         TextInputEditText password = view.findViewById(R.id.editTextTextPassword);

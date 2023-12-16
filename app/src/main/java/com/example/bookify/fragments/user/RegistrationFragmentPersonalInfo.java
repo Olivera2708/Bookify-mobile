@@ -32,7 +32,7 @@ public class RegistrationFragmentPersonalInfo extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    RegistrationViewModel viewModel = new ViewModelProvider(requireActivity()).get(RegistrationViewModel.class);
+    RegistrationViewModel viewModel;
 
     public RegistrationFragmentPersonalInfo() {
         // Required empty public constructor
@@ -70,6 +70,9 @@ public class RegistrationFragmentPersonalInfo extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_registration_personal_info, container, false);
+
+        viewModel = new ViewModelProvider(requireActivity()).get(RegistrationViewModel.class);
+
         Button button = view.findViewById(R.id.btnNext);
         TextInputEditText firstName = view.findViewById(R.id.inputFirstName);
         TextInputEditText lastName = view.findViewById(R.id.inputLastName);
