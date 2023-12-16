@@ -27,5 +27,10 @@ public interface AccountService {
     @POST("users/mobile")
     Call<MessageDTO> register(@Body UserRegistrationDTO user);
 
-
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("users/forgot-password/{email}")
+    Call<ResponseBody> forgetPassword(@Path("email") String email);
 }
