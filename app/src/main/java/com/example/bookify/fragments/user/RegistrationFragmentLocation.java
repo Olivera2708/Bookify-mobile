@@ -141,7 +141,7 @@ public class RegistrationFragmentLocation extends Fragment {
             call.enqueue(new Callback<MessageDTO>() {
                 @Override
                 public void onResponse(Call<MessageDTO> call, Response<MessageDTO> response) {
-                    Log.d("BOOKIFYT", response.code);
+                    Log.d("BOOKIFYT", "");
                     if (response.code() == 200) {
                         MessageDTO result = response.body();
                         Toast.makeText(getActivity(), result.getToken(), Toast.LENGTH_SHORT);
@@ -153,7 +153,7 @@ public class RegistrationFragmentLocation extends Fragment {
 
                 @Override
                 public void onFailure(Call<MessageDTO> call, Throwable t) {
-                    Log.d("BOOKIFYT", t.getMessage());
+                    Log.d("BOOKIFYT", t.getCause().getMessage());
                 }
             });
 

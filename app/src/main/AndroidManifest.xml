@@ -80,11 +80,15 @@
             android:name=".activities.LoginActivity"
             android:exported="true"
             android:screenOrientation="portrait">
-            <intent-filter>
+            <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="bookify" android:host="login" />
+
+                <data android:scheme="http" />
+                <data android:host="192.168.1.5:4200" />
+                <data android:pathPrefix="/login" />
             </intent-filter>
         </activity>
         <activity
