@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.auth0.android.jwt.JWT;
@@ -42,32 +43,9 @@ public class LoginActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("sharedPref", MODE_PRIVATE);
         editor = sharedPreferences.edit();
 
-        binding.btnGuest.setOnClickListener(v -> {
-            editor.putString("userType", "none");
-            editor.commit();
-            Intent intent = new Intent(LoginActivity.this, LandingActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-            startActivity(intent);
-            overridePendingTransition(0, 0);
-            finish();
-        });
-
-        binding.btnLogin.setOnClickListener(v -> {
-            if (binding.editTextTextEmailAddress.getText().toString().equals("") ||
-                    binding.editTextTextPassword.getText().toString().equals("")) {
-                Toast.makeText(LoginActivity.this, "You must fill in all field", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            login();
-        });
-
-        binding.btnRegister.setOnClickListener(v -> {
-            Intent intent = new Intent(LoginActivity.this, RegistrationActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-            startActivity(intent);
-            overridePendingTransition(0, 0);
-            finish();
-        });
+        setButtonGuestAction();
+        setLoginButtonAction();
+        setRegisterButtonAction();
 
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
@@ -77,6 +55,40 @@ public class LoginActivity extends AppCompatActivity {
             }
         };
         getOnBackPressedDispatcher().addCallback(this, callback);
+    }
+
+    private void setRegisterButtonAction() {
+        binding.btnRegister.setOnClickListener(v -> {
+            Intent intent = new Intent(LoginActivity.this, RegistrationActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            startActivity(intent);
+            overridePendingTransition(0, 0);
+            finish();
+        });
+    }
+
+    private void setLoginButtonAction() {
+        binding.btnLogin.setOnClickListener(v -> {
+            if (binding.editTextTextEmailAddress.getText().toString().equals("") ||
+                    binding.editTextTextPassword.getText().toString().equals("")) {
+                Toast.makeText(LoginActivity.this, "You must fill in all field", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            removeKeyboard();
+            login();
+        });
+    }
+
+    private void setButtonGuestAction() {
+        binding.btnGuest.setOnClickListener(v -> {
+            editor.putString("userType", "none");
+            editor.commit();
+            Intent intent = new Intent(LoginActivity.this, LandingActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            startActivity(intent);
+            overridePendingTransition(0, 0);
+            finish();
+        });
     }
 
     private void login() {
@@ -115,6 +127,15 @@ public class LoginActivity extends AppCompatActivity {
         snackbar.show();
     }
 
+    private void removeKeyboard(){
+        try {
+            InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        } catch (Exception e) {
+            Log.d("EXCEPTION", "removeKeyboard: " + e.getMessage());
+        }
+    }
+
     public void openForgotPasswordActivity(View view) {
         Intent intent = new Intent(this, ForgotPasswordActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -122,4 +143,5 @@ public class LoginActivity extends AppCompatActivity {
         overridePendingTransition(0, 0);
         finish();
     }
+
 }

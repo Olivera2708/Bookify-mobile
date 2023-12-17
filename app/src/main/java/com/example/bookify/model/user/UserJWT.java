@@ -23,12 +23,5 @@ public class UserJWT {
     public Long getExpiresIn() {
         return expiresIn;
     }
-
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
-    }
-
-    public void setExpiresIn(Long expiresIn) {
-        this.expiresIn = expiresIn;
-    }
+    
 }

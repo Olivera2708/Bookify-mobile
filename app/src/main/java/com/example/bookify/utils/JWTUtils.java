@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import com.auth0.android.jwt.JWT;
 import com.example.bookify.model.user.UserJWT;
 
+import java.util.Date;
+
 public abstract class JWTUtils {
     public static final String USER_ROLE = "userType";
     public static final String USER_ID = "id";
@@ -18,11 +20,12 @@ public abstract class JWTUtils {
         String role = jwt.getClaim("role").asString();
         String email = jwt.getSubject();
         Long id = jwt.getClaim("id").asLong();
+        Long expiration = jwt.getExpiresAt().getTime();
         editor.putString(USER_ROLE, role);
         editor.putString(USER_EMAIL, email);
-        editor.putString(USER_ID, id.toString());
+        editor.putLong(USER_ID, id);
         editor.putString(JWT_TOKEN, token.getAccessToken());
-        editor.putString(EXPIRATION, token.getExpiresIn().toString());
+        editor.putLong(EXPIRATION, expiration);
         editor.commit();
     }
 
@@ -35,6 +38,22 @@ public abstract class JWTUtils {
                 .remove(USER_ID)
                 .remove(EXPIRATION)
                 .commit();
+    }
+    public static boolean isLoggedIn(SharedPreferences sharedPreferences){
+        String test = sharedPreferences.getString(JWT_TOKEN,"");
+        return !test.isEmpty();
+    }
+    public static boolean hasTokenExpired(SharedPreferences sharedPreferences){
+        Long time = sharedPreferences.getLong(EXPIRATION,-1);
+        if(time < 0) return true;
+
+        Date date = new Date(time);
+        if((new Date()).after(date)) {
+            clearCurrentLoginUserData(sharedPreferences);
+            return true;
+        }
+
+        return false;
     }
 
 }
