@@ -3,13 +3,19 @@ package com.example.bookify.fragments.accommodation;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 
 import com.example.bookify.R;
 import com.example.bookify.fragments.MyFragment;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,6 +32,8 @@ public class AccommodationFragmentFilters extends MyFragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    AccommodationUpdateViewModel viewModel;
 
     public AccommodationFragmentFilters() {
         // Required empty public constructor
@@ -58,15 +66,48 @@ public class AccommodationFragmentFilters extends MyFragment {
         }
     }
 
+    View view;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_accommodation_filters, container, false);
+        view = inflater.inflate(R.layout.fragment_accommodation_filters, container, false);
+
+        viewModel = new ViewModelProvider(requireActivity()).get(AccommodationUpdateViewModel.class);
+
+        return view;
     }
+
+    List<String> amenities = new ArrayList<>();
 
     @Override
     public int isValid() {
+        iterateThroughCheckBoxes(view);
+        amenities = new ArrayList<>(new HashSet<>(amenities));
+        viewModel.setAmenities(amenities);
         return 0;
+    }
+
+
+    private void iterateThroughCheckBoxes(View view) {
+        if (view instanceof ViewGroup) {
+            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+                View childView = ((ViewGroup) view).getChildAt(i);
+                iterateThroughCheckBoxes(childView);
+            }
+        } else if (view instanceof CheckBox) {
+            CheckBox checkBox = (CheckBox) view;
+            boolean isChecked = checkBox.isChecked();
+            if (isChecked) {
+                amenities.add(getAmenity(checkBox.getText().toString()));
+            }
+        }
+    }
+
+    private String getAmenity(String name) {
+        if (name.equals("24-hour front desk"))
+            return "FRONT_DESK";
+        return name.toUpperCase().replaceAll("[^a-zA-Z]", "_");
     }
 }

@@ -4,6 +4,7 @@ import android.content.res.ColorStateList;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +33,8 @@ public class AccommodationFragmentGuests extends MyFragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    AccommodationUpdateViewModel viewModel;
 
     public AccommodationFragmentGuests() {
         // Required empty public constructor
@@ -73,7 +76,9 @@ public class AccommodationFragmentGuests extends MyFragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_accommodation_guests, container, false);
 
-        String[] sort = new String[]{"studio", "room", "apartment"};
+        viewModel = new ViewModelProvider(requireActivity()).get(AccommodationUpdateViewModel.class);
+
+        String[] sort = new String[]{"HOTEL", "ROOM", "APARTMENT"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.dropdown_item, sort);
         AutoCompleteTextView autoCompleteTextView = view.findViewById(R.id.typeDropDown);
         autoCompleteTextView.setAdapter(adapter);
@@ -139,6 +144,13 @@ public class AccommodationFragmentGuests extends MyFragment {
         if(Integer.parseInt(min.getText().toString()) > Integer.parseInt(max.getText().toString())){
             return 2;
         }
+
+        viewModel.setMinGuests(Integer.parseInt(min.getText().toString()));
+        viewModel.setMaxGuests(Integer.parseInt(max.getText().toString()));
+        viewModel.setType(autoCompleteTextView.getText().toString().toUpperCase());
+        MaterialButton right = view.findViewById(R.id.rightButton);
+        viewModel.setManual(right.isChecked());
+
         return 0;
     }
 }

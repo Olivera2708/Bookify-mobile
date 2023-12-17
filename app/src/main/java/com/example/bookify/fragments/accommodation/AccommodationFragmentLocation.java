@@ -3,6 +3,7 @@ package com.example.bookify.fragments.accommodation;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.AutoCompleteTextView;
 
 import com.example.bookify.R;
 import com.example.bookify.fragments.MyFragment;
+import com.example.bookify.model.Address;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -40,6 +42,8 @@ public class AccommodationFragmentLocation extends MyFragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    AccommodationUpdateViewModel viewModel;
 
     public AccommodationFragmentLocation() {
         // Required empty public constructor
@@ -79,6 +83,8 @@ public class AccommodationFragmentLocation extends MyFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_accommodation_location, container, false);
+
+        viewModel = new ViewModelProvider(requireActivity()).get(AccommodationUpdateViewModel.class);
 
         String[] sort =  Locale.getISOCountries();
         String[] countries = new String[sort.length];
@@ -122,6 +128,14 @@ public class AccommodationFragmentLocation extends MyFragment {
                 address.getText().toString().equals("") || zipCode.getText().toString().equals("")) {
             return 1;
         }
+
+        Address a = new Address();
+        a.setCountry(autoCompleteTextView.getText().toString());
+        a.setCity(city.getText().toString());
+        a.setAddress(address.getText().toString());
+        a.setZipCode(zipCode.getText().toString());
+        viewModel.setAddress(a);
+
         return 0;
     }
 }
