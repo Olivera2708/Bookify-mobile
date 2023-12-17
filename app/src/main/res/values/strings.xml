@@ -143,4 +143,9 @@
     <string name="owner_info">Owner</string>
     <string name="more">More...</string>
     <string name="change">Change</string>
+    <string name="basic_informations">Basic informations</string>
+    <string name="accommodation_details">Accommodation details</string>
+    <string name="amenities">Amenities</string>
+    <string name="paymeny_details">Paymeny details</string>
+    <string name="availability">Availability</string>
 </resources>

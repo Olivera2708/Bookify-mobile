@@ -67,6 +67,9 @@ public class AccommodationUpdateActivity extends AppCompatActivity {
                         R.id.accommodationFragment);
             }
             if (counter == fragments.length - 1) {
+                binding.previous.setVisibility(View.INVISIBLE);
+            }
+            if (counter == fragments.length - 2) {
                 binding.next.setText("Submit");
             }
         });
