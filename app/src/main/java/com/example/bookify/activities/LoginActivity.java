@@ -36,7 +36,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        checkForAutoLogout();
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -55,6 +55,16 @@ public class LoginActivity extends AppCompatActivity {
             }
         };
         getOnBackPressedDispatcher().addCallback(this, callback);
+    }
+
+    private void checkForAutoLogout() {
+        Intent intent = getIntent();
+        if(intent.getBooleanExtra(JWTUtils.AUTO_LOGOUT, false)){
+            Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
+                    "Your session has expired, please login again.",
+                    3000);
+            snackbar.show();
+        }
     }
 
     private void setRegisterButtonAction() {

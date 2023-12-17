@@ -7,6 +7,7 @@ import java.io.IOException;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
+import retrofit2.HttpException;
 
 public class Interceptors implements Interceptor {
     private final SharedPreferences sharedPreferences;
@@ -25,6 +26,9 @@ public class Interceptors implements Interceptor {
                     .build();
         }
         Response response = chain.proceed(request);
+        if(response.code()==401) {
+            throw new IOException("401");
+        }
         return response;
     }
 }
