@@ -88,7 +88,7 @@ public class AccountDetailsActivity extends AppCompatActivity {
 
     private void isCommentSectionVisible() {
         String role = getSharedPreferences("sharedPref", Context.MODE_PRIVATE).getString("userType", "none");
-        if (!role.equals("owner")) {
+        if (!role.equals("OWNER")) {
             findViewById(R.id.comment_section_account).setVisibility(View.GONE);
         }
     }

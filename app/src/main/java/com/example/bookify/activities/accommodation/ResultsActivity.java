@@ -233,7 +233,7 @@ public class ResultsActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<SearchResponseDTO> call, Throwable t) {
-                    JWTUtils.autoLogout(ResultsActivity.this, t);
+
                 }
             });
         }
