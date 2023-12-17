@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.Network;
@@ -16,6 +17,7 @@ import android.provider.Settings;
 import android.widget.Toast;
 
 import com.example.bookify.R;
+import com.example.bookify.clients.ClientUtils;
 import com.google.android.material.snackbar.Snackbar;
 
 public class SplashScreenActivity extends AppCompatActivity {
@@ -31,7 +33,7 @@ public class SplashScreenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
-
+        ClientUtils.setClientUtils(getSharedPreferences("sharedPref", MODE_PRIVATE));
 //        getSupportActionBar().hide();
         int SPLASH_TIME_OUT = 5000;
 

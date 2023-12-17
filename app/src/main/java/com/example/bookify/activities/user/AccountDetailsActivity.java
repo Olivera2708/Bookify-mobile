@@ -22,10 +22,12 @@ import com.example.bookify.activities.LandingActivity;
 import com.example.bookify.activities.LoginActivity;
 import com.example.bookify.navigation.NavigationBar;
 import com.example.bookify.R;
+import com.example.bookify.utils.JWTUtils;
 
 public class AccountDetailsActivity extends AppCompatActivity {
 
     private static final int[] USER_FIELDS = {R.id.first_name, R.id.last_name, R.id.address, R.id.phone_number};
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,29 +39,18 @@ public class AccountDetailsActivity extends AppCompatActivity {
         isCommentSectionVisible();
         setAccountPictureChange();
         setChangePasswordAction();
+        setLogoutButtonAction();
 
         View view1 = findViewById(R.id.include1);
         View view2 = findViewById(R.id.include2);
         View view3 = findViewById(R.id.include3);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("sharedPref", MODE_PRIVATE);
-        if (sharedPreferences.getString("userType", "none").equals("owner")) {
+        this.sharedPreferences = getSharedPreferences("sharedPref", MODE_PRIVATE);
+        if (sharedPreferences.getString("userType", "none").equals("OWNER")) {
             setReportButton(view1);
             setReportButton(view2);
             setReportButton(view3);
         }
-
-        Button logout = findViewById(R.id.btnLogout);
-        logout.setOnClickListener(v -> {
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("userType", "none");
-            editor.commit();
-            Intent intent = new Intent(this, LoginActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-            startActivity(intent);
-            overridePendingTransition(0, 0);
-            finish();
-        });
 
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
@@ -74,6 +65,18 @@ public class AccountDetailsActivity extends AppCompatActivity {
         getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
+    private void setLogoutButtonAction() {
+        Button logout = findViewById(R.id.btnLogout);
+        logout.setOnClickListener(v -> {
+            JWTUtils.clearCurrentLoginUserData(this.sharedPreferences);
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            startActivity(intent);
+            overridePendingTransition(0, 0);
+            finish();
+        });
+    }
+
     private void setReportButton(View view1) {
 
         Button report = view1.findViewById(R.id.btnReport);
@@ -85,7 +88,7 @@ public class AccountDetailsActivity extends AppCompatActivity {
 
     private void isCommentSectionVisible() {
         String role = getSharedPreferences("sharedPref", Context.MODE_PRIVATE).getString("userType", "none");
-        if(!role.equals("owner")){
+        if (!role.equals("owner")) {
             findViewById(R.id.comment_section_account).setVisibility(View.GONE);
         }
     }
