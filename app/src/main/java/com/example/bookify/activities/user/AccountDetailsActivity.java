@@ -7,32 +7,46 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.bookify.activities.LandingActivity;
 import com.example.bookify.activities.LoginActivity;
+import com.example.bookify.clients.ClientUtils;
+import com.example.bookify.databinding.ActivityAccountDetailsBinding;
+import com.example.bookify.model.user.UserDetailsDTO;
 import com.example.bookify.navigation.NavigationBar;
 import com.example.bookify.R;
 import com.example.bookify.utils.JWTUtils;
 
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class AccountDetailsActivity extends AppCompatActivity {
 
-    private static final int[] USER_FIELDS = {R.id.first_name, R.id.last_name, R.id.address, R.id.phone_number};
+    private static final int[] USER_FIELDS = {R.id.first_name, R.id.last_name, R.id.country, R.id.zip_code, R.id.street_address, R.id.city, R.id.phone_number};
     private SharedPreferences sharedPreferences;
+    private ActivityAccountDetailsBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_account_details);
+        binding = ActivityAccountDetailsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         setEditButtonAction();
         setSaveButtonAction();
         NavigationBar.setNavigationBar(findViewById(R.id.bottom_navigaiton), this, R.id.navigation_account);
@@ -40,7 +54,6 @@ public class AccountDetailsActivity extends AppCompatActivity {
         setAccountPictureChange();
         setChangePasswordAction();
         setLogoutButtonAction();
-
         View view1 = findViewById(R.id.include1);
         View view2 = findViewById(R.id.include2);
         View view3 = findViewById(R.id.include3);
@@ -62,7 +75,29 @@ public class AccountDetailsActivity extends AppCompatActivity {
                 finish();
             }
         };
+
         getOnBackPressedDispatcher().addCallback(this, callback);
+        Call<UserDetailsDTO> call = ClientUtils.accountService.getUserDetails(this.sharedPreferences.getLong(JWTUtils.USER_ID, -1));
+        call.enqueue(new Callback<UserDetailsDTO>() {
+            @Override
+            public void onResponse(Call<UserDetailsDTO> call, Response<UserDetailsDTO> response) {
+                UserDetailsDTO userDetails = response.body();
+                binding.accountInformation.email.setText(userDetails.getEmail());
+                binding.userInformation.firstName.setText(userDetails.getFirstName());
+                binding.userInformation.lastName.setText(userDetails.getLastName());
+                binding.userInformation.country.setText(userDetails.getAddress().getCountry());
+                binding.userInformation.city.setText(userDetails.getAddress().getCity());
+                binding.userInformation.streetAddress.setText(userDetails.getAddress().getAddress());
+                binding.userInformation.zipCode.setText(userDetails.getAddress().getZipCode());
+                binding.userInformation.phoneNumber.setText(userDetails.getPhone());
+                setAccountImage(userDetails.getImageId());
+            }
+
+            @Override
+            public void onFailure(Call<UserDetailsDTO> call, Throwable t) {
+                JWTUtils.autoLogout(AccountDetailsActivity.this, t);
+            }
+        });
     }
 
     private void setLogoutButtonAction() {
@@ -144,5 +179,24 @@ public class AccountDetailsActivity extends AppCompatActivity {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         dialog.getWindow().setGravity(Gravity.CENTER_VERTICAL);
+    }
+
+    private void setAccountImage(Long imageId){
+        if(imageId == null) return;
+        Call<ResponseBody> imageCall = ClientUtils.accountService.getImage(imageId);
+        imageCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Bitmap image = BitmapFactory.decodeStream(response.body().byteStream());
+                    binding.accountImage.setImageBitmap(image);
+                }
+            }
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.d("F", "onFailure: failed to load user image" + t.getMessage());
+            }
+        });
+
     }
 }

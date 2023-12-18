@@ -1,6 +1,7 @@
 package com.example.bookify.clients;
 
 import com.example.bookify.model.user.UserCredentialsDTO;
+import com.example.bookify.model.user.UserDetailsDTO;
 import com.example.bookify.model.user.UserJWT;
 
 import okhttp3.ResponseBody;
@@ -29,4 +30,12 @@ public interface AccountService {
     })
     @POST("users/login")
     Call<UserJWT> login(@Body UserCredentialsDTO credentialsDTO);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("users/{userId}")
+    Call<UserDetailsDTO> getUserDetails(@Path("userId") Long userId);
+
 }
