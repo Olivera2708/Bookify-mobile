@@ -73,6 +73,19 @@ public class AccommodationFragmentPaymentDetails extends MyFragment {
 
         viewModel = new ViewModelProvider(requireActivity()).get(AccommodationUpdateViewModel.class);
 
+        if (viewModel.getIsEditMode().getValue()) {
+            TextInputEditText deadline = view.findViewById(R.id.deadlineInput);
+            RadioButton person = view.findViewById(R.id.rbtPerson);
+            RadioButton room = view.findViewById(R.id.rbtRoom);
+
+            deadline.setText(viewModel.getCancellationDeadline().getValue().toString());
+            if (viewModel.getPricePer().getValue().equals("ROOM")) {
+                room.setChecked(true);
+            } else {
+                person.setChecked(true);
+            }
+        }
+
         return view;
     }
 
@@ -87,7 +100,7 @@ public class AccommodationFragmentPaymentDetails extends MyFragment {
         }
 
         viewModel.setCancellationDeadline(Integer.parseInt(deadline.getText().toString()));
-        if(person.isChecked())
+        if (person.isChecked())
             viewModel.setPricePer("PERSON");
         else
             viewModel.setPricePer("ROOM");

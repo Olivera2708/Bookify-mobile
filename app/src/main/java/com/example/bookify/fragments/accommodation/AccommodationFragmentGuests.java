@@ -89,6 +89,21 @@ public class AccommodationFragmentGuests extends MyFragment {
             }
         });
 
+        if (viewModel.getIsEditMode().getValue()) {
+            TextInputEditText min = view.findViewById(R.id.minGuestsInput);
+            TextInputEditText max = view.findViewById(R.id.maxGuestsInput);
+
+            autoCompleteTextView.setText(viewModel.getType().getValue(), false);
+            min.setText(viewModel.getMinGuests().getValue().toString());
+            max.setText(viewModel.getMaxGuests().getValue().toString());
+
+            if (viewModel.getManual().getValue()) {
+                selected = true;
+            } else {
+                selected = false;
+            }
+        }
+
         return view;
     }
 
@@ -141,7 +156,7 @@ public class AccommodationFragmentGuests extends MyFragment {
         if (min.getText().toString().equals("") || max.getText().toString().equals("") || autoCompleteTextView.getText().toString().trim().length() <= 0) {
             return 1;
         }
-        if(Integer.parseInt(min.getText().toString()) > Integer.parseInt(max.getText().toString())){
+        if (Integer.parseInt(min.getText().toString()) > Integer.parseInt(max.getText().toString())) {
             return 2;
         }
 

@@ -120,7 +120,7 @@ public class AccommodationFragmentLocation extends MyFragment {
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markerLatLng, 12));
 
             if (viewModel.getIsEditMode().getValue()) {
-                countryField.setText(viewModel.getAddress().getValue().getCountry());
+                countryField.setText(viewModel.getAddress().getValue().getCountry(), false);
                 cityField.setText(viewModel.getAddress().getValue().getCity());
                 addressField.setText(viewModel.getAddress().getValue().getAddress());
                 zipCodeField.setText(viewModel.getAddress().getValue().getZipCode());
@@ -222,18 +222,21 @@ public class AccommodationFragmentLocation extends MyFragment {
 
                 String country = address.getCountryName();
                 String city = address.getLocality();
-                String street = address.getThoroughfare() + " " + address.getSubThoroughfare();
+
+                String streetAddress = address.getThoroughfare() == null ? "" : address.getThoroughfare();
+                String addressNumber = address.getSubThoroughfare() == null ? "" : address.getSubThoroughfare();
+                String street = streetAddress + " " + addressNumber;
                 String zipCode = address.getPostalCode();
 
                 // Display the address information
 
                 countryField.setText(country, false);
                 cityField.setText(city);
-                addressField.setText(street);
+                addressField.setText(street.trim());
                 zipCodeField.setText(zipCode);
             } else {
                 addressField.setText("");
-                countryField.setText("");
+                countryField.setText("", false);
                 cityField.setText("");
                 zipCodeField.setText("");
             }
