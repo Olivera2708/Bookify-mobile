@@ -12,6 +12,7 @@ import android.widget.CheckBox;
 
 import com.example.bookify.R;
 import com.example.bookify.fragments.MyFragment;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -76,6 +77,10 @@ public class AccommodationFragmentFilters extends MyFragment {
 
         viewModel = new ViewModelProvider(requireActivity()).get(AccommodationUpdateViewModel.class);
 
+        if (viewModel.getIsEditMode().getValue()) {
+            setCheckBoxes(view);
+        }
+
         return view;
     }
 
@@ -89,6 +94,19 @@ public class AccommodationFragmentFilters extends MyFragment {
         return 0;
     }
 
+    private void setCheckBoxes(View view) {
+        if (view instanceof ViewGroup) {
+            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+                View childView = ((ViewGroup) view).getChildAt(i);
+                setCheckBoxes(childView);
+            }
+        } else if (view instanceof CheckBox) {
+            CheckBox checkBox = (CheckBox) view;
+            if (viewModel.getAmenities().getValue().contains(getAmenity(checkBox.getText().toString()))) {
+                checkBox.setChecked(true);
+            }
+        }
+    }
 
     private void iterateThroughCheckBoxes(View view) {
         if (view instanceof ViewGroup) {
