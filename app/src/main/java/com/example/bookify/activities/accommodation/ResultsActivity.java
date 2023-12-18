@@ -28,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.bookify.activities.LandingActivity;
+import com.example.bookify.activities.LoginActivity;
 import com.example.bookify.adapters.pagers.AccommodationListAdapter;
 import com.example.bookify.clients.ClientUtils;
 import com.example.bookify.enumerations.AccommodationType;
@@ -37,6 +38,7 @@ import com.example.bookify.model.FilterDTO;
 import com.example.bookify.model.SearchResponseDTO;
 import com.example.bookify.navigation.NavigationBar;
 import com.example.bookify.R;
+import com.example.bookify.utils.JWTUtils;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
@@ -231,7 +233,7 @@ public class ResultsActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<SearchResponseDTO> call, Throwable t) {
-                    Log.d("Error", "Search");
+
                 }
             });
         }
