@@ -106,20 +106,10 @@ public class AccommodationFragmentPhotos extends MyFragment {
                             for (int i = 0; i < clipData.getItemCount(); i++) {
                                 Uri selectedImageUri = clipData.getItemAt(i).getUri();
                                 setImage(selectedImageUri);
-                                File file = new File(getRealPathFromURI(getActivity(), selectedImageUri));
-                                RequestBody requestFile =
-                                        RequestBody.create(okhttp3.MultipartBody.FORM, file);
-                                MultipartBody.Part imagePart = MultipartBody.Part.createFormData("images", file.getName(), requestFile);
-                                imageParts.add(imagePart);
                             }
                         } else if (data != null && data.getData() != null) {
                             Uri selectedImageUri = data.getData();
                             setImage(selectedImageUri);
-                            File file = new File(getRealPathFromURI(getActivity(), selectedImageUri));
-                            RequestBody requestFile =
-                                    RequestBody.create(okhttp3.MultipartBody.FORM, file);
-                            MultipartBody.Part imagePart = MultipartBody.Part.createFormData("images", file.getName(), requestFile);
-                            imageParts.add(imagePart);
                         }
                     }
                 });
@@ -156,8 +146,15 @@ public class AccommodationFragmentPhotos extends MyFragment {
         containerLayout.addView(imageView);
         containerLayout.addView(deleteIcon);
 
+        File file = new File(getRealPathFromURI(getActivity(), selectedImageUri));
+        RequestBody requestFile =
+                RequestBody.create(okhttp3.MultipartBody.FORM, file);
+        MultipartBody.Part imagePart = MultipartBody.Part.createFormData("images", file.getName(), requestFile);
+        imageParts.add(imagePart);
+
         deleteIcon.setOnClickListener(v -> {
             ll.removeView(containerLayout);
+            imageParts.remove(imagePart);
         });
 
         ll.addView(containerLayout);

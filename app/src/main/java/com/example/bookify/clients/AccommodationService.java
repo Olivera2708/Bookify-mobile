@@ -6,6 +6,7 @@ import com.example.bookify.model.Accommodation;
 import com.example.bookify.model.AccommodationDetailDTO;
 import com.example.bookify.model.AccommodationInsertDTO;
 import com.example.bookify.model.FilterDTO;
+import com.example.bookify.model.PricelistItemDTO;
 import com.example.bookify.model.SearchResponseDTO;
 
 import java.util.List;
@@ -15,7 +16,9 @@ import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.HTTP;
 import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
@@ -82,4 +85,26 @@ public interface AccommodationService {
     @POST("accommodations/{accommodationId}")
     Call<Long> uploadImages(@Path("accommodationId") Long accommodationId, @Part List<MultipartBody.Part> images);
 
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("accommodations/{accommodationId}/getPrice")
+    Call<List<PricelistItemDTO>> getPricelistItems(@Path("accommodationId") Long accommodationId);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @POST("accommodations/{accommodationId}/addPrice")
+    Call<Long> addPricelistItem(@Path("accommodationId") Long accommodationId, @Body PricelistItemDTO dto);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @HTTP(method = "DELETE", path = "accommodations/price/{accommodationId}", hasBody = true)
+    Call<PricelistItemDTO> deletePricelistItem(@Path("accommodationId") Long accommodationId, @Body PricelistItemDTO dto);
+
+//    @DELETE("accommodations/price/{accommodationId}")
 }

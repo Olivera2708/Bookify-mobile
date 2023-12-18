@@ -12,6 +12,7 @@ import java.util.List;
 import okhttp3.MultipartBody;
 
 public class AccommodationUpdateViewModel extends ViewModel {
+    private final MutableLiveData<Long> accommodationId = new MutableLiveData<>();
     private final MutableLiveData<String> propertyName = new MutableLiveData<>();
     private final MutableLiveData<String> description = new MutableLiveData<>();
     private final MutableLiveData<Address> address = new MutableLiveData<>();
@@ -23,6 +24,14 @@ public class AccommodationUpdateViewModel extends ViewModel {
     private final MutableLiveData<Boolean> manual = new MutableLiveData<>();
     private final MutableLiveData<Integer> cancellationDeadline = new MutableLiveData<>();
     private final MutableLiveData<String> pricePer = new MutableLiveData<>();
+
+    public MutableLiveData<Long> getAccommodationId() {
+        return accommodationId;
+    }
+
+    public void setAccommodationId(Long value) {
+        accommodationId.setValue(value);
+    }
 
     public MutableLiveData<String> getPropertyName() {
         return propertyName;

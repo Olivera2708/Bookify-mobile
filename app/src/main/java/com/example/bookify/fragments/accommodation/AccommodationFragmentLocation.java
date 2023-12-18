@@ -1,10 +1,13 @@
 package com.example.bookify.fragments.accommodation;
 
+import android.location.Geocoder;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +25,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -78,6 +83,11 @@ public class AccommodationFragmentLocation extends MyFragment {
 
     View view;
 
+    Boolean isEnabledCountry = true;
+    Boolean isEnabledCity = true;
+    Boolean isEnabledStreet = true;
+    Boolean isEnabledZip = true;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -86,9 +96,9 @@ public class AccommodationFragmentLocation extends MyFragment {
 
         viewModel = new ViewModelProvider(requireActivity()).get(AccommodationUpdateViewModel.class);
 
-        String[] sort =  Locale.getISOCountries();
+        String[] sort = Locale.getISOCountries();
         String[] countries = new String[sort.length];
-        for(int i = 0; i<sort.length; i++){
+        for (int i = 0; i < sort.length; i++) {
             Locale locale = new Locale("", sort[i]);
             countries[i] = locale.getDisplayCountry();
         }
@@ -96,25 +106,163 @@ public class AccommodationFragmentLocation extends MyFragment {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.dropdown_item, countries);
         AutoCompleteTextView autoCompleteTextView = view.findViewById(R.id.typeDropDown);
         autoCompleteTextView.setAdapter(adapter);
-        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //code when something is selected
-            }
-        });
+
+        TextInputEditText cityField = view.findViewById(R.id.cityInput);
+        TextInputEditText addressField = view.findViewById(R.id.streetAddressInput);
+        TextInputEditText zipCodeField = view.findViewById(R.id.zipCodeInput);
+        AutoCompleteTextView countryField = view.findViewById(R.id.typeDropDown);
 
         mapView = view.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(googleMap -> {
-            // You can customize the map here
-            // For example, add a marker
             LatLng markerLatLng = new LatLng(45.267136, 19.833549);
-            googleMap.addMarker(new MarkerOptions().position(markerLatLng).title("Marker Title"));
+//            googleMap.addMarker(new MarkerOptions().position(markerLatLng));
 
-            // Move the camera to the marker
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markerLatLng, 12));
+
+            googleMap.setOnMapClickListener(latLang -> {
+                googleMap.clear();
+                googleMap.addMarker(new MarkerOptions().position(latLang));
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLang, 12), 1000, null);
+                getAddressFromLocation(latLang.latitude, latLang.longitude);
+            });
+
+            countryField.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (isEnabledCountry) {
+                        searchLocation(googleMap);
+                    }
+                    isEnabledCountry = true;
+                }
+            });
+
+            cityField.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (isEnabledCity) {
+                        searchLocation(googleMap);
+                    }
+                    isEnabledCity = true;
+                }
+            });
+
+            addressField.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (isEnabledStreet) {
+                        searchLocation(googleMap);
+                    }
+                    isEnabledStreet = true;
+                }
+            });
+
+            zipCodeField.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (isEnabledZip) {
+                        searchLocation(googleMap);
+                    }
+                    isEnabledZip = true;
+                }
+            });
         });
         return view;
+    }
+
+    private void searchLocation(GoogleMap googleMap) {
+        TextInputEditText cityField = view.findViewById(R.id.cityInput);
+        TextInputEditText addressField = view.findViewById(R.id.streetAddressInput);
+        TextInputEditText zipCodeField = view.findViewById(R.id.zipCodeInput);
+        AutoCompleteTextView countryField = view.findViewById(R.id.typeDropDown);
+        String searchQuery = addressField.getText().toString() + ", " + cityField.getText().toString() + ", " + zipCodeField.getText().toString() + ", " + countryField.getText().toString();
+        if (!searchQuery.isEmpty()) {
+            Geocoder geocoder = new Geocoder(getActivity());
+            try {
+                List<android.location.Address> addresses = geocoder.getFromLocationName(searchQuery, 1);
+                if (!addresses.isEmpty()) {
+                    android.location.Address address = addresses.get(0);
+                    LatLng newLocation = new LatLng(address.getLatitude(), address.getLongitude());
+
+                    googleMap.clear();
+
+                    googleMap.addMarker(new MarkerOptions().position(newLocation));
+
+                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(newLocation, 12), 1000, null);
+                } else {
+                    googleMap.clear();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void getAddressFromLocation(double latitude, double longitude) {
+        Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
+        TextInputEditText cityField = view.findViewById(R.id.cityInput);
+        TextInputEditText addressField = view.findViewById(R.id.streetAddressInput);
+        TextInputEditText zipCodeField = view.findViewById(R.id.zipCodeInput);
+        AutoCompleteTextView countryField = view.findViewById(R.id.typeDropDown);
+        isEnabledCity = false;
+        isEnabledCountry = false;
+        isEnabledZip = false;
+        isEnabledStreet = false;
+        try {
+            List<android.location.Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+            if (!addresses.isEmpty()) {
+                android.location.Address address = addresses.get(0);
+
+                String country = address.getCountryName();
+                String city = address.getLocality();
+                String street = address.getThoroughfare() + " " + address.getSubThoroughfare();
+                String zipCode = address.getPostalCode();
+
+                // Display the address information
+
+                countryField.setText(country, false);
+                cityField.setText(city);
+                addressField.setText(street);
+                zipCodeField.setText(zipCode);
+            } else {
+                addressField.setText("");
+                countryField.setText("");
+                cityField.setText("");
+                zipCodeField.setText("");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

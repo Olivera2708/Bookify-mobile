@@ -50,6 +50,7 @@ public class AccommodationUpdateActivity extends AppCompatActivity {
     };
 
     private int counter = 0;
+    private Long accommodationId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +80,7 @@ public class AccommodationUpdateActivity extends AppCompatActivity {
                 } else if (fragments[counter].isValid() == 2) {
                     Toast.makeText(this, "Max must be greater than min", Toast.LENGTH_SHORT).show();
                     return;
-                }else if(fragments[counter].isValid() == 3){
+                } else if (fragments[counter].isValid() == 3) {
                     Toast.makeText(this, "Select at least one photo", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -108,17 +109,13 @@ public class AccommodationUpdateActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Call<Accommodation> call, Response<Accommodation> response) {
                         if (response.code() == 201) {
-//                            RequestBody accommodationIdRequestBody = RequestBody.create(
-//                                    okhttp3.MultipartBody.FORM,
-//                                    String.valueOf(response.body().getId())
-//                            );
-
                             Call<Long> callImages = ClientUtils.accommodationService.uploadImages(response.body().getId(), viewModel.getImages().getValue());
-
+                            accommodationId = response.body().getId();
+                            viewModel.setAccommodationId(accommodationId);
                             callImages.enqueue(new Callback<Long>() {
                                 @Override
                                 public void onResponse(Call<Long> call, Response<Long> response) {
-//                                    Toast.makeText(AccommodationUpdateActivity.this, response.code(), Toast.LENGTH_SHORT).show();
+
                                 }
 
                                 @Override
