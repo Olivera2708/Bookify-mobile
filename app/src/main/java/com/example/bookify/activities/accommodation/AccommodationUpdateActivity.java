@@ -59,8 +59,46 @@ public class AccommodationUpdateActivity extends AppCompatActivity {
 
         viewModel = new ViewModelProvider(this).get(AccommodationUpdateViewModel.class);
 
-        FragmentTransition.to(fragments[counter], AccommodationUpdateActivity.this, true,
-                R.id.accommodationFragment);
+        Intent intentParams = getIntent();
+        boolean isEditMode = intentParams.getBooleanExtra("isEditMode", false);
+        Long accommodationIdParam = intentParams.getLongExtra("accommodationId", 0L);
+
+        viewModel.setAccommodationId(accommodationIdParam);
+        viewModel.setIsEditMode(isEditMode);
+
+        if (isEditMode) {
+            Call<Accommodation> call = ClientUtils.accommodationService.getAccommodation(accommodationIdParam);
+
+            call.enqueue(new Callback<Accommodation>() {
+                @Override
+                public void onResponse(Call<Accommodation> call, Response<Accommodation> response) {
+                    if (response.code() == 200) {
+                        Accommodation accommodation = response.body();
+                        viewModel.setPropertyName(accommodation.getName());
+                        viewModel.setDescription(accommodation.getDescription());
+                        viewModel.setAddress(accommodation.getAddress());
+                        viewModel.setAmenities(accommodation.getFilters());
+                        viewModel.setMinGuests(accommodation.getMinGuest());
+                        viewModel.setMaxGuests(accommodation.getMaxGuest());
+                        viewModel.setCancellationDeadline(accommodation.getCancellationDeadline());
+                        viewModel.setManual(accommodation.isManual());
+                        viewModel.setType(accommodation.getAccommodationType());
+                        viewModel.setPricePer(accommodation.getPricePer());
+                        FragmentTransition.to(fragments[counter], AccommodationUpdateActivity.this, true,
+                                R.id.accommodationFragment);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Accommodation> call, Throwable t) {
+
+                }
+            });
+        } else {
+            FragmentTransition.to(fragments[counter], AccommodationUpdateActivity.this, true,
+                    R.id.accommodationFragment);
+        }
+
 
         binding = ActivityAccommodationUpdateBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());

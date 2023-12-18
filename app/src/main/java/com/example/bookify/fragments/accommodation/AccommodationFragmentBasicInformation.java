@@ -72,6 +72,14 @@ public class AccommodationFragmentBasicInformation extends MyFragment {
 
         viewModel = new ViewModelProvider(requireActivity()).get(AccommodationUpdateViewModel.class);
 
+        if(viewModel.getIsEditMode().getValue()){
+            TextInputEditText name = view.findViewById(R.id.propertyNameInput);
+            TextInputEditText description = view.findViewById(R.id.descriptionInput);
+
+            name.setText(viewModel.getPropertyName().getValue());
+            description.setText(viewModel.getDescription().getValue());
+        }
+
         return view;
     }
 

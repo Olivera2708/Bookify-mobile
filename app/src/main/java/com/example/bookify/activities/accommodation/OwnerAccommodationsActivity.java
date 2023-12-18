@@ -5,9 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 
 import com.example.bookify.activities.LandingActivity;
+import com.example.bookify.fragments.accommodation.AccommodationUpdateViewModel;
 import com.example.bookify.navigation.NavigationBar;
 import com.example.bookify.R;
 import com.example.bookify.activities.ReportsActivity;
@@ -49,5 +51,16 @@ public class OwnerAccommodationsActivity extends AppCompatActivity {
             }
         };
         getOnBackPressedDispatcher().addCallback(this, callback);
+
+        View accommodationCard = findViewById(R.id.accommodation);
+        Button editButton = accommodationCard.findViewById(R.id.edit_accomodation);
+        editButton.setOnClickListener(v -> {
+            Intent intent = new Intent(OwnerAccommodationsActivity.this, AccommodationUpdateActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            intent.putExtra("isEditMode", true);
+            intent.putExtra("accommodationId", 3L);
+            startActivity(intent);
+            overridePendingTransition(0, 0);
+        });
     }
 }

@@ -106,5 +106,11 @@ public interface AccommodationService {
     @HTTP(method = "DELETE", path = "accommodations/price/{accommodationId}", hasBody = true)
     Call<PricelistItemDTO> deletePricelistItem(@Path("accommodationId") Long accommodationId, @Body PricelistItemDTO dto);
 
-//    @DELETE("accommodations/price/{accommodationId}")
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("accommodations/edit/{accommodationId}")
+    Call<Accommodation> getAccommodation(@Path("accommodationId") Long accommodationId);
+
 }

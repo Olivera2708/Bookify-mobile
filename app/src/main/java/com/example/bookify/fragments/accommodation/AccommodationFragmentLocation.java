@@ -111,14 +111,21 @@ public class AccommodationFragmentLocation extends MyFragment {
         TextInputEditText addressField = view.findViewById(R.id.streetAddressInput);
         TextInputEditText zipCodeField = view.findViewById(R.id.zipCodeInput);
         AutoCompleteTextView countryField = view.findViewById(R.id.typeDropDown);
-
         mapView = view.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(googleMap -> {
             LatLng markerLatLng = new LatLng(45.267136, 19.833549);
-//            googleMap.addMarker(new MarkerOptions().position(markerLatLng));
+
 
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markerLatLng, 12));
+
+            if (viewModel.getIsEditMode().getValue()) {
+                countryField.setText(viewModel.getAddress().getValue().getCountry());
+                cityField.setText(viewModel.getAddress().getValue().getCity());
+                addressField.setText(viewModel.getAddress().getValue().getAddress());
+                zipCodeField.setText(viewModel.getAddress().getValue().getZipCode());
+                searchLocation(googleMap);
+            }
 
             googleMap.setOnMapClickListener(latLang -> {
                 googleMap.clear();
@@ -137,19 +144,9 @@ public class AccommodationFragmentLocation extends MyFragment {
                 }
             });
 
-            cityField.addTextChangedListener(new TextWatcher() {
+            cityField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
+                public void onFocusChange(View v, boolean hasFocus) {
                     if (isEnabledCity) {
                         searchLocation(googleMap);
                     }
@@ -157,19 +154,9 @@ public class AccommodationFragmentLocation extends MyFragment {
                 }
             });
 
-            addressField.addTextChangedListener(new TextWatcher() {
+            addressField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
+                public void onFocusChange(View v, boolean hasFocus) {
                     if (isEnabledStreet) {
                         searchLocation(googleMap);
                     }
@@ -177,19 +164,9 @@ public class AccommodationFragmentLocation extends MyFragment {
                 }
             });
 
-            zipCodeField.addTextChangedListener(new TextWatcher() {
+            zipCodeField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
+                public void onFocusChange(View v, boolean hasFocus) {
                     if (isEnabledZip) {
                         searchLocation(googleMap);
                     }
