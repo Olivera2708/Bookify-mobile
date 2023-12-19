@@ -333,8 +333,14 @@ public class AccommodationFragmentPhotos extends MyFragment {
 
     @Override
     public int isValid() {
-        if (imageDTOS.size() + viewModel.getStoredImages().getValue().size() == 0) {
-            return 3;
+        if (viewModel.getStoredImages().getValue() != null) {
+            if (imageDTOS.size() + viewModel.getStoredImages().getValue().size() == 0) {
+                return 3;
+            }
+        }else{
+            if (imageDTOS.size() == 0) {
+                return 3;
+            }
         }
         viewModel.setImages(imageParts);
         return 0;
