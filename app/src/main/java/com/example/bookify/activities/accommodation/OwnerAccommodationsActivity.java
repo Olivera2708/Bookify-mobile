@@ -62,5 +62,16 @@ public class OwnerAccommodationsActivity extends AppCompatActivity {
             startActivity(intent);
             overridePendingTransition(0, 0);
         });
+
+        Button priceButton = accommodationCard.findViewById(R.id.price);
+        priceButton.setOnClickListener(v -> {
+            Intent intent = new Intent(OwnerAccommodationsActivity.this, AccommodationUpdateActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            intent.putExtra("isEditMode", true);
+            intent.putExtra("accommodationId", 3L);
+            intent.putExtra("price", true);
+            startActivity(intent);
+            overridePendingTransition(0, 0);
+        });
     }
 }

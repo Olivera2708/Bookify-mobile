@@ -1,12 +1,15 @@
 package com.example.bookify.fragments.accommodation;
 
+import android.graphics.Bitmap;
 import android.media.Image;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.bookify.model.Address;
+import com.example.bookify.model.ImageMobileDTO;
 
+import java.util.Collection;
 import java.util.List;
 
 import okhttp3.MultipartBody;
@@ -19,6 +22,7 @@ public class AccommodationUpdateViewModel extends ViewModel {
     private final MutableLiveData<Address> address = new MutableLiveData<>();
     private final MutableLiveData<List<String>> amenities = new MutableLiveData<>();
     private final MutableLiveData<List<MultipartBody.Part>> images = new MutableLiveData<>();
+    private final MutableLiveData<Collection<ImageMobileDTO>> storedImages = new MutableLiveData<>();
     private final MutableLiveData<Integer> minGuests = new MutableLiveData<>();
     private final MutableLiveData<Integer> maxGuests = new MutableLiveData<>();
     private final MutableLiveData<String> type = new MutableLiveData<>();
@@ -80,6 +84,14 @@ public class AccommodationUpdateViewModel extends ViewModel {
 
     public void setImages(List<MultipartBody.Part> value) {
         images.setValue(value);
+    }
+
+    public MutableLiveData<Collection<ImageMobileDTO>> getStoredImages() {
+        return storedImages;
+    }
+
+    public void setStoredImages(Collection<ImageMobileDTO> value) {
+        storedImages.setValue(value);
     }
 
     public MutableLiveData<Integer> getMinGuests() {

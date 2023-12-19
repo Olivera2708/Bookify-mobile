@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import androidx.loader.content.CursorLoader;
 
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +31,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.example.bookify.R;
+import com.example.bookify.clients.ClientUtils;
 import com.example.bookify.fragments.MyFragment;
+import com.example.bookify.model.ImageDTO;
+import com.example.bookify.model.ImageMobileDTO;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,6 +43,9 @@ import java.util.List;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -86,6 +94,8 @@ public class AccommodationFragmentPhotos extends MyFragment {
 
     View view;
     List<MultipartBody.Part> imageParts = new ArrayList<>();
+
+    List<ImageDTO> imageDTOS = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -147,18 +157,22 @@ public class AccommodationFragmentPhotos extends MyFragment {
         containerLayout.addView(deleteIcon);
 
         File file = new File(getRealPathFromURI(getActivity(), selectedImageUri));
-        RequestBody requestFile =
-                RequestBody.create(okhttp3.MultipartBody.FORM, file);
+        RequestBody requestFile = RequestBody.create(okhttp3.MultipartBody.FORM, file);
         MultipartBody.Part imagePart = MultipartBody.Part.createFormData("images", file.getName(), requestFile);
         imageParts.add(imagePart);
 
         deleteIcon.setOnClickListener(v -> {
             ll.removeView(containerLayout);
             imageParts.remove(imagePart);
+            imageDTOS.removeIf(imageDTO -> imagePart.equals(imageDTO.getImagePart()));
         });
+
+        imageDTOS.add(new ImageDTO(selectedImageBitmap, imagePart));
 
         ll.addView(containerLayout);
     }
+
+//    Boolean load = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -174,7 +188,139 @@ public class AccommodationFragmentPhotos extends MyFragment {
             chooseImage();
         });
 
+        if (viewModel.getIsEditMode().getValue()) {
+            setImages();
+            loadImages();
+//            load = false;
+        } else {
+            loadImages();
+        }
+
         return view;
+    }
+
+    private void loadImages() {
+        for (ImageDTO imageDTO : imageDTOS) {
+
+            LinearLayout ll = view.findViewById(R.id.photosLayout);
+            ImageView imageView = new ImageView(requireActivity());
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 500);
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imageView.setImageBitmap(imageDTO.getBitmap());
+            imageView.setLayoutParams(params);
+
+            ImageView deleteIcon = new ImageView(requireActivity());
+            deleteIcon.setImageResource(R.drawable.clear);
+            RelativeLayout.LayoutParams exitIconLayoutParams = new RelativeLayout.LayoutParams(100, 100);
+            exitIconLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+            exitIconLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_END);
+            deleteIcon.setLayoutParams(exitIconLayoutParams);
+
+            RelativeLayout containerLayout = new RelativeLayout(requireActivity());
+            containerLayout.setLayoutParams(new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.MATCH_PARENT,
+                    RelativeLayout.LayoutParams.MATCH_PARENT
+            ));
+
+            containerLayout.addView(imageView);
+            containerLayout.addView(deleteIcon);
+
+            MultipartBody.Part imagePart;
+            if (imageDTO.getImagePart() != null) {
+
+                imagePart = imageDTO.getImagePart();
+                if (!imageParts.contains(imagePart)) {
+                    imageParts.add(imagePart);
+                }
+            }
+
+            deleteIcon.setOnClickListener(v -> {
+                ll.removeView(containerLayout);
+                if (imageDTO.getImagePart() != null) {
+                    imageParts.remove(imageDTO.getImagePart());
+                } else {
+                    ImageMobileDTO dto = viewModel.getStoredImages().getValue().stream().filter(obj -> imageDTO.getBitmap().equals(decodeBase64Image(obj.getData()))).findFirst().get();
+                    Call<Long> call = ClientUtils.accommodationService.deleteImage(dto.getId());
+
+                    call.enqueue(new Callback<Long>() {
+                        @Override
+                        public void onResponse(Call<Long> call, Response<Long> response) {
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<Long> call, Throwable t) {
+
+                        }
+                    });
+                }
+                imageDTOS.removeIf(image -> imageDTO.getBitmap().equals(image.getBitmap()));
+            });
+
+//            imageDTOS.add(new ImageDTO(selectedImageBitmap, imagePart));
+
+            ll.addView(containerLayout);
+        }
+    }
+
+    private Bitmap decodeBase64Image(String base64Image) {
+        byte[] decodedBytes = Base64.decode(base64Image, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+    }
+
+    private void setImages() {
+        for (ImageMobileDTO image : viewModel.getStoredImages().getValue()) {
+
+            Bitmap selectedImageBitmap = decodeBase64Image(image.getData());
+
+            LinearLayout ll = view.findViewById(R.id.photosLayout);
+            ImageView imageView = new ImageView(requireActivity());
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 500);
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imageView.setImageBitmap(selectedImageBitmap);
+            imageView.setLayoutParams(params);
+
+            ImageView deleteIcon = new ImageView(requireActivity());
+            deleteIcon.setImageResource(R.drawable.clear);
+            RelativeLayout.LayoutParams exitIconLayoutParams = new RelativeLayout.LayoutParams(100, 100);
+            exitIconLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+            exitIconLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_END);
+            deleteIcon.setLayoutParams(exitIconLayoutParams);
+
+            RelativeLayout containerLayout = new RelativeLayout(requireActivity());
+            containerLayout.setLayoutParams(new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.MATCH_PARENT,
+                    RelativeLayout.LayoutParams.MATCH_PARENT
+            ));
+
+            containerLayout.addView(imageView);
+            containerLayout.addView(deleteIcon);
+
+            deleteIcon.setOnClickListener(v -> {
+                ll.removeView(containerLayout);
+//                imageDTOS.removeIf(imageDTO -> selectedImageBitmap.equals(imageDTO.getBitmap()));
+
+                viewModel.getStoredImages().getValue().remove(image);
+
+                Call<Long> call = ClientUtils.accommodationService.deleteImage(image.getId());
+
+                call.enqueue(new Callback<Long>() {
+                    @Override
+                    public void onResponse(Call<Long> call, Response<Long> response) {
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<Long> call, Throwable t) {
+
+                    }
+                });
+            });
+
+//            imageDTOS.add(new ImageDTO(selectedImageBitmap, null));
+
+            ll.addView(containerLayout);
+        }
     }
 
     private void chooseImage() {
@@ -187,7 +333,7 @@ public class AccommodationFragmentPhotos extends MyFragment {
 
     @Override
     public int isValid() {
-        if (imageParts.size() == 0) {
+        if (imageDTOS.size() + viewModel.getStoredImages().getValue().size() == 0) {
             return 3;
         }
         viewModel.setImages(imageParts);

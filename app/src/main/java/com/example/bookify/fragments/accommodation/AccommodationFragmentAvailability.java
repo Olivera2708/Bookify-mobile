@@ -108,15 +108,6 @@ public class AccommodationFragmentAvailability extends MyFragment {
             String priceTxt = price.getText().toString();
             List<CalendarDay> selectedDates = calendarView.getSelectedDates();
             if (selectedDates.size() > 0 && !priceTxt.equals("")) {
-//                for (CalendarDay cday : selectedDates) {
-//                    PriceDecorator pd = new PriceDecorator(new ArrayList<>(Arrays.asList(cday)), priceTxt + "€");
-//                    if (mapa.containsKey(cday)) {
-//                        calendarView.removeDecorator(mapa.get(cday));
-//                    }
-//                    mapa.put(cday, pd);
-//
-//                    calendarView.addDecorator(pd);
-//                }
                 PricelistItemDTO dto = new PricelistItemDTO();
                 dto.setPrice(Double.parseDouble(priceTxt));
 
@@ -194,19 +185,6 @@ public class AccommodationFragmentAvailability extends MyFragment {
 
         return view;
     }
-
-//    public List<CalendarDay> convertToCalendarDays(Date startDate, Date endDate) {
-//        List<CalendarDay> calendarDays = new ArrayList<>();
-//
-//        LocalDate current = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-//        LocalDate end = endDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-//        while (!current.isAfter(end)) {
-//            calendarDays.add(CalendarDay.from(current.getYear(), current.getMonthValue(), current.getDayOfMonth()));
-//            current.plusDays(1);
-//        }
-//
-//        return calendarDays;
-//    }
 
     private void getPricelist() {
         Call<List<PricelistItemDTO>> call = ClientUtils.accommodationService.getPricelistItems(viewModel.getAccommodationId().getValue());

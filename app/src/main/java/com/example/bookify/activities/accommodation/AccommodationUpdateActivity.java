@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -26,8 +27,13 @@ import com.example.bookify.fragments.accommodation.AccommodationUpdateViewModel;
 import com.example.bookify.fragments.user.RegistrationViewModel;
 import com.example.bookify.model.Accommodation;
 import com.example.bookify.model.AccommodationInsertDTO;
+import com.example.bookify.model.ImageMobileDTO;
 import com.example.bookify.model.MessageDTO;
 
+import java.util.Collection;
+import java.util.List;
+
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -62,9 +68,12 @@ public class AccommodationUpdateActivity extends AppCompatActivity {
         Intent intentParams = getIntent();
         boolean isEditMode = intentParams.getBooleanExtra("isEditMode", false);
         Long accommodationIdParam = intentParams.getLongExtra("accommodationId", 0L);
+        boolean price = intentParams.getBooleanExtra("price", false);
 
         viewModel.setAccommodationId(accommodationIdParam);
         viewModel.setIsEditMode(isEditMode);
+
+
 
         if (isEditMode) {
             Call<Accommodation> call = ClientUtils.accommodationService.getAccommodation(accommodationIdParam);
@@ -86,6 +95,22 @@ public class AccommodationUpdateActivity extends AppCompatActivity {
                         viewModel.setPricePer(accommodation.getPricePer());
                         FragmentTransition.to(fragments[counter], AccommodationUpdateActivity.this, true,
                                 R.id.accommodationFragment);
+
+                        Call<List<ImageMobileDTO>> callStoredImages = ClientUtils.accommodationService.getImagesFiles(accommodationIdParam);
+
+                        callStoredImages.enqueue(new Callback<List<ImageMobileDTO>>() {
+                            @Override
+                            public void onResponse(Call<List<ImageMobileDTO>> call, Response<List<ImageMobileDTO>> response) {
+                                if (response.isSuccessful()) {
+                                    viewModel.setStoredImages(response.body());
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<List<ImageMobileDTO>> call, Throwable t) {
+                                Log.d("BOOKIFY", "onFailure: " + t.getMessage());
+                            }
+                        });
                     }
                 }
 
@@ -103,6 +128,11 @@ public class AccommodationUpdateActivity extends AppCompatActivity {
         binding = ActivityAccommodationUpdateBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        if(price){
+            counter = fragments.length - 1;
+            binding.next.setText("Submit");
+        }
+
         binding.next.setOnClickListener(v -> {
             if (counter == fragments.length - 1 && binding.next.getText().toString().equals("Submit")) {
                 Intent intent = new Intent(AccommodationUpdateActivity.this, OwnerAccommodationsActivity.class);
@@ -110,6 +140,7 @@ public class AccommodationUpdateActivity extends AppCompatActivity {
                 startActivity(intent);
                 overridePendingTransition(0, 0);
                 finish();
+                return;
             }
             if (counter < fragments.length - 1) {
                 if (fragments[counter].isValid() == 1) {
@@ -129,46 +160,90 @@ public class AccommodationUpdateActivity extends AppCompatActivity {
             if (counter == fragments.length - 1) {
                 binding.previous.setVisibility(View.INVISIBLE);
 
-                AccommodationInsertDTO accommodation = new AccommodationInsertDTO();
-                accommodation.setName(viewModel.getPropertyName().getValue());
-                accommodation.setDescription(viewModel.getDescription().getValue());
-                accommodation.setAddress(viewModel.getAddress().getValue());
-                accommodation.setMinGuest(viewModel.getMinGuests().getValue());
-                accommodation.setMaxGuest(viewModel.getMaxGuests().getValue());
-                accommodation.setAccommodationType(viewModel.getType().getValue());
-                accommodation.setManual(viewModel.getManual().getValue());
-                accommodation.setFilters(viewModel.getAmenities().getValue());
-                accommodation.setCancellationDeadline(viewModel.getCancellationDeadline().getValue());
-                accommodation.setPricePer(viewModel.getPricePer().getValue());
+                if (viewModel.getIsEditMode().getValue()) {
+                    Accommodation accommodation = new Accommodation();
+                    accommodation.setId(accommodationIdParam);
+                    accommodation.setName(viewModel.getPropertyName().getValue());
+                    accommodation.setDescription(viewModel.getDescription().getValue());
+                    accommodation.setAddress(viewModel.getAddress().getValue());
+                    accommodation.setMinGuest(viewModel.getMinGuests().getValue());
+                    accommodation.setMaxGuest(viewModel.getMaxGuests().getValue());
+                    accommodation.setAccommodationType(viewModel.getType().getValue());
+                    accommodation.setManual(viewModel.getManual().getValue());
+                    accommodation.setFilters(viewModel.getAmenities().getValue());
+                    accommodation.setCancellationDeadline(viewModel.getCancellationDeadline().getValue());
+                    accommodation.setPricePer(viewModel.getPricePer().getValue());
+                    Call<Long> call = ClientUtils.accommodationService.modify(accommodation);
 
-                Call<Accommodation> call = ClientUtils.accommodationService.insert(3L, accommodation);
+                    call.enqueue(new Callback<Long>() {
+                        @Override
+                        public void onResponse(Call<Long> call, Response<Long> response) {
+                            if (response.isSuccessful()) {
+                                Call<Long> callImages = ClientUtils.accommodationService.uploadImages(response.body(), viewModel.getImages().getValue());
+                                accommodationId = response.body();
+                                viewModel.setAccommodationId(accommodationId);
+                                callImages.enqueue(new Callback<Long>() {
+                                    @Override
+                                    public void onResponse(Call<Long> call, Response<Long> response) {
 
-                call.enqueue(new Callback<Accommodation>() {
-                    @Override
-                    public void onResponse(Call<Accommodation> call, Response<Accommodation> response) {
-                        if (response.code() == 201) {
-                            Call<Long> callImages = ClientUtils.accommodationService.uploadImages(response.body().getId(), viewModel.getImages().getValue());
-                            accommodationId = response.body().getId();
-                            viewModel.setAccommodationId(accommodationId);
-                            callImages.enqueue(new Callback<Long>() {
-                                @Override
-                                public void onResponse(Call<Long> call, Response<Long> response) {
+                                    }
 
-                                }
+                                    @Override
+                                    public void onFailure(Call<Long> call, Throwable t) {
 
-                                @Override
-                                public void onFailure(Call<Long> call, Throwable t) {
-
-                                }
-                            });
+                                    }
+                                });
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<Accommodation> call, Throwable t) {
+                        @Override
+                        public void onFailure(Call<Long> call, Throwable t) {
 
-                    }
-                });
+                        }
+                    });
+                } else {
+
+                    AccommodationInsertDTO accommodation = new AccommodationInsertDTO();
+                    accommodation.setName(viewModel.getPropertyName().getValue());
+                    accommodation.setDescription(viewModel.getDescription().getValue());
+                    accommodation.setAddress(viewModel.getAddress().getValue());
+                    accommodation.setMinGuest(viewModel.getMinGuests().getValue());
+                    accommodation.setMaxGuest(viewModel.getMaxGuests().getValue());
+                    accommodation.setAccommodationType(viewModel.getType().getValue());
+                    accommodation.setManual(viewModel.getManual().getValue());
+                    accommodation.setFilters(viewModel.getAmenities().getValue());
+                    accommodation.setCancellationDeadline(viewModel.getCancellationDeadline().getValue());
+                    accommodation.setPricePer(viewModel.getPricePer().getValue());
+                    Call<Accommodation> call = ClientUtils.accommodationService.insert(3L, accommodation);
+
+                    call.enqueue(new Callback<Accommodation>() {
+                        @Override
+                        public void onResponse(Call<Accommodation> call, Response<Accommodation> response) {
+                            if (response.code() == 201) {
+                                Call<Long> callImages = ClientUtils.accommodationService.uploadImages(response.body().getId(), viewModel.getImages().getValue());
+                                accommodationId = response.body().getId();
+                                viewModel.setAccommodationId(accommodationId);
+                                callImages.enqueue(new Callback<Long>() {
+                                    @Override
+                                    public void onResponse(Call<Long> call, Response<Long> response) {
+
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<Long> call, Throwable t) {
+
+                                    }
+                                });
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Accommodation> call, Throwable t) {
+
+                        }
+                    });
+                }
+
             }
             if (counter == fragments.length - 2) {
                 binding.next.setText("Submit");

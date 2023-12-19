@@ -6,9 +6,11 @@ import com.example.bookify.model.Accommodation;
 import com.example.bookify.model.AccommodationDetailDTO;
 import com.example.bookify.model.AccommodationInsertDTO;
 import com.example.bookify.model.FilterDTO;
+import com.example.bookify.model.ImageMobileDTO;
 import com.example.bookify.model.PricelistItemDTO;
 import com.example.bookify.model.SearchResponseDTO;
 
+import java.util.Collection;
 import java.util.List;
 
 import okhttp3.MultipartBody;
@@ -22,6 +24,7 @@ import retrofit2.http.HTTP;
 import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -78,6 +81,14 @@ public interface AccommodationService {
             "User-Agent: Mobile-Android",
             "Content-Type:application/json"
     })
+    @GET("accommodations/images/files/{accommodationId}")
+    Call<List<ImageMobileDTO>> getImagesFiles(@Path("accommodationId") Long accommodationId);
+
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
     @POST("accommodations")
     Call<Accommodation> insert(@Query("ownerId") Long ownerId, @Body AccommodationInsertDTO accommodationDTO);
 
@@ -113,4 +124,17 @@ public interface AccommodationService {
     @GET("accommodations/edit/{accommodationId}")
     Call<Accommodation> getAccommodation(@Path("accommodationId") Long accommodationId);
 
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @PUT("accommodations")
+    Call<Long> modify(@Body Accommodation accommodation);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @DELETE("accommodations/images/{imageId}")
+    Call<Long> deleteImage(@Path("imageId") Long imageId);
 }
