@@ -1,17 +1,43 @@
 package com.example.bookify.activities.user;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultKt;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.ComponentName;
+import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.icu.text.SimpleDateFormat;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.FileUtils;
+import android.os.ParcelFileDescriptor;
+import android.os.ResultReceiver;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -29,18 +55,67 @@ import com.example.bookify.databinding.ActivityAccountDetailsBinding;
 import com.example.bookify.model.user.UserDetailsDTO;
 import com.example.bookify.navigation.NavigationBar;
 import com.example.bookify.R;
+import com.example.bookify.utils.GenericFileProvider;
 import com.example.bookify.utils.JWTUtils;
 
+import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URI;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Objects;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.Multipart;
 
 public class AccountDetailsActivity extends AppCompatActivity {
 
+    private static final String[] permissions = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
     private static final int[] USER_FIELDS = {R.id.first_name, R.id.last_name, R.id.country, R.id.zip_code, R.id.street_address, R.id.city, R.id.phone_number};
     private SharedPreferences sharedPreferences;
     private ActivityAccountDetailsBinding binding;
+    private ActivityResultLauncher<String[]> permissionsResult;
+    private boolean takeAPicture = false;
+
+    private ActivityResultLauncher<Intent> startForAccountImage;
+
+    @NonNull
+    private String getFilePath(Uri imageData) {
+        String filePath;
+        try {
+            InputStream in = getContentResolver().openInputStream(imageData);
+            File tempfile = File.createTempFile("test", ".jpeg");
+            OutputStream out = new FileOutputStream(tempfile);
+            byte[] buffer = new byte[1024];
+            int lenghtRead;
+            while ((lenghtRead = in.read(buffer)) > 0) {
+                out.write(buffer);
+                out.flush();
+            }
+            filePath = tempfile.getAbsolutePath();
+
+
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return filePath;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +173,53 @@ public class AccountDetailsActivity extends AppCompatActivity {
                 JWTUtils.autoLogout(AccountDetailsActivity.this, t);
             }
         });
+
+        permissionsResult = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), result -> {
+            ArrayList<Boolean> list = new ArrayList<>(result.values());
+            if (list.get(0) && list.get(1)) takeAPicture = true;
+        });
+        processPermission();
+        startForAccountImage = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent intent = result.getData();
+                        String filePath = "";
+                        Uri imageData = intent.getData();
+                        filePath = getFilePath(imageData);
+                        File file = new File(filePath);
+                        RequestBody requestFile = RequestBody.create(MultipartBody.FORM, file);
+                        MultipartBody.Part imagePart = MultipartBody.Part.createFormData("image", file.getName(), requestFile);
+                        Call<Long> call1 = ClientUtils.accountService.changeUserAccountImage(imagePart, sharedPreferences.getLong(JWTUtils.USER_ID, -1));
+                        call1.enqueue(new Callback<Long>() {
+                            @Override
+                            public void onResponse(Call<Long> call, Response<Long> response) {
+                                Log.d("nesto", "onResponse: nesto");
+                            }
+
+                            @Override
+                            public void onFailure(Call<Long> call, Throwable t) {
+                                JWTUtils.autoLogout(AccountDetailsActivity.this, t);
+                            }
+                        });
+                    }
+
+                });
+    }
+
+    private void processPermission() {
+        boolean permissionsGiven = true;
+        for (int i = 0; i < permissions.length; i++) {
+            int perm = ContextCompat.checkSelfPermission(AccountDetailsActivity.this, permissions[i]);
+            if (perm != PackageManager.PERMISSION_GRANTED) {
+                permissionsGiven = false;
+            }
+        }
+        if (!permissionsGiven) {
+            permissionsResult.launch(permissions);
+        } else {
+            this.takeAPicture = true;
+        }
+
     }
 
     private void setLogoutButtonAction() {
@@ -133,10 +255,23 @@ public class AccountDetailsActivity extends AppCompatActivity {
         accImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Context context = getApplicationContext();
-                CharSequence charSequence = "To-do";
-                Toast toast = Toast.makeText(context, charSequence, Toast.LENGTH_SHORT);
-                toast.show();
+                // Setting up gallery Intent
+                Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                galleryIntent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+                galleryIntent.setType("image/*");
+                Intent chooser = Intent.createChooser(new Intent(), "Chose an action");
+                // Setting up camera Intent if give permissions
+                if (takeAPicture) {
+                    Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE_SECURE);
+                    cameraIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    Uri file = FileProvider.getUriForFile(AccountDetailsActivity.this, GenericFileProvider.MY_PROVIDER, Objects.requireNonNull(getOutputMediaFile()));
+//                    Uri file = FileProvider.getUriForFile(AccountDetailsActivity.this, GenericFileProvider.MY_PROVIDER, Objects.requireNonNull(getOutputMediaFile()));
+                    cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, file);
+                    chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{galleryIntent, cameraIntent});
+                    chooser.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    chooser.putExtra(MediaStore.EXTRA_OUTPUT, file);
+                }
+                startForAccountImage.launch(chooser);
             }
         });
     }
@@ -181,8 +316,8 @@ public class AccountDetailsActivity extends AppCompatActivity {
         dialog.getWindow().setGravity(Gravity.CENTER_VERTICAL);
     }
 
-    private void setAccountImage(Long imageId){
-        if(imageId == null) return;
+    private void setAccountImage(Long imageId) {
+        if (imageId == null) return;
         Call<ResponseBody> imageCall = ClientUtils.accountService.getImage(imageId);
         imageCall.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -192,11 +327,23 @@ public class AccountDetailsActivity extends AppCompatActivity {
                     binding.accountImage.setImageBitmap(image);
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Log.d("F", "onFailure: failed to load user image" + t.getMessage());
             }
         });
+    }
+
+    private static File getOutputMediaFile() {
+        File mediaStoreDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Bookify");
+        if (!mediaStoreDir.exists()) {
+            if (!mediaStoreDir.mkdirs()) {
+                return null;
+            }
+        }
+        String timeStamp = new SimpleDateFormat("yyyyHHdd_HHmmss", Locale.UK).format(new Date());
+        return new File(mediaStoreDir.getPath() + File.separator + "IMG_" + timeStamp + "jpg");
 
     }
 }

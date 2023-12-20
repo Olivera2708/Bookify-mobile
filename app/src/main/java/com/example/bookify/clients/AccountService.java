@@ -1,15 +1,21 @@
 package com.example.bookify.clients;
 
+import android.net.Uri;
+
 import com.example.bookify.model.user.UserCredentialsDTO;
 import com.example.bookify.model.user.UserDetailsDTO;
 import com.example.bookify.model.user.UserJWT;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 
 public interface AccountService {
@@ -20,7 +26,6 @@ public interface AccountService {
     })
     @GET("users/image/{imageId}")
     Call<ResponseBody> getImage(@Path("imageId") Long imageId);
-
 
 
     @Headers({
@@ -38,4 +43,7 @@ public interface AccountService {
     @GET("users/{userId}")
     Call<UserDetailsDTO> getUserDetails(@Path("userId") Long userId);
 
+    @Multipart
+    @POST("users/change-image/{userId}")
+    Call<Long> changeUserAccountImage(@Part MultipartBody.Part image, @Path("userId") Long userId);
 }
