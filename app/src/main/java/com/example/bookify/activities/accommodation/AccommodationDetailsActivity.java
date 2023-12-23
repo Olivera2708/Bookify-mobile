@@ -311,7 +311,8 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
         reserve.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!reservationPeople.getText().equals("Calculating...")) {
+                TextView priceView = reservation.findViewById(R.id.price);
+                if (!priceView.getText().equals("Calculating...") && !priceView.getText().equals("")) {
                     //send request to server
                     SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy.");
                     String[] dates = reservationDate.getText().toString().split(" - ");
