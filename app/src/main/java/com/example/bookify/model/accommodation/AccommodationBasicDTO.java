@@ -1,7 +1,8 @@
-package com.example.bookify.model;
+package com.example.bookify.model.accommodation;
 
 import com.example.bookify.enumerations.AccommodationType;
 import com.example.bookify.enumerations.PricePer;
+import com.example.bookify.model.Address;
 import com.google.gson.annotations.Expose;
 
 public class AccommodationBasicDTO {

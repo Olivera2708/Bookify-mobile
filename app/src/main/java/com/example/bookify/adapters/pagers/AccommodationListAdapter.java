@@ -18,11 +18,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.bookify.R;
-import com.example.bookify.activities.LandingActivity;
 import com.example.bookify.activities.accommodation.AccommodationDetailsActivity;
-import com.example.bookify.activities.accommodation.ResultsActivity;
 import com.example.bookify.clients.ClientUtils;
-import com.example.bookify.model.AccommodationBasicDTO;
+import com.example.bookify.model.accommodation.AccommodationBasicDTO;
 
 import java.util.HashMap;
 import java.util.List;

@@ -1,11 +1,13 @@
 package com.example.bookify.activities.accommodation;
 
-import static java.util.Map.entry;
-
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Pair;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Address;
@@ -13,9 +15,11 @@ import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -27,9 +31,12 @@ import android.widget.ViewFlipper;
 import com.denzcoskun.imageslider.models.SlideModel;
 import com.example.bookify.clients.ClientUtils;
 import com.example.bookify.enumerations.Filter;
-import com.example.bookify.model.AccommodationDetailDTO;
+import com.example.bookify.model.accommodation.AccommodationDetailDTO;
+import com.example.bookify.model.reservation.ReservationDTO;
+import com.example.bookify.model.reservation.ReservationRequestDTO;
 import com.example.bookify.navigation.NavigationBar;
 import com.example.bookify.R;
+import com.example.bookify.utils.JWTUtils;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.model.LatLng;
@@ -37,6 +44,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -51,11 +59,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class AccommodationDetailsActivity extends AppCompatActivity {
-
-    Button reservationDate;
     private MapView mapView;
     AccommodationDetailDTO accommodation;
     Bundle savedInstanceState;
+    double price = -1;
     Map<String, Integer> amenitiesIcons = new HashMap<String, Integer>() {{
             put("Free wifi", R.drawable.wifi); put("Air conditioning", R.drawable.air);
             put("Terrace", R.drawable.terrace); put("Swimming pool", R.drawable.pool);
@@ -170,6 +177,10 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
         slider.setFlipInterval(3000);
         slider.startFlipping();
         setAmenities(amenitiesLayout);
+
+        SharedPreferences sharedPreferences = this.getSharedPreferences("sharedPref", Context.MODE_PRIVATE);
+        if (sharedPreferences.getString("userType", "none").equals("GUEST"))
+            showReservationOption();
     }
 
     private void setAmenities(GridLayout amenitiesLayout){
@@ -260,7 +271,9 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
         View reservation = getLayoutInflater().inflate(R.layout.reservation, layout, false);
         layout.addView(reservation);
 
-        reservationDate = reservation.findViewById(R.id.editDate);
+        Button reservationDate = reservation.findViewById(R.id.editDate);
+        EditText reservationPeople = reservation.findViewById(R.id.peopleText);
+
         reservationDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -276,10 +289,90 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
                         String endDate = new SimpleDateFormat("dd.MM.yyyy.", Locale.getDefault()).format(new Date(selection.second));
 
                         reservationDate.setText(startDate + " - " + endDate);
+                        calculatePrice(reservation, startDate, endDate, Integer.parseInt(reservationPeople.getText().toString()));
                     }
                 });
-
                 materialDatePicker.show(getSupportFragmentManager(), "tag");
+            }
+        });
+
+        reservationPeople.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER) && !reservationDate.getText().toString().equals("")) {
+                    String[] dates = reservationDate.getText().toString().split(" - ");
+                    calculatePrice(reservation, dates[0], dates[1], Integer.parseInt(reservationPeople.getText().toString()));
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        Button reserve = reservation.findViewById(R.id.button2);
+        reserve.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!reservationPeople.getText().equals("Calculating...")) {
+                    //send request to server
+                    SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy.");
+                    String[] dates = reservationDate.getText().toString().split(" - ");
+                    try {
+                        Date start = format.parse(dates[0]);
+                        Date end = format.parse(dates[1]);
+                        SharedPreferences sharedPreferences = AccommodationDetailsActivity.this.getSharedPreferences("sharedPref", Context.MODE_PRIVATE);
+                        Long guestId = sharedPreferences.getLong(JWTUtils.USER_ID, -1);
+
+                        ReservationRequestDTO requestDTO = new ReservationRequestDTO((new Date()).getTime(), start.getTime(), end.getTime(), Integer.parseInt(reservationPeople.getText().toString()), price);
+
+                        Call<ReservationDTO> call = ClientUtils.reservationService.createReservation(requestDTO, accommodation.getId(), guestId);
+                        call.enqueue(new Callback<ReservationDTO>() {
+                            @Override
+                            public void onResponse(Call<ReservationDTO> call, Response<ReservationDTO> response) {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(AccommodationDetailsActivity.this);
+                                builder.setTitle("Reservation Successful")
+                                        .setMessage("Your reservation has been successful.")
+                                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                //Go to reservations page
+                                            }
+                                        })
+                                        .show();
+                            }
+
+                            @Override
+                            public void onFailure(Call<ReservationDTO> call, Throwable t) {
+                                Log.d("ReservationCreate", "Reservation create error");
+                                JWTUtils.autoLogout(AccommodationDetailsActivity.this, t);
+                            }
+                        });
+                    } catch (ParseException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        });
+    }
+
+    private void calculatePrice(View reservation, String begin, String end, int persons){
+        TextView priceView = reservation.findViewById(R.id.price);
+        priceView.setText("Calculating...");
+        Call<Double> call = ClientUtils.accommodationService.getTotalPrice(accommodation.getId(), begin, end, accommodation.getPricePer(), persons);
+        call.enqueue(new Callback<Double>() {
+            @Override
+            public void onResponse(Call<Double> call, Response<Double> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    price = response.body();
+                    if (price == -1)
+                        priceView.setText("Not available");
+                    else
+                        priceView.setText(String.format("%.2f", price) + " EUR");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Double> call, Throwable t) {
+                Log.d("ReservationPrice", "Reservation price incorrect");
+                JWTUtils.autoLogout(AccommodationDetailsActivity.this, t);
             }
         });
     }
