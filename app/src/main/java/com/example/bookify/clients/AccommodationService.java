@@ -3,12 +3,14 @@ package com.example.bookify.clients;
 import android.database.Observable;
 
 import com.example.bookify.model.Accommodation;
-import com.example.bookify.model.AccommodationDetailDTO;
 import com.example.bookify.model.AccommodationInsertDTO;
 import com.example.bookify.model.FilterDTO;
 import com.example.bookify.model.ImageMobileDTO;
 import com.example.bookify.model.PricelistItemDTO;
-import com.example.bookify.model.SearchResponseDTO;
+import com.example.bookify.enumerations.PricePer;
+import com.example.bookify.model.accommodation.AccommodationDetailDTO;
+import com.example.bookify.model.FilterDTO;
+import com.example.bookify.model.accommodation.SearchResponseDTO;
 
 import java.util.Collection;
 import java.util.List;
@@ -137,4 +139,16 @@ public interface AccommodationService {
     })
     @DELETE("accommodations/images/{imageId}")
     Call<Long> deleteImage(@Path("imageId") Long imageId);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("accommodations/price")
+    Call<Double> getTotalPrice(@Query("id") Long id,
+                             @Query("begin") String dateBegin,
+                             @Query("end") String dateEnd,
+                             @Query("pricePer") PricePer pricePer,
+                             @Query("persons") int persons);
+
 }

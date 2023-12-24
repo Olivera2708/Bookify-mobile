@@ -21,7 +21,7 @@ import com.example.bookify.activities.LoginActivity;
 import com.example.bookify.clients.ClientUtils;
 import com.example.bookify.model.Address;
 import com.example.bookify.model.MessageDTO;
-import com.example.bookify.model.SearchResponseDTO;
+//import com.example.bookify.model.SearchResponseDTO;
 import com.example.bookify.model.UserRegistrationDTO;
 import com.google.android.material.textfield.TextInputEditText;
 

@@ -2,6 +2,8 @@ package com.example.bookify.clients;
 
 import com.example.bookify.model.MessageDTO;
 import com.example.bookify.model.UserRegistrationDTO;
+import com.example.bookify.model.user.UserCredentialsDTO;
+import com.example.bookify.model.user.UserJWT;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -33,4 +35,13 @@ public interface AccountService {
     })
     @GET("users/forgot-password/{email}")
     Call<ResponseBody> forgetPassword(@Path("email") String email);
+
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json",
+            "skip:true"
+    })
+    @POST("users/login")
+    Call<UserJWT> login(@Body UserCredentialsDTO credentialsDTO);
 }

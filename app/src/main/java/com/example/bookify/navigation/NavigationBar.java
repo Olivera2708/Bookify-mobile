@@ -17,17 +17,17 @@ public abstract class NavigationBar {
         navigationView.getMenu().clear();
         navigationView.setOnItemSelectedListener(null);
         switch (getUserType(context)) {
-            case "owner":
+            case "OWNER":
                 navigationView.inflateMenu(R.menu.bottom_nav_menu_owner);
                 navigationView.setSelectedItemId(selectedItem);
                 navigationView.setOnItemSelectedListener(new OwnerNavigation(context));
                 break;
-            case "guest":
+            case "GUEST":
                 navigationView.inflateMenu(R.menu.bottom_nav_menu_guest);
                 navigationView.setSelectedItemId(selectedItem);
                 navigationView.setOnItemSelectedListener(new GuestNavigation(context));
                 break;
-            case "admin":
+            case "ADMIN":
                 navigationView.inflateMenu(R.menu.bottom_nav_menu_admin);
                 navigationView.setSelectedItemId(selectedItem);
                 navigationView.setOnItemSelectedListener(new AdminNavigation(context));
