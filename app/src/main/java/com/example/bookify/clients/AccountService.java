@@ -15,6 +15,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 
@@ -46,4 +47,27 @@ public interface AccountService {
     @Multipart
     @POST("users/change-image/{userId}")
     Call<Long> changeUserAccountImage(@Part MultipartBody.Part image, @Path("userId") Long userId);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @POST("users/{userId}/change-password")
+    Call<ResponseBody> changePassword(@Path("userId") Long userId, @Body RequestBody newPassword);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("users/logout")
+    Call<ResponseBody> logout();
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @PUT("users")
+    Call<UserDetailsDTO> updateUser(@Body UserDetailsDTO updatedUser);
+
+
 }
