@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
-import com.auth0.android.jwt.JWT;
 import com.example.bookify.R;
 import com.example.bookify.activities.user.ForgotPasswordActivity;
 import com.example.bookify.activities.user.RegistrationActivity;
