@@ -4,7 +4,9 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -29,6 +31,7 @@ import com.example.bookify.model.Accommodation;
 import com.example.bookify.model.AccommodationInsertDTO;
 import com.example.bookify.model.ImageMobileDTO;
 import com.example.bookify.model.MessageDTO;
+import com.example.bookify.utils.JWTUtils;
 
 import java.util.Collection;
 import java.util.List;
@@ -214,7 +217,10 @@ public class AccommodationUpdateActivity extends AppCompatActivity {
                     accommodation.setFilters(viewModel.getAmenities().getValue());
                     accommodation.setCancellationDeadline(viewModel.getCancellationDeadline().getValue());
                     accommodation.setPricePer(viewModel.getPricePer().getValue());
-                    Call<Accommodation> call = ClientUtils.accommodationService.insert(3L, accommodation);
+
+                    SharedPreferences sharedPreferences = AccommodationUpdateActivity.this.getSharedPreferences("sharedPref", Context.MODE_PRIVATE);
+                    Long ownerId = sharedPreferences.getLong(JWTUtils.USER_ID, -1);
+                    Call<Accommodation> call = ClientUtils.accommodationService.insert(ownerId, accommodation);
 
                     call.enqueue(new Callback<Accommodation>() {
                         @Override

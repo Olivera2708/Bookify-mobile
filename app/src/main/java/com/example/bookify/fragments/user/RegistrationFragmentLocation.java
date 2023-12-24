@@ -152,7 +152,7 @@ public class RegistrationFragmentLocation extends Fragment {
 
                 @Override
                 public void onFailure(Call<MessageDTO> call, Throwable t) {
-                    Toast.makeText(getActivity(), "Fail", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
 
