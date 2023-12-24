@@ -37,6 +37,7 @@ import android.widget.Toast;
 import com.example.bookify.activities.LandingActivity;
 import com.example.bookify.activities.LoginActivity;
 import com.example.bookify.clients.ClientUtils;
+import com.example.bookify.databinding.AccountDeletionDialogBinding;
 import com.example.bookify.databinding.ActivityAccountDetailsBinding;
 import com.example.bookify.databinding.ChangePasswordBinding;
 import com.example.bookify.model.user.UserDetailsDTO;
@@ -73,6 +74,7 @@ public class AccountDetailsActivity extends AppCompatActivity {
     private UserDetailsDTO userDetails;
     private ActivityAccountDetailsBinding binding;
     private ChangePasswordBinding changePasswordBinding;
+    private AccountDeletionDialogBinding accountDeletionDialogBinding;
     private ActivityResultLauncher<String[]> permissionsResult;
     private ActivityResultLauncher<Intent> startForAccountImage;
     private boolean takeAPicture = false;
@@ -91,6 +93,7 @@ public class AccountDetailsActivity extends AppCompatActivity {
         setAccountPictureChange();
         setChangePasswordAction();
         setLogoutButtonAction();
+        setDeleteAccountAction();
 
         View view1 = findViewById(R.id.include1);
         View view2 = findViewById(R.id.include2);
@@ -487,5 +490,59 @@ public class AccountDetailsActivity extends AppCompatActivity {
             return  changePasswordBinding.repeatedPassword.getError().toString();
         }
         return "";
+    }
+
+    private void setDeleteAccountAction(){
+        binding.accountInformation.btnDeleteAccount.setOnClickListener(v -> {
+            final Dialog dialog = new Dialog(this);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            accountDeletionDialogBinding = AccountDeletionDialogBinding.inflate(getLayoutInflater());
+            dialog.setContentView(accountDeletionDialogBinding.getRoot());
+
+            accountDeletionDialogBinding.btnAcceptDelete.setOnClickListener(v1->{
+                deleteAccount();
+                dialog.dismiss();
+            });
+
+            accountDeletionDialogBinding.btnCancelDelete.setOnClickListener(v1 -> {
+                dialog.dismiss();
+            });
+            dialog.show();
+            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+            dialog.getWindow().setGravity(Gravity.CENTER_VERTICAL);
+        });
+    }
+
+    private void deleteAccount() {
+        Call<ResponseBody> deleteAccountCall = ClientUtils.accountService.deleteUser(sharedPreferences.getLong(JWTUtils.USER_ID, -1));
+        deleteAccountCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.code() == 400){
+                    try {
+                        Snackbar.make(binding.getRoot(), response.errorBody().string(), Snackbar.LENGTH_LONG).setAnchorView(binding.bottomNavigaiton).show();
+                        return;
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                JWTUtils.clearCurrentLoginUserData(sharedPreferences);
+                Intent intent = new Intent(AccountDetailsActivity.this, LoginActivity.class);
+                intent.putExtra(JWTUtils.AUTO_LOGOUT,true);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                startActivity(intent);
+                overridePendingTransition(0, 0);
+                finish();
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.d("", t.getMessage());
+                Log.d("NOT YIPI", "We are here");
+
+            }
+        });
     }
 }
