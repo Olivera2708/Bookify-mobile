@@ -75,10 +75,42 @@ public class AccountDetailsActivity extends AppCompatActivity {
     private ActivityAccountDetailsBinding binding;
     private ChangePasswordBinding changePasswordBinding;
     private AccountDeletionDialogBinding accountDeletionDialogBinding;
-    private ActivityResultLauncher<String[]> permissionsResult;
-    private ActivityResultLauncher<Intent> startForAccountImage;
     private boolean takeAPicture = false;
     private Uri file;
+    private final ActivityResultLauncher<String[]> permissionsResult = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), result -> {
+        ArrayList<Boolean> list = new ArrayList<>(result.values());
+        if (list.get(0) && list.get(1)) takeAPicture = true;
+    });
+    private final ActivityResultLauncher<Intent> startForAccountImage = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    String filePath = "";
+                    Uri imageData;
+                    if(result.getData() != null) {
+                        Intent intent = result.getData();
+                        imageData = intent.getData();
+                    }else{
+                        imageData = file;
+                    }
+                    filePath = getFilePath(imageData);
+                    File file = new File(filePath);
+                    RequestBody requestFile = RequestBody.create(MultipartBody.FORM, file);
+                    MultipartBody.Part imagePart = MultipartBody.Part.createFormData("image", file.getName(), requestFile);
+                    Call<Long> call1 = ClientUtils.accountService.changeUserAccountImage(imagePart, sharedPreferences.getLong(JWTUtils.USER_ID, -1));
+                    call1.enqueue(new Callback<Long>() {
+                        @Override
+                        public void onResponse(Call<Long> call, Response<Long> response) {
+                            Log.d("nesto", "onResponse: nesto");
+                        }
+
+                        @Override
+                        public void onFailure(Call<Long> call, Throwable t) {
+                            JWTUtils.autoLogout(AccountDetailsActivity.this, t);
+                        }
+                    });
+                }
+
+            });
 
 
     @Override
@@ -116,42 +148,8 @@ public class AccountDetailsActivity extends AppCompatActivity {
                 finish();
             }
         };
-
         getOnBackPressedDispatcher().addCallback(this, callback);
-
-
-        permissionsResult = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), result -> {
-            ArrayList<Boolean> list = new ArrayList<>(result.values());
-            if (list.get(0) && list.get(1)) takeAPicture = true;
-        });
-
         processPermission();
-        startForAccountImage = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        Intent intent = result.getData();
-                        String filePath = "";
-                        Uri imageData = intent.getData();
-                        filePath = getFilePath(imageData);
-                        File file = new File(filePath);
-                        RequestBody requestFile = RequestBody.create(MultipartBody.FORM, file);
-                        MultipartBody.Part imagePart = MultipartBody.Part.createFormData("image", file.getName(), requestFile);
-                        Call<Long> call1 = ClientUtils.accountService.changeUserAccountImage(imagePart, sharedPreferences.getLong(JWTUtils.USER_ID, -1));
-                        call1.enqueue(new Callback<Long>() {
-                            @Override
-                            public void onResponse(Call<Long> call, Response<Long> response) {
-                                Log.d("nesto", "onResponse: nesto");
-                            }
-
-                            @Override
-                            public void onFailure(Call<Long> call, Throwable t) {
-                                JWTUtils.autoLogout(AccountDetailsActivity.this, t);
-                            }
-                        });
-                    }
-
-                });
-
         loadUserData();
         setTextFieldsValidators();
     }
@@ -236,16 +234,14 @@ public class AccountDetailsActivity extends AppCompatActivity {
 
     private void setAccountPictureChange() {
         binding.accountImage.setOnClickListener(v -> {
-            // Setting up gallery Intent
             Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
             galleryIntent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
             galleryIntent.setType("image/*");
             Intent chooser = Intent.createChooser(new Intent(), "Chose an action");
-            // Setting up camera Intent if give permissions
             if (takeAPicture) {
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 cameraIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                Uri file = FileProvider.getUriForFile(AccountDetailsActivity.this, GenericFileProvider.MY_PROVIDER, Objects.requireNonNull(getOutputMediaFile()));
+                file = FileProvider.getUriForFile(getApplicationContext(), GenericFileProvider.MY_PROVIDER, Objects.requireNonNull(getOutputMediaFile()));
                 cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, file);
                 chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{galleryIntent, cameraIntent});
             }
@@ -373,7 +369,7 @@ public class AccountDetailsActivity extends AppCompatActivity {
             }
         }
         String timeStamp = new SimpleDateFormat("yyyyHHdd_HHmmss", Locale.UK).format(new Date());
-        return new File(mediaStoreDir.getPath() + File.separator + "IMG_" + timeStamp + "jpg");
+        return new File(mediaStoreDir.getPath() + File.separator + "IMG_" + timeStamp + ".jpg");
 
     }
 
