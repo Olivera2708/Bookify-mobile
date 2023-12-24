@@ -1,7 +1,7 @@
-package com.example.bookify.model;
+package com.example.bookify.model.accommodation;
 
+import com.example.bookify.model.accommodation.AccommodationBasicDTO;
 import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 

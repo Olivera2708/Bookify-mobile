@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 
 import com.example.bookify.BuildConfig;
 import com.example.bookify.utils.Interceptors;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.concurrent.TimeUnit;
 
@@ -46,10 +48,12 @@ public class ClientUtils {
                 .build();
         ClientUtils.accommodationService = retrofit.create(AccommodationService.class);
         ClientUtils.accountService = retrofit.create(AccountService.class);
+        ClientUtils.reservationService = retrofit.create(ReservationService.class);
     }
     /*
      * Prvo je potrebno da definisemo retrofit instancu preko koje ce komunikacija ici
      * */
+
     public static Retrofit retrofit = null;
 
     /*
@@ -58,4 +62,5 @@ public class ClientUtils {
      * */
     public static AccommodationService accommodationService = null;
     public static AccountService accountService = null;
+    public static ReservationService reservationService = null;
 }

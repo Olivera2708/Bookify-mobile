@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="12dp"
-            android:background="@color/grey">
+            android:background="?attr/popupMenuBackground">
 
             <Button
                 android:id="@+id/editDate"
@@ -32,43 +32,44 @@
                 android:drawableLeft="@drawable/calendar"
                 android:backgroundTint="?attr/colorOnBackground"
                 android:drawableTint="?attr/popupMenuBackground"
-                android:text="12.5.2023. - 16.5.2023."
+                android:hint="Date from - Date to"
+                android:textColorHint="?attr/popupMenuBackground"
                 android:textColor="?attr/popupMenuBackground"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/peopleIcon"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="10dp"
-                app:layout_constraintBottom_toBottomOf="@+id/editDate"
-                app:layout_constraintEnd_toStartOf="@id/peopleText"
-                app:layout_constraintStart_toEndOf="@+id/editDate"
-                app:layout_constraintTop_toTopOf="@+id/editDate"
-                app:srcCompat="@drawable/person"
-                app:tint="?attr/colorOnBackground" />
-
-            <EditText
-                android:id="@+id/peopleText"
-                android:layout_width="40dp"
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="30dp"
-                android:inputType="number"
-                android:text="2"
-                android:background="@null"
-                android:textColor="?attr/colorOnBackground"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="@+id/peopleIcon"
-                app:layout_constraintTop_toTopOf="@+id/peopleIcon"
-                app:layout_constraintStart_toEndOf="@+id/peopleIcon"/>
+                app:layout_constraintBottom_toBottomOf="@+id/editDate"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/editDate"
+                app:layout_constraintTop_toTopOf="@+id/editDate">
+
+                <ImageView
+                    android:id="@+id/peopleIcon"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    app:srcCompat="@drawable/person"
+                    app:tint="?attr/colorOnBackground" />
+
+                <EditText
+                    android:id="@+id/peopleText"
+                    android:layout_width="20dp"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:inputType="number"
+                    android:text="2"
+                    android:textAlignment="center"
+                    android:textColor="?attr/colorOnBackground"
+                    android:textSize="16sp" />
+            </LinearLayout>
 
             <TextView
+                android:id="@+id/price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserrat_medium"
-                android:text="354 EUR"
                 android:textColor="?attr/textFillColor"
                 android:textSize="18sp"
                 android:layout_marginEnd="14dp"

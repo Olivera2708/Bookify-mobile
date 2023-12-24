@@ -1,6 +1,10 @@
-package com.example.bookify.model;
+package com.example.bookify.model.accommodation;
 
 import com.example.bookify.enumerations.Filter;
+import com.example.bookify.enumerations.PricePer;
+import com.example.bookify.model.Address;
+import com.example.bookify.model.OwnerDTO;
+import com.example.bookify.model.ReviewDTO;
 import com.google.gson.annotations.Expose;
 
 import java.util.Collection;
@@ -23,10 +27,13 @@ public class AccommodationDetailDTO {
     @Expose
     private OwnerDTO owner;
 
+    @Expose
+    private PricePer pricePer;
+
     public AccommodationDetailDTO() {
     }
 
-    public AccommodationDetailDTO(Long id, String name, String description, float avgRating, Collection<ReviewDTO> reviews, Collection<Filter> filters, Address address, OwnerDTO owner) {
+    public AccommodationDetailDTO(Long id, String name, String description, float avgRating, Collection<ReviewDTO> reviews, Collection<Filter> filters, Address address, OwnerDTO owner, PricePer pricePer) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -35,6 +42,15 @@ public class AccommodationDetailDTO {
         this.filters = filters;
         this.address = address;
         this.owner = owner;
+        this.pricePer = pricePer;
+    }
+
+    public PricePer getPricePer() {
+        return pricePer;
+    }
+
+    public void setPricePer(PricePer pricePer) {
+        this.pricePer = pricePer;
     }
 
     public Long getId() {
