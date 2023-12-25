@@ -1,5 +1,7 @@
 package com.example.bookify.clients;
 
+import com.example.bookify.model.MessageDTO;
+import com.example.bookify.model.UserRegistrationDTO;
 import com.example.bookify.model.user.UserCredentialsDTO;
 import com.example.bookify.model.user.UserJWT;
 
@@ -20,6 +22,19 @@ public interface AccountService {
     @GET("users/image/{imageId}")
     Call<ResponseBody> getImage(@Path("imageId") Long imageId);
 
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @POST("users/mobile")
+    Call<MessageDTO> register(@Body UserRegistrationDTO user);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("users/forgot-password/{email}")
+    Call<ResponseBody> forgetPassword(@Path("email") String email);
 
 
     @Headers({

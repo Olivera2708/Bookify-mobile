@@ -3,6 +3,7 @@ package com.example.bookify.fragments.accommodation;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +28,8 @@ public class AccommodationFragmentBasicInformation extends MyFragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    AccommodationUpdateViewModel viewModel;
 
     public AccommodationFragmentBasicInformation() {
         // Required empty public constructor
@@ -66,6 +69,17 @@ public class AccommodationFragmentBasicInformation extends MyFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_accommodation_basic_information, container, false);
+
+        viewModel = new ViewModelProvider(requireActivity()).get(AccommodationUpdateViewModel.class);
+
+        if(viewModel.getIsEditMode().getValue()){
+            TextInputEditText name = view.findViewById(R.id.propertyNameInput);
+            TextInputEditText description = view.findViewById(R.id.descriptionInput);
+
+            name.setText(viewModel.getPropertyName().getValue());
+            description.setText(viewModel.getDescription().getValue());
+        }
+
         return view;
     }
 
@@ -76,6 +90,8 @@ public class AccommodationFragmentBasicInformation extends MyFragment {
         if (name.getText().toString().equals("") || description.getText().toString().equals("")) {
             return 1;
         }
+        viewModel.setPropertyName(name.getText().toString());
+        viewModel.setDescription(description.getText().toString());
         return 0;
     }
 }

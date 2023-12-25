@@ -4,6 +4,7 @@ import android.content.res.ColorStateList;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +33,8 @@ public class AccommodationFragmentGuests extends MyFragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    AccommodationUpdateViewModel viewModel;
 
     public AccommodationFragmentGuests() {
         // Required empty public constructor
@@ -73,7 +76,9 @@ public class AccommodationFragmentGuests extends MyFragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_accommodation_guests, container, false);
 
-        String[] sort = new String[]{"studio", "room", "apartment"};
+        viewModel = new ViewModelProvider(requireActivity()).get(AccommodationUpdateViewModel.class);
+
+        String[] sort = new String[]{"HOTEL", "ROOM", "APARTMENT"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.dropdown_item, sort);
         AutoCompleteTextView autoCompleteTextView = view.findViewById(R.id.typeDropDown);
         autoCompleteTextView.setAdapter(adapter);
@@ -83,6 +88,21 @@ public class AccommodationFragmentGuests extends MyFragment {
                 //code when something is selected
             }
         });
+
+        if (viewModel.getIsEditMode().getValue()) {
+            TextInputEditText min = view.findViewById(R.id.minGuestsInput);
+            TextInputEditText max = view.findViewById(R.id.maxGuestsInput);
+
+            autoCompleteTextView.setText(viewModel.getType().getValue(), false);
+            min.setText(viewModel.getMinGuests().getValue().toString());
+            max.setText(viewModel.getMaxGuests().getValue().toString());
+
+            if (viewModel.getManual().getValue()) {
+                selected = true;
+            } else {
+                selected = false;
+            }
+        }
 
         return view;
     }
@@ -136,9 +156,16 @@ public class AccommodationFragmentGuests extends MyFragment {
         if (min.getText().toString().equals("") || max.getText().toString().equals("") || autoCompleteTextView.getText().toString().trim().length() <= 0) {
             return 1;
         }
-        if(Integer.parseInt(min.getText().toString()) > Integer.parseInt(max.getText().toString())){
+        if (Integer.parseInt(min.getText().toString()) > Integer.parseInt(max.getText().toString())) {
             return 2;
         }
+
+        viewModel.setMinGuests(Integer.parseInt(min.getText().toString()));
+        viewModel.setMaxGuests(Integer.parseInt(max.getText().toString()));
+        viewModel.setType(autoCompleteTextView.getText().toString().toUpperCase());
+        MaterialButton right = view.findViewById(R.id.rightButton);
+        viewModel.setManual(right.isChecked());
+
         return 0;
     }
 }

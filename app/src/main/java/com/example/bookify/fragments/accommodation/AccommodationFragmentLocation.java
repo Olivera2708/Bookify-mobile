@@ -1,9 +1,13 @@
 package com.example.bookify.fragments.accommodation;
 
+import android.location.Geocoder;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +17,7 @@ import android.widget.AutoCompleteTextView;
 
 import com.example.bookify.R;
 import com.example.bookify.fragments.MyFragment;
+import com.example.bookify.model.Address;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -20,7 +25,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -40,6 +47,8 @@ public class AccommodationFragmentLocation extends MyFragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    AccommodationUpdateViewModel viewModel;
 
     public AccommodationFragmentLocation() {
         // Required empty public constructor
@@ -74,15 +83,22 @@ public class AccommodationFragmentLocation extends MyFragment {
 
     View view;
 
+    Boolean isEnabledCountry = true;
+    Boolean isEnabledCity = true;
+    Boolean isEnabledStreet = true;
+    Boolean isEnabledZip = true;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_accommodation_location, container, false);
 
-        String[] sort =  Locale.getISOCountries();
+        viewModel = new ViewModelProvider(requireActivity()).get(AccommodationUpdateViewModel.class);
+
+        String[] sort = Locale.getISOCountries();
         String[] countries = new String[sort.length];
-        for(int i = 0; i<sort.length; i++){
+        for (int i = 0; i < sort.length; i++) {
             Locale locale = new Locale("", sort[i]);
             countries[i] = locale.getDisplayCountry();
         }
@@ -90,25 +106,143 @@ public class AccommodationFragmentLocation extends MyFragment {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.dropdown_item, countries);
         AutoCompleteTextView autoCompleteTextView = view.findViewById(R.id.typeDropDown);
         autoCompleteTextView.setAdapter(adapter);
-        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //code when something is selected
-            }
-        });
 
+        TextInputEditText cityField = view.findViewById(R.id.cityInput);
+        TextInputEditText addressField = view.findViewById(R.id.streetAddressInput);
+        TextInputEditText zipCodeField = view.findViewById(R.id.zipCodeInput);
+        AutoCompleteTextView countryField = view.findViewById(R.id.typeDropDown);
         mapView = view.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(googleMap -> {
-            // You can customize the map here
-            // For example, add a marker
             LatLng markerLatLng = new LatLng(45.267136, 19.833549);
-            googleMap.addMarker(new MarkerOptions().position(markerLatLng).title("Marker Title"));
 
-            // Move the camera to the marker
+
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(markerLatLng, 12));
+
+            if (viewModel.getIsEditMode().getValue()) {
+                countryField.setText(viewModel.getAddress().getValue().getCountry(), false);
+                cityField.setText(viewModel.getAddress().getValue().getCity());
+                addressField.setText(viewModel.getAddress().getValue().getAddress());
+                zipCodeField.setText(viewModel.getAddress().getValue().getZipCode());
+                searchLocation(googleMap);
+            }
+
+            googleMap.setOnMapClickListener(latLang -> {
+                googleMap.clear();
+                googleMap.addMarker(new MarkerOptions().position(latLang));
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLang, 12), 1000, null);
+                getAddressFromLocation(latLang.latitude, latLang.longitude);
+            });
+
+            countryField.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (isEnabledCountry) {
+                        searchLocation(googleMap);
+                    }
+                    isEnabledCountry = true;
+                }
+            });
+
+            cityField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (isEnabledCity) {
+                        searchLocation(googleMap);
+                    }
+                    isEnabledCity = true;
+                }
+            });
+
+            addressField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (isEnabledStreet) {
+                        searchLocation(googleMap);
+                    }
+                    isEnabledStreet = true;
+                }
+            });
+
+            zipCodeField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (isEnabledZip) {
+                        searchLocation(googleMap);
+                    }
+                    isEnabledZip = true;
+                }
+            });
         });
         return view;
+    }
+
+    private void searchLocation(GoogleMap googleMap) {
+        TextInputEditText cityField = view.findViewById(R.id.cityInput);
+        TextInputEditText addressField = view.findViewById(R.id.streetAddressInput);
+        TextInputEditText zipCodeField = view.findViewById(R.id.zipCodeInput);
+        AutoCompleteTextView countryField = view.findViewById(R.id.typeDropDown);
+        String searchQuery = addressField.getText().toString() + ", " + cityField.getText().toString() + ", " + zipCodeField.getText().toString() + ", " + countryField.getText().toString();
+        if (!searchQuery.isEmpty()) {
+            Geocoder geocoder = new Geocoder(getActivity());
+            try {
+                List<android.location.Address> addresses = geocoder.getFromLocationName(searchQuery, 1);
+                if (!addresses.isEmpty()) {
+                    android.location.Address address = addresses.get(0);
+                    LatLng newLocation = new LatLng(address.getLatitude(), address.getLongitude());
+
+                    googleMap.clear();
+
+                    googleMap.addMarker(new MarkerOptions().position(newLocation));
+
+                    googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(newLocation, 12), 1000, null);
+                } else {
+                    googleMap.clear();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void getAddressFromLocation(double latitude, double longitude) {
+        Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
+        TextInputEditText cityField = view.findViewById(R.id.cityInput);
+        TextInputEditText addressField = view.findViewById(R.id.streetAddressInput);
+        TextInputEditText zipCodeField = view.findViewById(R.id.zipCodeInput);
+        AutoCompleteTextView countryField = view.findViewById(R.id.typeDropDown);
+        isEnabledCity = false;
+        isEnabledCountry = false;
+        isEnabledZip = false;
+        isEnabledStreet = false;
+        try {
+            List<android.location.Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+            if (!addresses.isEmpty()) {
+                android.location.Address address = addresses.get(0);
+
+                String country = address.getCountryName();
+                String city = address.getLocality();
+
+                String streetAddress = address.getThoroughfare() == null ? "" : address.getThoroughfare();
+                String addressNumber = address.getSubThoroughfare() == null ? "" : address.getSubThoroughfare();
+                String street = streetAddress + " " + addressNumber;
+                String zipCode = address.getPostalCode();
+
+                // Display the address information
+
+                countryField.setText(country, false);
+                cityField.setText(city);
+                addressField.setText(street.trim());
+                zipCodeField.setText(zipCode);
+            } else {
+                addressField.setText("");
+                countryField.setText("", false);
+                cityField.setText("");
+                zipCodeField.setText("");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -122,6 +256,14 @@ public class AccommodationFragmentLocation extends MyFragment {
                 address.getText().toString().equals("") || zipCode.getText().toString().equals("")) {
             return 1;
         }
+
+        Address a = new Address();
+        a.setCountry(autoCompleteTextView.getText().toString());
+        a.setCity(city.getText().toString());
+        a.setAddress(address.getText().toString());
+        a.setZipCode(zipCode.getText().toString());
+        viewModel.setAddress(a);
+
         return 0;
     }
 }
