@@ -3,7 +3,9 @@ package com.example.bookify.fragments.user;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,9 @@ import android.widget.Toast;
 import com.example.bookify.R;
 import com.example.bookify.fragments.FragmentTransition;
 import com.google.android.material.textfield.TextInputEditText;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,6 +34,8 @@ public class RegistrationFragmentAccountInfo extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    RegistrationViewModel viewModel;
 
     public RegistrationFragmentAccountInfo() {
         // Required empty public constructor
@@ -66,6 +73,9 @@ public class RegistrationFragmentAccountInfo extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_registration_account_info, container, false);
+
+        viewModel = new ViewModelProvider(requireActivity()).get(RegistrationViewModel.class);
+
         Button button = view.findViewById(R.id.btnNext);
         TextInputEditText email = view.findViewById(R.id.editTextTextEmailAddress);
         TextInputEditText password = view.findViewById(R.id.editTextTextPassword);
@@ -83,10 +93,32 @@ public class RegistrationFragmentAccountInfo extends Fragment {
                     Toast.makeText(getActivity(), "Password and repeated password must be the same", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                if(!isEmailValid(email.getText().toString())){
+                    Toast.makeText(getActivity(), "Invalid email format", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(!isPasswordValid(password.getText().toString())){
+                    Toast.makeText(getActivity(), "Invalid password format", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                viewModel.setEmail(email.getText().toString());
+                viewModel.setPassword(password.getText().toString());
+                viewModel.setConfirmPassword(repeatedPassword.getText().toString());
                 FragmentTransition.to(RegistrationFragmentPersonalInfo.newInstance("AccInfo", "Account informations"),
                         getActivity(), false, R.id.registration);
             }
         });
         return view;
+    }
+
+    private boolean isEmailValid(CharSequence email) {
+        return email != null && Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
+    private boolean isPasswordValid(String password) {
+        String passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$";
+        Pattern pattern = Pattern.compile(passwordPattern);
+        Matcher matcher = pattern.matcher(password);
+        return matcher.matches();
     }
 }

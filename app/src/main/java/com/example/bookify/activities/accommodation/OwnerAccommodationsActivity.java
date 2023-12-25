@@ -6,9 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 
 import com.example.bookify.activities.LandingActivity;
+import com.example.bookify.fragments.accommodation.AccommodationUpdateViewModel;
 import com.example.bookify.adapters.data.OwnerAccommodationListAdapter;
 import com.example.bookify.clients.ClientUtils;
 import com.example.bookify.databinding.ActivityOwnerAccommodationsBinding;
@@ -80,12 +82,13 @@ public class OwnerAccommodationsActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<AccommodationOwnerDTO>> call, Throwable t) {
-
+                JWTUtils.autoLogout(OwnerAccommodationsActivity.this, t);
             }
         });
     }
     private void displayData(List<AccommodationOwnerDTO> accommodations) {
         adapter = new OwnerAccommodationListAdapter(this, accommodations);
         binding.ownerAccommodationsList.setAdapter(adapter);
+
     }
 }

@@ -39,11 +39,19 @@ public class ClientUtils {
         return client;
     }
 
+    private static Gson gson = new GsonBuilder()
+            .setDateFormat("yyyy-MM-dd")
+            .create();
+
+    /*
+     * Prvo je potrebno da definisemo retrofit instancu preko koje ce komunikacija ici
+     * */
+
     public static void setClientUtils(SharedPreferences sharedPreferences){
         ClientUtils.sharedPreferences = sharedPreferences;
         ClientUtils.retrofit = new Retrofit.Builder()
                 .baseUrl(SERVICE_API_PATH)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(test())
                 .build();
         ClientUtils.accommodationService = retrofit.create(AccommodationService.class);

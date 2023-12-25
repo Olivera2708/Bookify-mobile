@@ -3,6 +3,7 @@ package com.example.bookify.fragments.accommodation;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +29,8 @@ public class AccommodationFragmentPaymentDetails extends MyFragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    AccommodationUpdateViewModel viewModel;
 
     public AccommodationFragmentPaymentDetails() {
         // Required empty public constructor
@@ -67,6 +70,22 @@ public class AccommodationFragmentPaymentDetails extends MyFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_accommodation_payment_details, container, false);
+
+        viewModel = new ViewModelProvider(requireActivity()).get(AccommodationUpdateViewModel.class);
+
+        if (viewModel.getIsEditMode().getValue()) {
+            TextInputEditText deadline = view.findViewById(R.id.deadlineInput);
+            RadioButton person = view.findViewById(R.id.rbtPerson);
+            RadioButton room = view.findViewById(R.id.rbtRoom);
+
+            deadline.setText(viewModel.getCancellationDeadline().getValue().toString());
+            if (viewModel.getPricePer().getValue().equals("ROOM")) {
+                room.setChecked(true);
+            } else {
+                person.setChecked(true);
+            }
+        }
+
         return view;
     }
 
@@ -79,6 +98,12 @@ public class AccommodationFragmentPaymentDetails extends MyFragment {
         if (deadline.getText().toString().equals("") || (!person.isChecked() && !room.isChecked())) {
             return 1;
         }
+
+        viewModel.setCancellationDeadline(Integer.parseInt(deadline.getText().toString()));
+        if (person.isChecked())
+            viewModel.setPricePer("PERSON");
+        else
+            viewModel.setPricePer("ROOM");
         return 0;
     }
 }

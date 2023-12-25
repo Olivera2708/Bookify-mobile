@@ -18,6 +18,10 @@
             android:gravity="left"
             android:orientation="vertical">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/basic_informations"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="250dp"

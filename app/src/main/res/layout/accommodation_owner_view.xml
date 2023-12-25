@@ -2,6 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingHorizontal="14dp"
+    android:paddingVertical="7dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -34,7 +36,7 @@
                     android:id="@+id/accommodation_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/apartment"/>
+                    android:scaleType="centerCrop"/>
             </androidx.cardview.widget.CardView>
 
             <TextView
@@ -124,7 +126,7 @@
                     android:layout_width="70dp"
                     android:layout_height="36dp"
                     android:layout_marginBottom="4dp"
-                    android:backgroundTint="?attr/android:windowBackground"
+                    android:backgroundTint="?attr/colorSurfaceContainerHighest"
                     android:fontFamily="@font/montserrat_medium"
                     android:padding="0sp"
                     android:text="@string/price"
