@@ -4,26 +4,43 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 
 import com.example.bookify.activities.LandingActivity;
+import com.example.bookify.fragments.accommodation.AccommodationUpdateViewModel;
+import com.example.bookify.adapters.data.OwnerAccommodationListAdapter;
+import com.example.bookify.clients.ClientUtils;
+import com.example.bookify.databinding.ActivityOwnerAccommodationsBinding;
+import com.example.bookify.model.accommodation.AccommodationOwnerDTO;
 import com.example.bookify.navigation.NavigationBar;
 import com.example.bookify.R;
 import com.example.bookify.activities.ReportsActivity;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.example.bookify.utils.JWTUtils;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class OwnerAccommodationsActivity extends AppCompatActivity {
+
+    private ActivityOwnerAccommodationsBinding binding;
+    private OwnerAccommodationListAdapter adapter;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_owner_accommodations);
+        binding = ActivityOwnerAccommodationsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        this.sharedPreferences = getSharedPreferences("sharedPref", MODE_PRIVATE);
         NavigationBar.setNavigationBar(findViewById(R.id.bottom_navigaiton), this, R.id.navigation_accommodation);
 
-        FloatingActionButton addAccommodation = findViewById(R.id.addAccommodationButton);
-
-        addAccommodation.setOnClickListener(v -> {
+        binding.addAccommodationButton.setOnClickListener(v -> {
             Intent intent = new Intent(OwnerAccommodationsActivity.this, AccommodationUpdateActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(intent);
@@ -49,5 +66,29 @@ public class OwnerAccommodationsActivity extends AppCompatActivity {
             }
         };
         getOnBackPressedDispatcher().addCallback(this, callback);
+        getData();
+
+    }
+    private void getData(){
+        Call<List<AccommodationOwnerDTO>> call = ClientUtils.accommodationService.getOwnerAccommodations(sharedPreferences.getLong(JWTUtils.USER_ID, -1));
+        call.enqueue(new Callback<List<AccommodationOwnerDTO>>() {
+            @Override
+            public void onResponse(Call<List<AccommodationOwnerDTO>> call, Response<List<AccommodationOwnerDTO>> response) {
+                if(response.body() != null && response.code() == 200){
+                    displayData(response.body());
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<List<AccommodationOwnerDTO>> call, Throwable t) {
+                JWTUtils.autoLogout(OwnerAccommodationsActivity.this, t);
+            }
+        });
+    }
+    private void displayData(List<AccommodationOwnerDTO> accommodations) {
+        adapter = new OwnerAccommodationListAdapter(this, accommodations);
+        binding.ownerAccommodationsList.setAdapter(adapter);
+
     }
 }

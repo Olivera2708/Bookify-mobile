@@ -28,8 +28,7 @@
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/accommodation_scroll">
+        app:layout_constraintTop_toTopOf="parent">
 
         <View
             android:layout_width="3dp"
@@ -48,52 +47,24 @@
             android:textSize="20sp" />
 
     </LinearLayout>
-
-
-    <ScrollView
-        android:id="@+id/accommodation_scroll"
+    <ListView
+        android:id="@+id/ownerAccommodationsList"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="12dp"
+        android:divider="@null"
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigaiton"
+        app:layout_constraintTop_toBottomOf="@id/linearLayout5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/linearLayout5"
-        app:layout_constraintBottom_toTopOf="@id/bottom_navigaiton">
+        app:layout_constrainedHeight="true"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_editor_absoluteX="0dp"
+        tools:listitem="@layout/accommodation_owner_view"
+        >
 
+    </ListView>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginHorizontal="20dp">
-
-            <include layout="@layout/accommodation_owner_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="5dp"/>
-            <include layout="@layout/accommodation_owner_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="5dp"/>
-            <include layout="@layout/accommodation_owner_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="5dp"/>
-            <include layout="@layout/accommodation_owner_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="5dp"/>
-            <include layout="@layout/accommodation_owner_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="5dp"/>
-            <include layout="@layout/accommodation_owner_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="5dp"/>
-
-        </LinearLayout>
-
-    </ScrollView>
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigaiton"
         android:layout_width="0dp"
