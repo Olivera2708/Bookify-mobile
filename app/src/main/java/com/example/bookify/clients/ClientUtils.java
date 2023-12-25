@@ -1,6 +1,13 @@
 package com.example.bookify.clients;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import com.example.bookify.BuildConfig;
+import com.example.bookify.utils.Interceptors;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -11,6 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ClientUtils {
 
     //EXAMPLE: http://192.168.43.73:8080/api/
+    public static SharedPreferences sharedPreferences = null;
     public static final String SERVICE_API_PATH = "http://"+ BuildConfig.IP_ADDR +":8080/api/v1/";
 
     /*
@@ -22,6 +30,7 @@ public class ClientUtils {
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(new Interceptors(ClientUtils.sharedPreferences))
                 .connectTimeout(120, TimeUnit.SECONDS)
                 .readTimeout(120, TimeUnit.SECONDS)
                 .writeTimeout(120, TimeUnit.SECONDS)
@@ -30,19 +39,28 @@ public class ClientUtils {
         return client;
     }
 
+    public static void setClientUtils(SharedPreferences sharedPreferences){
+        ClientUtils.sharedPreferences = sharedPreferences;
+        ClientUtils.retrofit = new Retrofit.Builder()
+                .baseUrl(SERVICE_API_PATH)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(test())
+                .build();
+        ClientUtils.accommodationService = retrofit.create(AccommodationService.class);
+        ClientUtils.accountService = retrofit.create(AccountService.class);
+        ClientUtils.reservationService = retrofit.create(ReservationService.class);
+    }
     /*
      * Prvo je potrebno da definisemo retrofit instancu preko koje ce komunikacija ici
      * */
-    public static Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl(SERVICE_API_PATH)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(test())
-            .build();
+
+    public static Retrofit retrofit = null;
 
     /*
      * Definisemo konkretnu instancu servisa na intnerntu sa kojim
      * vrsimo komunikaciju
      * */
-    public static AccommodationService accommodationService = retrofit.create(AccommodationService.class);
-    public static AccountService accountService = retrofit.create(AccountService.class);
+    public static AccommodationService accommodationService = null;
+    public static AccountService accountService = null;
+    public static ReservationService reservationService = null;
 }

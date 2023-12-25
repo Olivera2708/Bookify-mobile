@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.Network;
@@ -16,6 +17,8 @@ import android.provider.Settings;
 import android.widget.Toast;
 
 import com.example.bookify.R;
+import com.example.bookify.clients.ClientUtils;
+import com.example.bookify.utils.JWTUtils;
 import com.google.android.material.snackbar.Snackbar;
 
 public class SplashScreenActivity extends AppCompatActivity {
@@ -31,7 +34,7 @@ public class SplashScreenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
-
+        ClientUtils.setClientUtils(getSharedPreferences("sharedPref", MODE_PRIVATE));
 //        getSupportActionBar().hide();
         int SPLASH_TIME_OUT = 5000;
 
@@ -77,9 +80,15 @@ public class SplashScreenActivity extends AppCompatActivity {
                         Snackbar.LENGTH_SHORT).show();
 
                 handler.postDelayed(() -> {
-                    Intent intent = new Intent(SplashScreenActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                    finish();
+                    if(isAlreadyLoggedIn()){
+                        Intent intent = new Intent(SplashScreenActivity.this, LandingActivity.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        Intent intent = new Intent(SplashScreenActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
                 }, 5000);
             }
 
@@ -152,5 +161,10 @@ public class SplashScreenActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         handler.removeCallbacks(navigateTo);
+    }
+
+    private boolean isAlreadyLoggedIn() {
+        return JWTUtils.isLoggedIn(getSharedPreferences("sharedPref", MODE_PRIVATE))
+                && !JWTUtils.hasTokenExpired(getSharedPreferences("sharedPref", MODE_PRIVATE));
     }
 }

@@ -32,9 +32,9 @@ import com.example.bookify.adapters.pagers.AccommodationListAdapter;
 import com.example.bookify.clients.ClientUtils;
 import com.example.bookify.enumerations.AccommodationType;
 import com.example.bookify.enumerations.Filter;
-import com.example.bookify.model.AccommodationBasicDTO;
+import com.example.bookify.model.accommodation.AccommodationBasicDTO;
 import com.example.bookify.model.FilterDTO;
-import com.example.bookify.model.SearchResponseDTO;
+import com.example.bookify.model.accommodation.SearchResponseDTO;
 import com.example.bookify.navigation.NavigationBar;
 import com.example.bookify.R;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -231,7 +231,7 @@ public class ResultsActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<SearchResponseDTO> call, Throwable t) {
-                    Log.d("Error", "Search");
+
                 }
             });
         }

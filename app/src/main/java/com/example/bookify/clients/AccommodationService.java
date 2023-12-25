@@ -1,10 +1,9 @@
 package com.example.bookify.clients;
 
-import android.database.Observable;
-
-import com.example.bookify.model.AccommodationDetailDTO;
+import com.example.bookify.enumerations.PricePer;
+import com.example.bookify.model.accommodation.AccommodationDetailDTO;
 import com.example.bookify.model.FilterDTO;
-import com.example.bookify.model.SearchResponseDTO;
+import com.example.bookify.model.accommodation.SearchResponseDTO;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -62,5 +61,16 @@ public interface AccommodationService {
     })
     @GET("accommodations/images/{accommodationId}")
     Call<String[]> getImages(@Path("accommodationId") Long accommodationId);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("accommodations/price")
+    Call<Double> getTotalPrice(@Query("id") Long id,
+                             @Query("begin") String dateBegin,
+                             @Query("end") String dateEnd,
+                             @Query("pricePer") PricePer pricePer,
+                             @Query("persons") int persons);
 
 }
