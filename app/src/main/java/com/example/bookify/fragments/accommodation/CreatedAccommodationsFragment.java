@@ -1,14 +1,31 @@
 package com.example.bookify.fragments.accommodation;
 
+import android.app.Activity;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.example.bookify.R;
+import com.example.bookify.adapters.pagers.data.AccommodationRequestsAdapter;
+import com.example.bookify.clients.ClientUtils;
+import com.example.bookify.enumerations.AccommodationStatusRequest;
+import com.example.bookify.model.accommodation.AccommodationRequestDTO;
+import com.example.bookify.utils.JWTUtils;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,6 +33,11 @@ import com.example.bookify.R;
  * create an instance of this fragment.
  */
 public class CreatedAccommodationsFragment extends Fragment {
+
+    private List<AccommodationRequestDTO> accommodationRequestList;
+    private AccommodationRequestsAdapter adapter;
+    private ListView createdAccommodation;
+    private Activity activity;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -28,6 +50,11 @@ public class CreatedAccommodationsFragment extends Fragment {
 
     public CreatedAccommodationsFragment() {
         // Required empty public constructor
+
+    }
+    public CreatedAccommodationsFragment(Activity activity) {
+        // Required empty public constructor
+        this.activity = activity;
     }
 
     /**
@@ -47,7 +74,12 @@ public class CreatedAccommodationsFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-
+    public static CreatedAccommodationsFragment newInstance(Activity activity){
+        CreatedAccommodationsFragment fragment = new CreatedAccommodationsFragment(activity);
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
+        return fragment;
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +87,7 @@ public class CreatedAccommodationsFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     @Override
@@ -62,5 +95,32 @@ public class CreatedAccommodationsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_created_accommodations, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        createdAccommodation = view.findViewById(R.id.createdAccommodationList);
+        getRequests();
+    }
+
+    private void getRequests(){
+        Call<List<AccommodationRequestDTO>> call = ClientUtils.accommodationService.getRequests();
+        call.enqueue(new Callback<List<AccommodationRequestDTO>>() {
+            @Override
+            public void onResponse(Call<List<AccommodationRequestDTO>> call, Response<List<AccommodationRequestDTO>> response) {
+                if(response.body() != null && response.code() == 200){
+                    accommodationRequestList = response.body();
+                    accommodationRequestList.removeIf(s -> !s.getStatusRequest().equals(AccommodationStatusRequest.CREATED));
+                    adapter = new AccommodationRequestsAdapter(requireActivity(), accommodationRequestList);
+                    createdAccommodation.setAdapter(adapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<AccommodationRequestDTO>> call, Throwable t) {
+                JWTUtils.autoLogout((AppCompatActivity) activity, t);
+            }
+        });
     }
 }

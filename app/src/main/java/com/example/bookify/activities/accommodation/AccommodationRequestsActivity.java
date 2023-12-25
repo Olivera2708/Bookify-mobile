@@ -9,9 +9,17 @@ import android.os.Bundle;
 
 import com.example.bookify.adapters.pagers.AccommodationRequestsViewPagerAdapter;
 import com.example.bookify.activities.LandingActivity;
+import com.example.bookify.clients.ClientUtils;
+import com.example.bookify.model.accommodation.AccommodationRequestDTO;
 import com.example.bookify.navigation.NavigationBar;
 import com.example.bookify.R;
 import com.google.android.material.tabs.TabLayout;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AccommodationRequestsActivity extends AppCompatActivity {
 

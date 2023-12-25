@@ -1,5 +1,7 @@
 package com.example.bookify.adapters.pagers;
 
+import android.app.Activity;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -10,8 +12,11 @@ import com.example.bookify.fragments.accommodation.EditedAccommodationsFragment;
 
 
 public class AccommodationRequestsViewPagerAdapter extends FragmentStateAdapter {
+
+    private Activity activity;
     public AccommodationRequestsViewPagerAdapter(@NonNull FragmentActivity fragmentActivity) {
         super(fragmentActivity);
+        this.activity = fragmentActivity;
     }
 
     @NonNull
@@ -19,9 +24,9 @@ public class AccommodationRequestsViewPagerAdapter extends FragmentStateAdapter 
     public Fragment createFragment(int position) {
         switch (position){
             case 1:
-                return new EditedAccommodationsFragment();
+                return EditedAccommodationsFragment.newInstance(activity);
             default:
-                return new CreatedAccommodationsFragment();
+                return CreatedAccommodationsFragment.newInstance(activity);
         }
     }
 

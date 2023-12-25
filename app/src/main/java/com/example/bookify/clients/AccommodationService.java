@@ -3,7 +3,10 @@ package com.example.bookify.clients;
 import com.example.bookify.enumerations.PricePer;
 import com.example.bookify.model.accommodation.AccommodationDetailDTO;
 import com.example.bookify.model.FilterDTO;
+import com.example.bookify.model.accommodation.AccommodationRequestDTO;
 import com.example.bookify.model.accommodation.SearchResponseDTO;
+
+import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -11,6 +14,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -73,4 +77,26 @@ public interface AccommodationService {
                              @Query("pricePer") PricePer pricePer,
                              @Query("persons") int persons);
 
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("accommodations/requests")
+    Call<List<AccommodationRequestDTO>> getRequests();
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @PUT("accommodations/approve/{accommodationId}")
+    Call<ResponseBody> approveAccommodation(@Path("accommodationId") Long accommodationId);
+
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @PUT("accommodations/reject/{accommodationId}")
+    Call<ResponseBody> rejectAccommodation(@Path("accommodationId") Long accommodationId);
 }
