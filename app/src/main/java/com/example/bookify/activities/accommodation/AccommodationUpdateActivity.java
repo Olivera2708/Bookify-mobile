@@ -77,7 +77,6 @@ public class AccommodationUpdateActivity extends AppCompatActivity {
         viewModel.setIsEditMode(isEditMode);
 
 
-
         if (isEditMode) {
             Call<Accommodation> call = ClientUtils.accommodationService.getAccommodation(accommodationIdParam);
 
@@ -131,7 +130,7 @@ public class AccommodationUpdateActivity extends AppCompatActivity {
         binding = ActivityAccommodationUpdateBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        if(price){
+        if (price) {
             counter = fragments.length - 1;
             binding.next.setText("Submit");
         }
@@ -197,6 +196,14 @@ public class AccommodationUpdateActivity extends AppCompatActivity {
                                     }
                                 });
                             }
+                            if (response.code() == 400 && response.errorBody() != null) {
+                                Toast.makeText(AccommodationUpdateActivity.this, "Cannot change data", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(AccommodationUpdateActivity.this, OwnerAccommodationsActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                startActivity(intent);
+                                overridePendingTransition(0, 0);
+                                finish();
+                            }
                         }
 
                         @Override
@@ -241,11 +248,19 @@ public class AccommodationUpdateActivity extends AppCompatActivity {
                                     }
                                 });
                             }
+                            if (response.code() == 400 && response.errorBody() != null) {
+                                Toast.makeText(AccommodationUpdateActivity.this, "Cannot change data", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(AccommodationUpdateActivity.this, OwnerAccommodationsActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                startActivity(intent);
+                                overridePendingTransition(0, 0);
+                                finish();
+                            }
                         }
 
                         @Override
                         public void onFailure(Call<Accommodation> call, Throwable t) {
-
+                            JWTUtils.autoLogout(AccommodationUpdateActivity.this, t);
                         }
                     });
                 }

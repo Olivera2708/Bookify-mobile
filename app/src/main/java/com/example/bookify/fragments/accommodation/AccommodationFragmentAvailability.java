@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.bookify.activities.accommodation.AccommodationUpdateActivity;
 import com.example.bookify.clients.ClientUtils;
 import com.example.bookify.fragments.PriceDecorator;
 import com.example.bookify.R;
@@ -126,6 +127,9 @@ public class AccommodationFragmentAvailability extends MyFragment {
                         if (response.code() == 200) {
                             getPricelist();
                         }
+                        if (response.code() == 400 && response.errorBody() != null) {
+                            Toast.makeText(getActivity(), "Cannot change data", Toast.LENGTH_SHORT).show();
+                        }
                     }
 
                     @Override
@@ -149,12 +153,6 @@ public class AccommodationFragmentAvailability extends MyFragment {
         delete.setOnClickListener(v -> {
             List<CalendarDay> selectedDates = calendarView.getSelectedDates();
             if (selectedDates.size() > 0) {
-                for (CalendarDay cday : selectedDates) {
-                    if (mapa.containsKey(cday)) {
-                        calendarView.removeDecorator(mapa.get(cday));
-                        mapa.remove(cday);
-                    }
-                }
                 PricelistItemDTO dto = new PricelistItemDTO();
                 dto.setPrice(0);
 
@@ -170,7 +168,18 @@ public class AccommodationFragmentAvailability extends MyFragment {
                 call.enqueue(new Callback<PricelistItemDTO>() {
                     @Override
                     public void onResponse(Call<PricelistItemDTO> call, Response<PricelistItemDTO> response) {
-                        getPricelist();
+                        if (response.isSuccessful()) {
+                            for (CalendarDay cday : selectedDates) {
+                                if (mapa.containsKey(cday)) {
+                                    calendarView.removeDecorator(mapa.get(cday));
+                                    mapa.remove(cday);
+                                }
+                            }
+                            getPricelist();
+                        }
+                        if (response.code() == 400 && response.errorBody() != null) {
+                            Toast.makeText(getActivity(), "Cannot change data", Toast.LENGTH_SHORT).show();
+                        }
                     }
 
                     @Override

@@ -15,6 +15,8 @@ import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.loader.content.CursorLoader;
@@ -136,7 +138,7 @@ public class AccommodationFragmentPhotos extends MyFragment {
         }
         LinearLayout ll = view.findViewById(R.id.photosLayout);
         ImageView imageView = new ImageView(requireActivity());
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ll.getWidth(), 500);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 500);
         imageView.setImageBitmap(selectedImageBitmap);
         imageView.setLayoutParams(params);
 
@@ -172,7 +174,6 @@ public class AccommodationFragmentPhotos extends MyFragment {
         ll.addView(containerLayout);
     }
 
-//    Boolean load = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -188,15 +189,20 @@ public class AccommodationFragmentPhotos extends MyFragment {
             chooseImage();
         });
 
+        return view;
+    }
+
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
         if (viewModel.getIsEditMode().getValue()) {
             setImages();
             loadImages();
-//            load = false;
         } else {
             loadImages();
         }
-
-        return view;
     }
 
     private void loadImages() {
@@ -205,7 +211,6 @@ public class AccommodationFragmentPhotos extends MyFragment {
             LinearLayout ll = view.findViewById(R.id.photosLayout);
             ImageView imageView = new ImageView(requireActivity());
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 500);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setImageBitmap(imageDTO.getBitmap());
             imageView.setLayoutParams(params);
 
@@ -257,7 +262,6 @@ public class AccommodationFragmentPhotos extends MyFragment {
                 imageDTOS.removeIf(image -> imageDTO.getBitmap().equals(image.getBitmap()));
             });
 
-//            imageDTOS.add(new ImageDTO(selectedImageBitmap, imagePart));
 
             ll.addView(containerLayout);
         }
@@ -276,7 +280,6 @@ public class AccommodationFragmentPhotos extends MyFragment {
             LinearLayout ll = view.findViewById(R.id.photosLayout);
             ImageView imageView = new ImageView(requireActivity());
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 500);
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setImageBitmap(selectedImageBitmap);
             imageView.setLayoutParams(params);
 
@@ -298,7 +301,6 @@ public class AccommodationFragmentPhotos extends MyFragment {
 
             deleteIcon.setOnClickListener(v -> {
                 ll.removeView(containerLayout);
-//                imageDTOS.removeIf(imageDTO -> selectedImageBitmap.equals(imageDTO.getBitmap()));
 
                 viewModel.getStoredImages().getValue().remove(image);
 
@@ -316,8 +318,6 @@ public class AccommodationFragmentPhotos extends MyFragment {
                     }
                 });
             });
-
-//            imageDTOS.add(new ImageDTO(selectedImageBitmap, null));
 
             ll.addView(containerLayout);
         }

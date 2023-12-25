@@ -19,6 +19,8 @@ import androidx.annotation.Nullable;
 
 import com.example.bookify.R;
 import com.example.bookify.activities.accommodation.AccommodationDetailsActivity;
+import com.example.bookify.activities.accommodation.AccommodationUpdateActivity;
+import com.example.bookify.activities.accommodation.OwnerAccommodationsActivity;
 import com.example.bookify.clients.ClientUtils;
 import com.example.bookify.model.accommodation.AccommodationOwnerDTO;
 
@@ -82,11 +84,22 @@ public class OwnerAccommodationListAdapter extends ArrayAdapter<AccommodationOwn
             type.setText(accommodation.getAccommodationType().toString());
             status.setText(accommodation.getStatusRequest().toString());
             btnEditPrice.setOnClickListener(v -> {
-                // open for price editing
+                Intent intent = new Intent(activity, AccommodationUpdateActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                intent.putExtra("isEditMode", true);
+                intent.putExtra("accommodationId", accommodation.getId());
+                intent.putExtra("price", true);
+                activity.startActivity(intent);
+                activity.overridePendingTransition(0, 0);
             });
 
             btnEditAccommodation.setOnClickListener(v -> {
-                // open for accommodation editing
+                Intent intent = new Intent(activity, AccommodationUpdateActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                intent.putExtra("isEditMode", true);
+                intent.putExtra("accommodationId", accommodation.getId());
+                activity.startActivity(intent);
+                activity.overridePendingTransition(0, 0);
             });
 
             name.setOnClickListener(v -> {

@@ -67,27 +67,16 @@ public class OwnerAccommodationsActivity extends AppCompatActivity {
         };
         getOnBackPressedDispatcher().addCallback(this, callback);
 
-        View accommodationCard = findViewById(R.id.accommodation);
-        Button editButton = accommodationCard.findViewById(R.id.btnEditAccommodation);
-        editButton.setOnClickListener(v -> {
-            Intent intent = new Intent(OwnerAccommodationsActivity.this, AccommodationUpdateActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-            intent.putExtra("isEditMode", true);
-            intent.putExtra("accommodationId", 3L);
-            startActivity(intent);
-            overridePendingTransition(0, 0);
-        });
-
-        Button priceButton = accommodationCard.findViewById(R.id.btnEditPrice);
-        priceButton.setOnClickListener(v -> {
-            Intent intent = new Intent(OwnerAccommodationsActivity.this, AccommodationUpdateActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-            intent.putExtra("isEditMode", true);
-            intent.putExtra("accommodationId", 3L);
-            intent.putExtra("price", true);
-            startActivity(intent);
-            overridePendingTransition(0, 0);
-        });
+//        View accommodationCard = findViewById(R.id.accommodation);
+//        Button editButton = accommodationCard.findViewById(R.id.btnEditAccommodation);
+//        editButton.setOnClickListener(v -> {
+//
+//        });
+//
+//        Button priceButton = accommodationCard.findViewById(R.id.btnEditPrice);
+//        priceButton.setOnClickListener(v -> {
+//
+//        });
         getData();
 
     }
@@ -104,7 +93,7 @@ public class OwnerAccommodationsActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<AccommodationOwnerDTO>> call, Throwable t) {
-
+                JWTUtils.autoLogout(OwnerAccommodationsActivity.this, t);
             }
         });
     }
