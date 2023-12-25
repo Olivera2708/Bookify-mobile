@@ -125,7 +125,7 @@
                     android:layout_marginHorizontal="14dp"
                     android:layout_gravity="center"
                     android:background="@drawable/all_rounded"
-                    android:backgroundTint="@color/caribbean"/>
+                    android:backgroundTint="?attr/iconTint"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -282,6 +282,7 @@
                         android:layout_height="70dp"
                         android:layout_centerHorizontal="true"
                         android:background="@drawable/person"
+                        android:backgroundTint="@color/light_grey"
                         android:scaleType="centerCrop" />
                 </androidx.cardview.widget.CardView>
 
