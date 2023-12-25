@@ -66,17 +66,6 @@ public class OwnerAccommodationsActivity extends AppCompatActivity {
             }
         };
         getOnBackPressedDispatcher().addCallback(this, callback);
-
-//        View accommodationCard = findViewById(R.id.accommodation);
-//        Button editButton = accommodationCard.findViewById(R.id.btnEditAccommodation);
-//        editButton.setOnClickListener(v -> {
-//
-//        });
-//
-//        Button priceButton = accommodationCard.findViewById(R.id.btnEditPrice);
-//        priceButton.setOnClickListener(v -> {
-//
-//        });
         getData();
 
     }
