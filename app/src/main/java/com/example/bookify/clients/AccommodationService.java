@@ -10,6 +10,9 @@ import com.example.bookify.model.PricelistItemDTO;
 import com.example.bookify.enumerations.PricePer;
 import com.example.bookify.model.accommodation.AccommodationDetailDTO;
 import com.example.bookify.model.FilterDTO;
+import com.example.bookify.model.accommodation.AccommodationRequestDTO;
+import com.example.bookify.model.accommodation.SearchResponseDTO;
+
 import com.example.bookify.model.accommodation.AccommodationOwnerDTO;
 import com.example.bookify.model.accommodation.SearchResponseDTO;
 
@@ -18,6 +21,7 @@ import java.util.List;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+
 import java.util.List;
 
 import okhttp3.ResponseBody;
@@ -41,11 +45,11 @@ public interface AccommodationService {
     })
     @GET("accommodations/search")
     Call<SearchResponseDTO> getForSearch(@Query("location") String location,
-                                                    @Query("begin") String dateBegin,
-                                                    @Query("end") String dateEnd,
-                                                    @Query("persons") int persons,
-                                                    @Query("page") int page,
-                                                    @Query("size") int size);
+                                         @Query("begin") String dateBegin,
+                                         @Query("end") String dateEnd,
+                                         @Query("persons") int persons,
+                                         @Query("page") int page,
+                                         @Query("size") int size);
 
     @Headers({
             "User-Agent: Mobile-Android",
@@ -149,10 +153,32 @@ public interface AccommodationService {
     })
     @GET("accommodations/price")
     Call<Double> getTotalPrice(@Query("id") Long id,
-                             @Query("begin") String dateBegin,
-                             @Query("end") String dateEnd,
-                             @Query("pricePer") PricePer pricePer,
-                             @Query("persons") int persons);
+                               @Query("begin") String dateBegin,
+                               @Query("end") String dateEnd,
+                               @Query("pricePer") PricePer pricePer,
+                               @Query("persons") int persons);
+    
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("accommodations/requests")
+    Call<List<AccommodationRequestDTO>> getRequests();
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @PUT("accommodations/approve/{accommodationId}")
+    Call<ResponseBody> approveAccommodation(@Path("accommodationId") Long accommodationId);
+
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @PUT("accommodations/reject/{accommodationId}")
+    Call<ResponseBody> rejectAccommodation(@Path("accommodationId") Long accommodationId);
 
     @Headers({
             "User-Agent: Mobile-Android",

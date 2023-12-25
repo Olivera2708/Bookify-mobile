@@ -1,14 +1,30 @@
 package com.example.bookify.fragments.accommodation;
 
+import android.app.Activity;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.example.bookify.R;
+import com.example.bookify.adapters.pagers.data.AccommodationRequestsAdapter;
+import com.example.bookify.clients.ClientUtils;
+import com.example.bookify.enumerations.AccommodationStatusRequest;
+import com.example.bookify.model.accommodation.AccommodationRequestDTO;
+import com.example.bookify.utils.JWTUtils;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -17,6 +33,10 @@ import com.example.bookify.R;
  */
 public class EditedAccommodationsFragment extends Fragment {
 
+    private List<AccommodationRequestDTO> accommodationRequestList;
+    private AccommodationRequestsAdapter adapter;
+    private ListView editedAccommodations;
+    private Activity activity;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -29,7 +49,10 @@ public class EditedAccommodationsFragment extends Fragment {
     public EditedAccommodationsFragment() {
         // Required empty public constructor
     }
-
+    public EditedAccommodationsFragment(Activity activity) {
+        // Required empty public constructor
+        this.activity = activity;
+    }
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -44,6 +67,12 @@ public class EditedAccommodationsFragment extends Fragment {
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
+    public static EditedAccommodationsFragment newInstance(Activity activity){
+        EditedAccommodationsFragment fragment = new EditedAccommodationsFragment(activity);
+        Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
     }
@@ -62,5 +91,32 @@ public class EditedAccommodationsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_edited_accommodations, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        editedAccommodations = view.findViewById(R.id.editedAccommodationList);
+        getRequests();
+    }
+
+    private void getRequests(){
+        Call<List<AccommodationRequestDTO>> call = ClientUtils.accommodationService.getRequests();
+        call.enqueue(new Callback<List<AccommodationRequestDTO>>() {
+            @Override
+            public void onResponse(Call<List<AccommodationRequestDTO>> call, Response<List<AccommodationRequestDTO>> response) {
+                if(response.body() != null && response.code() == 200){
+                    accommodationRequestList = response.body();
+                    accommodationRequestList.removeIf(s -> !s.getStatusRequest().equals(AccommodationStatusRequest.EDITED));
+                    adapter = new AccommodationRequestsAdapter(requireActivity(), accommodationRequestList);
+                    editedAccommodations.setAdapter(adapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<AccommodationRequestDTO>> call, Throwable t) {
+                JWTUtils.autoLogout((AppCompatActivity) activity, t);
+            }
+        });
     }
 }
