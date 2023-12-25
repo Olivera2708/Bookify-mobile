@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.auth0.android.jwt.JWT;
+import com.example.bookify.R;
 import com.example.bookify.activities.LoginActivity;
 import com.example.bookify.activities.accommodation.ResultsActivity;
 import com.example.bookify.model.user.UserJWT;

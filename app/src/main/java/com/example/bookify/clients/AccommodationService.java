@@ -3,7 +3,10 @@ package com.example.bookify.clients;
 import com.example.bookify.enumerations.PricePer;
 import com.example.bookify.model.accommodation.AccommodationDetailDTO;
 import com.example.bookify.model.FilterDTO;
+import com.example.bookify.model.accommodation.AccommodationOwnerDTO;
 import com.example.bookify.model.accommodation.SearchResponseDTO;
+
+import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -73,4 +76,10 @@ public interface AccommodationService {
                              @Query("pricePer") PricePer pricePer,
                              @Query("persons") int persons);
 
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("accommodations/{ownerId}")
+    Call<List<AccommodationOwnerDTO>> getOwnerAccommodations(@Path("ownerId") Long id);
 }
