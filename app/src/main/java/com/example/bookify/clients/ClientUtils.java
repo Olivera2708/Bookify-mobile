@@ -63,7 +63,6 @@ public class ClientUtils {
      * */
 
     public static Retrofit retrofit = null;
-//>>>>>>> e111e6ed0ab3e8c7f085547d23203d0d9aa69f4b
 
     /*
      * Definisemo konkretnu instancu servisa na intnerntu sa kojim
