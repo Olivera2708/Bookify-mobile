@@ -23,43 +23,17 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <ScrollView
+        <ListView
+            android:id="@+id/resultList"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:fillViewport="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <LinearLayout
-                android:paddingVertical="15dp"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
-
-                <include
-                    android:id="@+id/acco1"
-                    layout="@layout/accommodation_request_guest"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp" />
-
-                <include
-                    android:id="@+id/acco2"
-                    layout="@layout/accommodation_request_guest"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp" />
-
-                <include
-                    android:id="@+id/acco3"
-                    layout="@layout/accommodation_request_guest"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="0dp" />
-
-            </LinearLayout>
-        </ScrollView>
+            android:layout_height="wrap_content"
+            android:divider="@null"
+            android:dividerHeight="20dp"
+            android:paddingTop="12dp"
+            app:layout_constrainedHeight="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="0dp"
+            tools:listitem="@layout/accommodation_request_guest" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

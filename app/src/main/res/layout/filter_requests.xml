@@ -141,6 +141,13 @@
                 android:layout_height="30dp"
                 android:layout_weight="1"
                 android:text="@string/rejected" />
+
+            <CheckBox
+                android:id="@+id/canceled"
+                android:layout_width="170dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:text="@string/canceled" />
         </LinearLayout>
     </LinearLayout>
 
