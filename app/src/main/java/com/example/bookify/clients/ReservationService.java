@@ -61,25 +61,29 @@ public interface ReservationService {
                                                            @Query("endDate") String endDate,
                                                            @Query("statuses") Status[] statuses);
 
-//
-//    getAllRequestsForOwner(userId: number): Observable<ReservationDTO[]> {
-//        return this.httpClient.get<ReservationDTO[]>(environment.apiHost + "reservations/owner" + "?userId=" + userId);
-//    }
-//
-//    getAccommodationMapForOwner(userId: number): Observable<any[]> {
-//        return this.httpClient.get<any[]>(environment.apiHost + "reservations/accommodations/owner" + "?userId=" + userId);
-//    }
-//
-//    deleteRequest(reservationId: number): Observable<string> {
-//        return this.httpClient.put(environment.apiHost + "reservations/delete/" + reservationId, {}, {responseType:"text"});
-//    }
-//
-//    getFilteredRequestsForOwner(userId: number, accommodationId: number, dateBegin: Date, dateEnd: Date, statuses: string[]): Observable<ReservationDTO[]> {
-//        return this.httpClient.get<ReservationDTO[]>(environment.apiHost + "reservations/owner/filter" +
-//                "?userId=" + userId +
-//                "&accommodationId=" + accommodationId +
-//                "&startDate=" + (moment(dateBegin)).format('DD.MM.YYYY') +
-//                "&endDate=" + (moment(dateEnd)).format('DD.MM.YYYY') +
-//                "&statuses=" + statuses);
-//    }
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("reservations/owner")
+    Call<List<ReservationDTO>> getAllRequestsForOwner(@Query("userId") Long ownerId);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("reservations/accommodations/owner")
+    Call<List<Object[]>> getAccommodationNamesOwner(@Query("userId") Long userId);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("reservations/owner/filter")
+    Call<List<ReservationDTO>> getFilteredRequestsForOwner(@Query("userId") Long userId,
+                                                           @Query("accommodationId") Long accommodationId,
+                                                           @Query("startDate") String startDate,
+                                                           @Query("endDate") String endDate,
+                                                           @Query("statuses") Status[] statuses);
+
 }
