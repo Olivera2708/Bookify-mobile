@@ -2,10 +2,13 @@ package com.example.bookify.fragments.reservation;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
 
@@ -27,6 +30,7 @@ import com.example.bookify.activities.accommodation.AccommodationDetailsActivity
 import com.example.bookify.adapters.data.GuestRequestsListAdapter;
 import com.example.bookify.adapters.pagers.AccommodationListAdapter;
 import com.example.bookify.clients.ClientUtils;
+import com.example.bookify.model.DropdownItem;
 import com.example.bookify.model.accommodation.AccommodationBasicDTO;
 import com.example.bookify.model.accommodation.SearchResponseDTO;
 import com.example.bookify.model.reservation.ReservationDTO;
@@ -38,10 +42,12 @@ import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClic
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -134,6 +140,7 @@ public class RequestFragmentGuest extends Fragment {
             @Override
             public void onFailure(Call<List<ReservationDTO>> call, Throwable t) {
                 Log.d("Error", "Reservation error");
+                JWTUtils.autoLogout((AppCompatActivity) getActivity(), t);
             }
         });
     }
@@ -149,15 +156,14 @@ public class RequestFragmentGuest extends Fragment {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.filter_requests);
 
-        String[] sort = new String[] {"Test Apartment", "Cool hotel", "Babo's house"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.dropdown_item, sort);
+        ArrayAdapter<DropdownItem> adapter = new ArrayAdapter<>(getActivity(), R.layout.dropdown_item, getAccommodations());
         AutoCompleteTextView autoCompleteTextView = dialog.findViewById(R.id.filled_exposed);
         autoCompleteTextView.setAdapter(adapter);
-        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //code when something is selected
-            }
+        autoCompleteTextView.setOnItemClickListener((parent, view, position, id) -> {
+            DropdownItem selectedItem = (DropdownItem) parent.getItemAtPosition(position);
+            Long selectedId = selectedItem.getId();
+
+            Log.d("Testiranje", selectedId.toString());
         });
 
         Button editDate = dialog.findViewById(R.id.editButton);
@@ -188,5 +194,30 @@ public class RequestFragmentGuest extends Fragment {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
+    }
+
+    private List<DropdownItem> getAccommodations(){
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("sharedPref", Context.MODE_PRIVATE);
+        Long guestId = sharedPreferences.getLong(JWTUtils.USER_ID, -1);
+        List<DropdownItem> itemList = new ArrayList<>();
+        Call<List<Object[]>> call = ClientUtils.reservationService.getAccommodationNamesGuest(guestId);
+        call.enqueue(new Callback<List<Object[]>>() {
+            @Override
+            public void onResponse(Call<List<Object[]>> call, Response<List<Object[]>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    for (Object[] o : response.body()){
+                        double doubleValue = Double.parseDouble(o[0].toString());
+                        long longValue = (long) doubleValue;
+                        itemList.add(new DropdownItem(o[1].toString(), longValue));
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<List<Object[]>> call, Throwable t) {
+                Log.d("AccommodationNames", "Accommodation names not here");
+                JWTUtils.autoLogout((AppCompatActivity) getActivity(), t);
+            }
+        });
+        return itemList;
     }
 }

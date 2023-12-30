@@ -21,7 +21,7 @@
         android:id="@+id/textInputLayout"
         style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
         android:layout_width="230dp"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="30dp">
 
         <AutoCompleteTextView

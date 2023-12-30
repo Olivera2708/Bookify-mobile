@@ -1,10 +1,12 @@
 package com.example.bookify.clients;
 
+import com.example.bookify.enumerations.Status;
 import com.example.bookify.model.accommodation.SearchResponseDTO;
 import com.example.bookify.model.reservation.ReservationDTO;
 import com.example.bookify.model.reservation.ReservationRequestDTO;
 
 import java.util.List;
+import java.util.Objects;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -41,19 +43,24 @@ public interface ReservationService {
     @PUT("reservations/delete/{reservationId}")
     Call<ResponseBody> deleteRequest(@Path("reservationId") Long reservationId);
 
-//
-//    getAccommodationMapForGuest(userId: number): Observable<any[]> {
-//        return this.httpClient.get<any[]>(environment.apiHost + "reservations/accommodations/guest" + "?userId=" + userId);
-//    }
-//
-//    getFilteredRequestsForGuest(userId: number, accommodationId: number, dateBegin: Date, dateEnd: Date, statuses: string[]): Observable<ReservationDTO[]> {
-//        return this.httpClient.get<ReservationDTO[]>(environment.apiHost + "reservations/guest/filter" +
-//                "?userId=" + userId +
-//                "&accommodationId=" + accommodationId +
-//                "&startDate=" + (moment(dateBegin)).format('DD.MM.YYYY') +
-//                "&endDate=" + (moment(dateEnd)).format('DD.MM.YYYY') +
-//                "&statuses=" + statuses);
-//    }
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("reservations/accommodations/guest")
+    Call<List<Object[]>> getAccommodationNamesGuest(@Query("userId") Long userId);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("reservations/guest/filter")
+    Call<List<ReservationDTO>> getFilteredRequestsForGuest(@Query("userId") Long userId,
+                                                           @Query("accommodationId") Long accommodationId,
+                                                           @Query("startDate") String startDate,
+                                                           @Query("endDate") String endDate,
+                                                           @Query("statuses") Status[] statuses);
+
 //
 //    getAllRequestsForOwner(userId: number): Observable<ReservationDTO[]> {
 //        return this.httpClient.get<ReservationDTO[]>(environment.apiHost + "reservations/owner" + "?userId=" + userId);

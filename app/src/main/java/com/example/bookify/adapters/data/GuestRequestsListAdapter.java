@@ -1,5 +1,7 @@
 package com.example.bookify.adapters.data;
 
+import static android.app.PendingIntent.getActivity;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -17,12 +19,14 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bookify.R;
 import com.example.bookify.activities.accommodation.AccommodationDetailsActivity;
 import com.example.bookify.clients.ClientUtils;
 import com.example.bookify.model.accommodation.AccommodationBasicDTO;
 import com.example.bookify.model.reservation.ReservationDTO;
+import com.example.bookify.utils.JWTUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -112,6 +116,7 @@ public class GuestRequestsListAdapter extends ArrayAdapter<ReservationDTO> {
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         Log.d("Image", "Basic accommodation image");
+                        JWTUtils.autoLogout((AppCompatActivity) getContext(), t);
                     }
                 });
             }
@@ -134,6 +139,7 @@ public class GuestRequestsListAdapter extends ArrayAdapter<ReservationDTO> {
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Log.d("Delete", "Error in deleting");
+                JWTUtils.autoLogout((AppCompatActivity) getContext(), t);
             }
         });
     }

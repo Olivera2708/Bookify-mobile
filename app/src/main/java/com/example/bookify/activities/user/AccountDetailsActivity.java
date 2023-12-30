@@ -159,7 +159,6 @@ public class AccountDetailsActivity extends AppCompatActivity {
         call.enqueue(new Callback<UserDetailsDTO>() {
             @Override
             public void onResponse(Call<UserDetailsDTO> call, Response<UserDetailsDTO> response) {
-                if (response.body() == null) return;
                 userDetails = response.body();
                 binding.accountInformation.email.setText(userDetails.getEmail());
                 binding.userInformation.firstName.setText(userDetails.getFirstName());
@@ -268,7 +267,6 @@ public class AccountDetailsActivity extends AppCompatActivity {
                         Snackbar.make(binding.getRoot(), "User information successfully updated!", Snackbar.LENGTH_LONG)
                                 .setAnchorView(binding.bottomNavigaiton).show();
                         setFieldsEnabledStatus(false);
-                        return;
                     }
                     Snackbar.make(binding.getRoot(), "Something went wrong!", Snackbar.LENGTH_LONG)
                             .setAnchorView(binding.bottomNavigaiton).show();
@@ -317,7 +315,6 @@ public class AccountDetailsActivity extends AppCompatActivity {
             changePasswordCall.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    if(response.body() == null) return;
                     String message = null;
                     try {
                         message = response.body().string();
@@ -519,7 +516,6 @@ public class AccountDetailsActivity extends AppCompatActivity {
                 if(response.code() == 400){
                     try {
                         Snackbar.make(binding.getRoot(), response.errorBody().string(), Snackbar.LENGTH_LONG).setAnchorView(binding.bottomNavigaiton).show();
-                        return;
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
