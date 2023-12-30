@@ -68,6 +68,7 @@ public class RequestFragmentOwner extends Fragment {
 
     Long dateStart;
     Long dateEnd;
+    Status[] saveStatuses = {Status.PENDING, Status.ACCEPTED, Status.CANCELED, Status.REJECTED};
 
     public RequestFragmentOwner() {
         // Required empty public constructor
@@ -162,6 +163,8 @@ public class RequestFragmentOwner extends Fragment {
             accommodationId[0] = selectedItem.getId();
         });
 
+        loadStatuses(dialog);
+
         Button editDate = dialog.findViewById(R.id.editButton);
         if (dateStart == null || dateEnd == null) {
             dateStart = MaterialDatePicker.thisMonthInUtcMilliseconds();
@@ -239,6 +242,9 @@ public class RequestFragmentOwner extends Fragment {
                     public void onResponse(Call<List<ReservationDTO>> call, Response<List<ReservationDTO>> response) {
                         if (response.isSuccessful() && response.body() != null) {
                             showResults(response.body());
+                            dateStart = null;
+                            dateEnd = null;
+                            saveStatuses = new Status[]{Status.PENDING, Status.ACCEPTED, Status.CANCELED, Status.REJECTED};
                             dialog.cancel();
                         }
                     }
@@ -256,6 +262,24 @@ public class RequestFragmentOwner extends Fragment {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
+    }
+
+    private void loadStatuses(BottomSheetDialog dialog){
+        CheckBox pending = dialog.findViewById(R.id.pending);
+        CheckBox accepted = dialog.findViewById(R.id.accepted);
+        CheckBox rejected = dialog.findViewById(R.id.rejected);
+        CheckBox canceled = dialog.findViewById(R.id.canceled);
+
+        for (Status s : saveStatuses){
+            if (s == Status.ACCEPTED)
+                accepted.setChecked(true);
+            if (s == Status.PENDING)
+                pending.setChecked(true);
+            if (s == Status.REJECTED)
+                rejected.setChecked(true);
+            if (s == Status.CANCELED)
+                canceled.setChecked(true);
+        }
     }
 
     private Status[] getStatuses(BottomSheetDialog dialog){
@@ -281,6 +305,8 @@ public class RequestFragmentOwner extends Fragment {
         }
         if (canceled.isChecked())
             statuses[index] = Status.CANCELED;
+
+        saveStatuses = statuses;
 
         return statuses;
     }
