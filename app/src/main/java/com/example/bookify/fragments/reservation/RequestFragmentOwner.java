@@ -66,6 +66,9 @@ public class RequestFragmentOwner extends Fragment {
     private OwnerRequestsListAdapter adapter;
     private ListView listView;
 
+    Long dateStart;
+    Long dateEnd;
+
     public RequestFragmentOwner() {
         // Required empty public constructor
     }
@@ -160,12 +163,21 @@ public class RequestFragmentOwner extends Fragment {
         });
 
         Button editDate = dialog.findViewById(R.id.editButton);
+        if (dateStart == null || dateEnd == null) {
+            dateStart = MaterialDatePicker.thisMonthInUtcMilliseconds();
+            dateEnd = MaterialDatePicker.todayInUtcMilliseconds();
+        }
+        else{
+            String startDate = new SimpleDateFormat("dd.MM.yyyy.", Locale.getDefault()).format(new Date(dateStart));
+            String endDate = new SimpleDateFormat("dd.MM.yyyy.", Locale.getDefault()).format(new Date(dateEnd));
+            editDate.setText(startDate + " - " + endDate);
+        }
         editDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 MaterialDatePicker<Pair<Long, Long>> materialDatePicker = MaterialDatePicker.Builder.dateRangePicker().setSelection(new Pair<>(
-                        MaterialDatePicker.thisMonthInUtcMilliseconds(),
-                        MaterialDatePicker.todayInUtcMilliseconds()
+                        dateStart,
+                        dateEnd
                 )).build();
 
                 materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Pair<Long, Long>>() {
@@ -173,6 +185,9 @@ public class RequestFragmentOwner extends Fragment {
                     public void onPositiveButtonClick(Pair<Long, Long> selection) {
                         String startDate = new SimpleDateFormat("dd.MM.yyyy.", Locale.getDefault()).format(new Date(selection.first));
                         String endDate = new SimpleDateFormat("dd.MM.yyyy.", Locale.getDefault()).format(new Date(selection.second));
+
+                        dateStart = selection.first;
+                        dateEnd = selection.second;
 
                         editDate.setText(startDate + " - " + endDate);
                     }
@@ -188,7 +203,7 @@ public class RequestFragmentOwner extends Fragment {
             public void onClick(View v) {
                 SharedPreferences sharedPreferences = getContext().getSharedPreferences("sharedPref", Context.MODE_PRIVATE);
                 Long ownerId = sharedPreferences.getLong(JWTUtils.USER_ID, -1);
-                try {
+                if (accommodationId[0] != null && !editDate.getText().equals("")) {
                     Call<List<ReservationDTO>> call = ClientUtils.reservationService.getFilteredRequestsForOwner(ownerId, accommodationId[0], editDate.getText().toString().split(" - ")[0], editDate.getText().toString().split(" - ")[1], getStatuses(dialog));
                     call.enqueue(new Callback<List<ReservationDTO>>() {
                         @Override
@@ -206,7 +221,7 @@ public class RequestFragmentOwner extends Fragment {
                         }
                     });
                 }
-                catch (Exception e){
+                else {
                     Toast.makeText(getActivity(), "Please select accommodation and date range", Toast.LENGTH_SHORT).show();
                 }
             }
