@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <RatingBar
-        android:id="@+id/ratings"
+        android:id="@+id/ratingsAccommodation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:progressTint="?attr/colorOnBackground"
@@ -35,9 +35,10 @@
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ratings">
+        app:layout_constraintTop_toBottomOf="@+id/ratingsAccommodation">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/accommodationComment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:ems="10"
@@ -49,6 +50,18 @@
             android:scrollbars="vertical" />
     </com.google.android.material.textfield.TextInputLayout>
 
+
+    <Button
+        android:id="@+id/btnSendAccommodation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="@color/caribbean"
+        android:text="@string/send"
+        android:textColor="@color/off_white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
+
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
@@ -58,10 +71,10 @@
         android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
+        app:layout_constraintTop_toBottomOf="@+id/btnSendAccommodation" />
 
     <RatingBar
-        android:id="@+id/ratings2"
+        android:id="@+id/ratingsOwner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:progressTint="?attr/colorOnBackground"
@@ -77,9 +90,10 @@
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ratings2">
+        app:layout_constraintTop_toBottomOf="@+id/ratingsOwner">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/ownerComment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:ems="10"
@@ -92,6 +106,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
+        android:id="@+id/btnSendOwner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"

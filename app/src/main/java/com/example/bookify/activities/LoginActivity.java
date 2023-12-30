@@ -42,7 +42,6 @@ public class LoginActivity extends AppCompatActivity {
             Uri data = intent2.getData();
             if (data != null) {
                 String uuid = data.getQueryParameter("uuid");
-                // Perform actions based on the userId
             }
         }
 

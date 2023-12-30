@@ -32,7 +32,7 @@ public class RequestsActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("sharedPref", MODE_PRIVATE);
         String userType = sharedPreferences.getString("userType", "");
 
-        if (userType.equals("guest")) {
+        if (userType.equals("GUEST")) {
             ReservationRequestsViewPagerGuestAdapter reportsViewPagerAdapter = new ReservationRequestsViewPagerGuestAdapter(this);
             viewPager2.setAdapter(reportsViewPagerAdapter);
         }
