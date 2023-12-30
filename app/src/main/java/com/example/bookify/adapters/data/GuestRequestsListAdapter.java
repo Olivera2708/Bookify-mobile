@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -89,7 +90,7 @@ public class GuestRequestsListAdapter extends ArrayAdapter<ReservationDTO> {
             cancel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //cancel
+                    deleteRequest(request.getId(), position);
                 }
             });
 
@@ -115,46 +116,25 @@ public class GuestRequestsListAdapter extends ArrayAdapter<ReservationDTO> {
                 });
             }
         }
-
-//        if(accommodation != null){
-//            name.setText(accommodation.getName());
-//            address.setText(accommodation.getAddress().toString());
-//            price.setText(String.valueOf(accommodation.getTotalPrice()));
-//            pricePer.setText(accommodation.getPriceOne() + " per " + accommodation.getPricePer().toString().toLowerCase());
-//            start.setRating(accommodation.getAvgRating());
-//            type.setText(accommodation.getType().toString().substring(0, 1) + accommodation.getType().toString().substring(1, accommodation.getType().toString().length()).toLowerCase());
-//
-//            details.setOnClickListener(v -> {
-//                Log.i("Test", "Otvori aaccommodation broj " + accommodation.getId());
-//                Intent intent = new Intent(activity, AccommodationDetailsActivity.class);
-//                intent.putExtra("id", accommodation.getId());
-//                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-//                activity.startActivity(intent);
-//                activity.overridePendingTransition(0, 0);
-//            });
-//
-//            if (imageMap.containsKey(accommodation.getImageId())){
-//                image.setImageBitmap(imageMap.get(accommodation.getImageId()));
-//            }
-//            else {
-//                Call<ResponseBody> call = ClientUtils.accommodationService.getImage(accommodation.getImageId());
-//                call.enqueue(new Callback<ResponseBody>() {
-//                    @Override
-//                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-//                        if (response.isSuccessful() && response.body() != null) {
-//                            Bitmap bitmap = BitmapFactory.decodeStream(response.body().byteStream());
-//                            imageMap.put(accommodation.getImageId(), bitmap);
-//                            image.setImageBitmap(bitmap);
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-//                        Log.d("Image", "Basic accommodation image");
-//                    }
-//                });
-//            }
-//        }
         return convertView;
+    }
+
+    private void deleteRequest(Long id, int position){
+        Call<ResponseBody> call = ClientUtils.reservationService.deleteRequest(id);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(getContext(), "Request deleted", Toast.LENGTH_SHORT).show();
+                    requests.remove(position);
+                    notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.d("Delete", "Error in deleting");
+            }
+        });
     }
 }
