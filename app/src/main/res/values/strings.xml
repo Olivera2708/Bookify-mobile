@@ -67,6 +67,7 @@
     <string name="min_price">Min price</string>
     <string name="max_price">Max price</string>
     <string name="canceled">Canceled</string>
+    <string name="restart">Restart</string>
 
     <string name="you_not_internet">You are not connected to the Internet</string>
     <string name="you_internet">You are connected to the Internet</string>

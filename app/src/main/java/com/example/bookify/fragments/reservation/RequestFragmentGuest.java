@@ -23,13 +23,16 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.bookify.R;
 import com.example.bookify.activities.accommodation.AccommodationDetailsActivity;
 import com.example.bookify.adapters.data.GuestRequestsListAdapter;
 import com.example.bookify.adapters.pagers.AccommodationListAdapter;
 import com.example.bookify.clients.ClientUtils;
+import com.example.bookify.enumerations.Status;
 import com.example.bookify.model.DropdownItem;
 import com.example.bookify.model.accommodation.AccommodationBasicDTO;
 import com.example.bookify.model.accommodation.SearchResponseDTO;
@@ -121,7 +124,6 @@ public class RequestFragmentGuest extends Fragment {
                 showBottomDialog();
             }
         });
-
     }
 
     private void getData(){
@@ -156,14 +158,13 @@ public class RequestFragmentGuest extends Fragment {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.filter_requests);
 
+        final Long[] accommodationId = new Long[1];
         ArrayAdapter<DropdownItem> adapter = new ArrayAdapter<>(getActivity(), R.layout.dropdown_item, getAccommodations());
         AutoCompleteTextView autoCompleteTextView = dialog.findViewById(R.id.filled_exposed);
         autoCompleteTextView.setAdapter(adapter);
         autoCompleteTextView.setOnItemClickListener((parent, view, position, id) -> {
             DropdownItem selectedItem = (DropdownItem) parent.getItemAtPosition(position);
-            Long selectedId = selectedItem.getId();
-
-            Log.d("Testiranje", selectedId.toString());
+            accommodationId[0] = selectedItem.getId();
         });
 
         Button editDate = dialog.findViewById(R.id.editButton);
@@ -189,11 +190,92 @@ public class RequestFragmentGuest extends Fragment {
             }
         });
 
+        Button save = dialog.findViewById(R.id.save);
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences sharedPreferences = getContext().getSharedPreferences("sharedPref", Context.MODE_PRIVATE);
+                Long guestId = sharedPreferences.getLong(JWTUtils.USER_ID, -1);
+                try {
+                    Call<List<ReservationDTO>> call = ClientUtils.reservationService.getFilteredRequestsForGuest(guestId, accommodationId[0], editDate.getText().toString().split(" - ")[0], editDate.getText().toString().split(" - ")[1], getStatuses(dialog));
+                    call.enqueue(new Callback<List<ReservationDTO>>() {
+                        @Override
+                        public void onResponse(Call<List<ReservationDTO>> call, Response<List<ReservationDTO>> response) {
+                            if (response.isSuccessful() && response.body() != null) {
+                                showResults(response.body());
+                                dialog.cancel();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<List<ReservationDTO>> call, Throwable t) {
+                            Log.d("Save", "Error");
+                            JWTUtils.autoLogout((AppCompatActivity) getActivity(), t);
+                        }
+                    });
+                }
+                catch (Exception e){
+                    Toast.makeText(getActivity(), "Please select accommodation and date range", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        Button remove = dialog.findViewById(R.id.remove);
+        remove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences sharedPreferences = getContext().getSharedPreferences("sharedPref", Context.MODE_PRIVATE);
+                Long guestId = sharedPreferences.getLong(JWTUtils.USER_ID, -1);
+                Call<List<ReservationDTO>> call = ClientUtils.reservationService.getAllRequestsForGuest(guestId);
+                call.enqueue(new Callback<List<ReservationDTO>>() {
+                    @Override
+                    public void onResponse(Call<List<ReservationDTO>> call, Response<List<ReservationDTO>> response) {
+                        if (response.isSuccessful() && response.body() != null) {
+                            showResults(response.body());
+                            dialog.cancel();
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<List<ReservationDTO>> call, Throwable t) {
+                        Log.d("RemoveAll", "Error");
+                        JWTUtils.autoLogout((AppCompatActivity) getActivity(), t);
+                    }
+                });
+            }
+        });
+
         dialog.show();
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
+    }
+
+    private Status[] getStatuses(BottomSheetDialog dialog){
+        CheckBox pending = dialog.findViewById(R.id.pending);
+        CheckBox accepted = dialog.findViewById(R.id.accepted);
+        CheckBox rejected = dialog.findViewById(R.id.rejected);
+        CheckBox canceled = dialog.findViewById(R.id.canceled);
+
+        Status[] statuses = new Status[4];
+        int index = 0;
+
+        if (pending.isChecked()) {
+            statuses[index] = Status.PENDING;
+            index++;
+        }
+        if (accepted.isChecked()) {
+            statuses[index] = Status.ACCEPTED;
+            index++;
+        }
+        if (rejected.isChecked()) {
+            statuses[index] = Status.REJECTED;
+            index++;
+        }
+        if (canceled.isChecked())
+            statuses[index] = Status.CANCELED;
+
+        return statuses;
     }
 
     private List<DropdownItem> getAccommodations(){

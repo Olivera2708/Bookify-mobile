@@ -68,7 +68,7 @@
         android:background="@android:color/transparent"
         android:drawableRight="@drawable/edit"
         android:textColor="?attr/colorOnSecondary"
-        android:text="12.5.2023. - 16.5.2023."
+        android:hint="Date from - Date to"
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="@+id/calendarIcon"
         app:layout_constraintStart_toEndOf="@+id/calendarIcon"
@@ -117,14 +117,16 @@
                 android:layout_width="170dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
-                android:text="@string/pending" />
+                android:text="@string/pending"
+                android:checked="true"/>
 
             <CheckBox
                 android:id="@+id/accepted"
                 android:layout_width="170dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
-                android:text="@string/accepted" />
+                android:text="@string/accepted"
+                android:checked="true"/>
         </LinearLayout>
 
         <LinearLayout
@@ -140,14 +142,16 @@
                 android:layout_width="170dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
-                android:text="@string/rejected" />
+                android:text="@string/rejected"
+                android:checked="true"/>
 
             <CheckBox
                 android:id="@+id/canceled"
                 android:layout_width="170dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
-                android:text="@string/canceled" />
+                android:text="@string/canceled"
+                android:checked="true"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -168,7 +172,7 @@
             android:layout_marginStart="30dp"
             android:layout_weight="1"
             android:backgroundTint="@color/battleship"
-            android:text="@string/remove_all"
+            android:text="@string/restart"
             android:textColor="@color/charcoal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/save"
@@ -183,7 +187,7 @@
             android:layout_marginEnd="30dp"
             android:layout_weight="1"
             android:backgroundTint="@color/caribbean"
-            android:text="@string/save"
+            android:text="@string/filter"
             android:textColor="@color/off_white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
