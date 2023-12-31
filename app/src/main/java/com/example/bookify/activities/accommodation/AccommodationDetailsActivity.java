@@ -1,15 +1,20 @@
 package com.example.bookify.activities.accommodation;
 
+import static java.security.AccessController.getContext;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.util.Pair;
 
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -89,10 +94,12 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
         getData(id);
 
         Button favorite = findViewById(R.id.favorite);
+//        checkIfInFavorites(favorite);
         favorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addToFavorites(favorite);
+                if (favorite.getTag().equals("empty"))
+                    addToFavorites(favorite);
             }
         });
 
@@ -412,6 +419,27 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
         return p1;
     }
 
+    private void checkIfInFavorites(Button favorite){
+        SharedPreferences sharedPreferences = this.getSharedPreferences("sharedPref", Context.MODE_PRIVATE);
+        Long guestId = sharedPreferences.getLong(JWTUtils.USER_ID, -1);
+        Call<Boolean> call = ClientUtils.accommodationService.checkIfInFavorites(guestId, accommodation.getId());
+        call.enqueue(new Callback<Boolean>() {
+            @Override
+            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+//                if (response.isSuccessful() && response.body() != null) {
+//                    if (response.body())
+//                        favorite.setBackgroundResource(R.drawable.favorite);
+//                }
+            }
+
+            @Override
+            public void onFailure(Call<Boolean> call, Throwable t) {
+                Log.d("LoadingFavorites", "Not loaded");
+                JWTUtils.autoLogout(AccommodationDetailsActivity.this, t);
+            }
+        });
+    }
+
     private void addToFavorites(Button favorite){
         SharedPreferences sharedPreferences = this.getSharedPreferences("sharedPref", Context.MODE_PRIVATE);
         Long guestId = sharedPreferences.getLong(JWTUtils.USER_ID, -1);
@@ -421,6 +449,7 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     favorite.setBackgroundResource(R.drawable.favorite);
+                    favorite.setTag("full");
                 }
             }
 
@@ -430,5 +459,22 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
                 JWTUtils.autoLogout(AccommodationDetailsActivity.this, t);
             }
         });
+    }
+
+    private int getResourceIdFromDrawable(Drawable drawable) {
+        if (drawable == null) {
+            return 0;
+        }
+
+        Resources resources = getResources();
+        if (resources != null) {
+            return resources.getIdentifier(
+                    resources.getResourceEntryName(drawable.hashCode()),
+                    "drawable",
+                    getPackageName()
+            );
+        }
+
+        return 0;
     }
 }

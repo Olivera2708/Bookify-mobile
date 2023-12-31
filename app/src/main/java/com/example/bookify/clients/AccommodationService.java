@@ -207,5 +207,5 @@ public interface AccommodationService {
             "Content-Type:application/json"
     })
     @GET("accommodations/added-to-favorites/{guestId}/{accommodationId}")
-    Call<List<AccommodationBasicDTO>> checkIfInFavorites(@Path("guestId") Long guestId, @Path("accommodationId") Long accommodationId);
+    Call<Boolean> checkIfInFavorites(@Path("guestId") Long guestId, @Path("accommodationId") Long accommodationId);
 }
