@@ -5,6 +5,7 @@ import com.example.bookify.model.AccommodationInsertDTO;
 import com.example.bookify.model.CommentDTO;
 import com.example.bookify.model.RatingDTO;
 import com.example.bookify.model.ReviewDTO;
+import com.example.bookify.model.UserBasicDTO;
 
 import java.util.List;
 
@@ -75,5 +76,20 @@ public interface ReviewService {
     })
     @DELETE("reviews/accommodation-delete/{accommodationId}/{reviewId}")
     Call<Void> deleteAccommodationReview(@Path("accommodationId") Long accommodationId, @Path("reviewId") Long reviewId);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @DELETE("reviews/owner-delete/{ownerId}/{reviewId}")
+    Call<Void> deleteOwnerReview(@Path("ownerId") Long ownerId, @Path("reviewId") Long reviewId);
+
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("users/user/{userId}")
+    Call<UserBasicDTO> getUserBasic(@Path("userId") Long userId);
 
 }

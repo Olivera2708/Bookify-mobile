@@ -69,7 +69,7 @@
                                 android:layout_width="100dp"
                                 android:layout_height="100dp"
                                 android:src="@drawable/account_round"
-                                app:tint="?attr/iconTint"
+                                android:scaleType="centerCrop"
                                 />
 
                             <TextView
@@ -110,7 +110,7 @@
                         </LinearLayout>
             </androidx.cardview.widget.CardView>
             <include
-                android:id="@+id/comment_section"
+                android:id="@+id/comments_1"
                 layout="@layout/account_rating_and_comments"/>
         </LinearLayout>
     </ScrollView>

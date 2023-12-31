@@ -124,6 +124,7 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(AccommodationDetailsActivity.this, OwnerDetailsActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                intent.putExtra("ownerId", accommodation.getOwner().getId());
                 startActivity(intent);
                 overridePendingTransition(0, 0);
             }
