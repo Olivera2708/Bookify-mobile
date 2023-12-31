@@ -77,7 +77,6 @@ public class OwnerAccommodationsActivity extends AppCompatActivity {
                 if(response.body() != null && response.code() == 200){
                     displayData(response.body());
                 }
-
             }
 
             @Override

@@ -123,7 +123,6 @@ public class LoginActivity extends AppCompatActivity {
                 UserJWT token = response.body();
                 if (token == null) {
                     onFailure(call, null);
-                    return;
                 }
                 JWTUtils.setCurrentLoginUser(sharedPreferences, token);
                 Intent intent = new Intent(LoginActivity.this, LandingActivity.class);

@@ -28,9 +28,9 @@
                 android:layout_margin="10dp" >
 
                 <ImageView
+                    android:id="@+id/image"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/apartment"
                     android:scaleType="centerCrop"
                     android:contentDescription="@string/room_picture" />
             </androidx.cardview.widget.CardView>
@@ -148,7 +148,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
                 <Button
-                    android:id="@+id/remove"
+                    android:id="@+id/reject"
                     style="?android:attr/buttonBarButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="36dp"
@@ -163,7 +163,7 @@
                     app:layout_constraintStart_toStartOf="parent" />
 
                 <Button
-                    android:id="@+id/save"
+                    android:id="@+id/accept"
                     style="?android:attr/buttonBarButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="36dp"
