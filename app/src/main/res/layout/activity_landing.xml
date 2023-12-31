@@ -77,33 +77,122 @@
                         android:layout_height="match_parent"
                         android:layout_marginTop="12dp">
 
-                        <include
-                            android:id="@+id/loc1"
-                            layout="@layout/popular_location"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="34dp" />
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="210dp"
+                            android:layout_height="150dp"
+                            android:layout_marginEnd="24dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:cardCornerRadius="20dp">
 
-                        <include
-                            android:id="@+id/loc2"
-                            layout="@layout/popular_location"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="34dp" />
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
 
-                        <include
-                            android:id="@+id/loc3"
-                            layout="@layout/popular_location"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="34dp" />
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:scaleType="centerCrop"
+                                    android:src="@drawable/sydney"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
 
-                        <include
-                            android:id="@+id/loc4"
-                            layout="@layout/popular_location"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="12dp" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/montserrat_medium"
+                                    android:text="Sydney, Australia"
+                                    android:textColor="@color/white"
+                                    android:textSize="14sp"
+                                    android:layout_marginStart="12dp"
+                                    android:layout_marginBottom="6dp"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="210dp"
+                            android:layout_height="150dp"
+                            android:layout_marginEnd="24dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:cardCornerRadius="20dp">
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:scaleType="centerCrop"
+                                    android:src="@drawable/budapest"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/montserrat_medium"
+                                    android:text="Budapest, Hungary"
+                                    android:textColor="@color/white"
+                                    android:textSize="14sp"
+                                    android:layout_marginStart="12dp"
+                                    android:layout_marginBottom="6dp"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="210dp"
+                            android:layout_height="150dp"
+                            android:layout_marginEnd="12dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:cardCornerRadius="20dp">
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:scaleType="centerCrop"
+                                    android:src="@drawable/copenhagen"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/montserrat_medium"
+                                    android:text="Copenhagen, Denmark"
+                                    android:textColor="@color/white"
+                                    android:textSize="14sp"
+                                    android:layout_marginStart="12dp"
+                                    android:layout_marginBottom="6dp"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent" />
+
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+                        </androidx.cardview.widget.CardView>
 
                     </LinearLayout>
                 </HorizontalScrollView>
@@ -143,46 +232,19 @@
                         android:textSize="20sp" />
                 </LinearLayout>
 
-                <HorizontalScrollView
+                <LinearLayout
+                    android:layout_marginStart="12dp"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp">
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="12dp">
 
-                    <LinearLayout
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/horizontalRecyclerView"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="12dp">
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"/>
 
-                        <include
-                            android:id="@+id/acco1"
-                            layout="@layout/popular_accommodation_guest"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="34dp" />
-
-                        <include
-                            android:id="@+id/acco2"
-                            layout="@layout/popular_accommodation_guest"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="34dp" />
-
-                        <include
-                            android:id="@+id/acco3"
-                            layout="@layout/popular_accommodation_guest"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="34dp" />
-
-                        <include
-                            android:id="@+id/acco4"
-                            layout="@layout/popular_accommodation_guest"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="12dp" />
-
-                    </LinearLayout>
-                </HorizontalScrollView>
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
