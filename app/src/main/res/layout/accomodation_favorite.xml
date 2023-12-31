@@ -88,7 +88,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:maxLines="4"
+                android:maxLines="3"
                 android:text="Bulevar Kneza Milos 45, Novi Sad, Srbija"
                 android:textColor="?attr/textFillColor"
                 android:textSize="11sp"
