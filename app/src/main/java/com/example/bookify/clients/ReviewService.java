@@ -2,6 +2,7 @@ package com.example.bookify.clients;
 
 import com.example.bookify.model.Accommodation;
 import com.example.bookify.model.AccommodationInsertDTO;
+import com.example.bookify.model.ReportedUserDTO;
 import com.example.bookify.model.ReviewDTO;
 
 import retrofit2.Call;
@@ -26,4 +27,16 @@ public interface ReviewService {
     })
     @POST("reviews/new-accommodation/{accommodationId}")
     Call<ReviewDTO> addAccommodationReview(@Path("accommodationId") Long accommodationId, @Body ReviewDTO reviewDTO);
+
+//    reportUser(reportedUser: ReportedUserDTO): Observable<number> {
+//        return this.httpClient.post<number>(environment.apiUser + "/report", reportedUser);
+//    }
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @POST("users/report")
+    Call<Long> reportUser(@Body ReportedUserDTO reportedUserDTO);
+
 }

@@ -16,12 +16,16 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.RatingBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.bookify.R;
 import com.example.bookify.clients.ClientUtils;
+import com.example.bookify.model.ReportedUserDTO;
 import com.example.bookify.model.ReviewDTO;
 import com.google.android.material.textfield.TextInputEditText;
+
+import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -105,17 +109,27 @@ public class ReservationsFragmentGuest extends Fragment {
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         dialog.getWindow().setGravity(Gravity.CENTER_VERTICAL);
 
-        Button accommodationReview = dialog.findViewById(R.id.btnSendAccommodation);
+        if (id == R.layout.new_comment) {
+            Button accommodationReview = dialog.findViewById(R.id.btnSendAccommodation);
 
-        accommodationReview.setOnClickListener(v -> {
-            sendAccommodationReview(dialog);
-        });
+            accommodationReview.setOnClickListener(v -> {
+                sendAccommodationReview(dialog);
+            });
 
-        Button ownerReview = dialog.findViewById(R.id.btnSendOwner);
+            Button ownerReview = dialog.findViewById(R.id.btnSendOwner);
 
-        ownerReview.setOnClickListener(v -> {
-            sendOwnerReview(dialog);
-        });
+            ownerReview.setOnClickListener(v -> {
+                sendOwnerReview(dialog);
+            });
+        } else {
+            TextView reportOwner = dialog.findViewById(R.id.reportOwner);
+            reportOwner.setVisibility(View.VISIBLE);
+            Button btnReport = dialog.findViewById(R.id.btnReport);
+
+            btnReport.setOnClickListener(v -> {
+                sendReportOwner(dialog);
+            });
+        }
 
     }
 
@@ -183,6 +197,37 @@ public class ReservationsFragmentGuest extends Fragment {
             @Override
             public void onFailure(Call<ReviewDTO> call, Throwable t) {
                 Toast.makeText(getActivity(), "You need to have a reservation to be able to comment on the owner", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void sendReportOwner(Dialog dialog){
+        TextInputEditText reason = dialog.findViewById(R.id.reason);
+
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("sharedPref", Context.MODE_PRIVATE);
+        Long guestId = sharedPreferences.getLong("id", 0L);
+        String comment = reason.getText().toString();
+
+        if (comment.equals("")) {
+            Toast.makeText(getActivity(), "Reason is required", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        ReportedUserDTO reportedUserDTO = new ReportedUserDTO(comment, new Date(), 11L, guestId);
+        Call<Long> call = ClientUtils.reviewService.reportUser(reportedUserDTO);
+
+        call.enqueue(new Callback<Long>() {
+            @Override
+            public void onResponse(Call<Long> call, Response<Long> response) {
+                if(response.isSuccessful()){
+                    Toast.makeText(getActivity(), "Successfully reported user", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(getActivity(), "Cannot report user", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Long> call, Throwable t) {
+                Toast.makeText(getActivity(), "Cannot report user", Toast.LENGTH_SHORT).show();
             }
         });
     }
