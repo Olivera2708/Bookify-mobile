@@ -10,6 +10,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
@@ -44,12 +45,15 @@ public interface ReviewService {
             "User-Agent: Mobile-Android",
             "Content-Type:application/json"
     })
+    @GET("reviews/accommodation/{accommodationId}")
+    Call<List<CommentDTO>> getAccommodationComments(@Path("accommodationId") Long accommodationId);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
     @PUT("reviews/report/{reviewId}")
     Call<Long> reportComment(@Path("reviewId") Long reviewId);
-
-//    getOwnerRating(ownerId: number): Observable<RatingDTO>{
-//        return this.httpClient.get<RatingDTO>(environment.apiReview + "/owner/" + ownerId + "/rating");
-//    }
 
     @Headers({
             "User-Agent: Mobile-Android",
@@ -57,5 +61,19 @@ public interface ReviewService {
     })
     @GET("reviews/owner/{ownerId}/rating")
     Call<RatingDTO> getOwnerRating(@Path("ownerId") Long ownerId);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("reviews/accommodation/{accommodationId}/rating")
+    Call<RatingDTO> getAccommodationRating(@Path("accommodationId") Long accommodationId);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @DELETE("reviews/accommodation-delete/{accommodationId}/{reviewId}")
+    Call<Void> deleteAccommodationReview(@Path("accommodationId") Long accommodationId, @Path("reviewId") Long reviewId);
 
 }
