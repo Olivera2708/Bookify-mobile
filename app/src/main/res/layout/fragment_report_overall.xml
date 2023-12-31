@@ -23,7 +23,7 @@
             android:drawableLeft="@drawable/calendar"
             android:backgroundTint="?attr/popupMenuBackground"
             android:drawableTint="?attr/textFillColor"
-            android:text="12.5.2023. - 16.5.2023."
+            android:hint="Date form - Date to"
             android:textColor="?attr/textFillColor" />
     </LinearLayout>
 

@@ -1,15 +1,21 @@
 package com.example.bookify.fragments.feedback;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.anychart.APIlib;
 import com.anychart.AnyChart;
@@ -28,6 +34,11 @@ import com.anychart.enums.LegendLayout;
 import com.anychart.enums.Position;
 import com.anychart.enums.TooltipPositionMode;
 import com.example.bookify.R;
+import com.example.bookify.activities.accommodation.AccommodationDetailsActivity;
+import com.example.bookify.clients.ClientUtils;
+import com.example.bookify.model.accommodation.ChartDTO;
+import com.example.bookify.model.accommodation.SearchResponseDTO;
+import com.example.bookify.utils.JWTUtils;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 
@@ -36,6 +47,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -52,6 +68,10 @@ public class ReportOverallFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    AnyChartView incomeYearChart;
+    Cartesian cartesianIncome;
+    AnyChartView reservationChart;
+    Pie pie;
 
     public ReportOverallFragment() {
         // Required empty public constructor
@@ -90,6 +110,19 @@ public class ReportOverallFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_report_overall, container, false);
         charts(view);
+
+        incomeYearChart = view.findViewById(R.id.incomeChart);
+        APIlib.getInstance().setActiveAnyChartView(incomeYearChart);
+        cartesianIncome = AnyChart.column();
+        setIncomeYearChart(view);
+        incomeYearChart.setChart(cartesianIncome);
+
+        reservationChart = view.findViewById(R.id.reservationChart);
+        APIlib.getInstance().setActiveAnyChartView(reservationChart);
+        pie = AnyChart.pie();
+        setReservationChart(view);
+        reservationChart.setChart(pie);
+
         return view;
     }
 
@@ -110,17 +143,61 @@ public class ReportOverallFragment extends Fragment {
                         String endDate = new SimpleDateFormat("dd.MM.yyyy.", Locale.getDefault()).format(new Date(selection.second));
 
                         editDate.setText(startDate + " - " + endDate);
+
+                        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("sharedPref", Context.MODE_PRIVATE);
+                        Long ownerId = sharedPreferences.getLong(JWTUtils.USER_ID, -1);
+                        Call<List<ChartDTO>> call = ClientUtils.accommodationService.getOverallCharts(ownerId, startDate, endDate);
+                        call.enqueue(new Callback<List<ChartDTO>>() {
+                            @Override
+                            public void onResponse(Call<List<ChartDTO>> call, Response<List<ChartDTO>> response) {
+                                if (response.code() == 200 && response.body() != null) {
+                                    showResults(response.body());
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<List<ChartDTO>> call, Throwable t) {
+                                JWTUtils.autoLogout((AppCompatActivity) getActivity(), t);
+                            }
+                        });
                     }
                 });
-
                 materialDatePicker.show(getActivity().getSupportFragmentManager(), "tag");
             }
         });
+    }
 
-        AnyChartView incomeYearChart = view.findViewById(R.id.incomeChart);
+    private void showResults(List<ChartDTO> charts){
+        if (charts.size() == 0)
+            Toast.makeText(getContext(), "No data for selected period!", Toast.LENGTH_LONG).show();
+        else {
+            updateIncomeYearChart(charts);
+            updateReservationChart(charts);
+        }
+    }
+
+    private void updateIncomeYearChart(List<ChartDTO> chart) {
+        List<DataEntry> data = new ArrayList<>();
+        for (ChartDTO c : chart) {
+            data.add(new ValueDataEntry(c.getName(), c.getProfitOfAccommodation()));
+        }
+
         APIlib.getInstance().setActiveAnyChartView(incomeYearChart);
-        Cartesian cartesianIncome = AnyChart.column();
+        cartesianIncome.data(data);
+    }
 
+    private void updateReservationChart(List<ChartDTO> chart) {
+        List<DataEntry> data = new ArrayList<>();
+        for (ChartDTO c : chart) {
+            data.add(new ValueDataEntry(c.getName(), c.getNumberOfReservations()));
+        }
+
+        APIlib.getInstance().setActiveAnyChartView(reservationChart);
+        pie.data(data);
+    }
+
+
+    private void setIncomeYearChart(View view){
         ColorDrawable colorDrawable = (ColorDrawable) getActivity().getWindow().getDecorView().getBackground();
         String hexColor = String.format("#%06X", (0xFFFFFF & colorDrawable.getColor()));
 
@@ -128,9 +205,7 @@ public class ReportOverallFragment extends Fragment {
         cartesianIncome.background().fill(hexColor);
 
         List<DataEntry> data = new ArrayList<>();
-        data.add(new ValueDataEntry("Test Apartment", 1090));
-        data.add(new ValueDataEntry("Test Hotel", 1810));
-        data.add(new ValueDataEntry("Test test", 1340));
+        data.add(new ValueDataEntry("", 0));
 
         Column columnIncome = cartesianIncome.column(data);
         columnIncome.tooltip()
@@ -149,17 +224,14 @@ public class ReportOverallFragment extends Fragment {
         cartesianIncome.interactivity().hoverMode(HoverMode.BY_X);
         cartesianIncome.xAxis(0).title("Accommodation");
         cartesianIncome.yAxis(0).title("Revenue");
-        incomeYearChart.setChart(cartesianIncome);
+    }
 
-
-
-        AnyChartView reservationChart = view.findViewById(R.id.reservationChart);
-        APIlib.getInstance().setActiveAnyChartView(reservationChart);
-        Pie pie = AnyChart.pie();
-
+    private void setReservationChart(View view){
+        ColorDrawable colorDrawable = (ColorDrawable) getActivity().getWindow().getDecorView().getBackground();
+        String hexColor = String.format("#%06X", (0xFFFFFF & colorDrawable.getColor()));
         pie.background().enabled(true);
         pie.background().fill(hexColor);
-        
+
         pie.setOnClickListener(new ListenersInterface.OnClickListener(new String[]{"x", "value"}) {
             @Override
             public void onClick(Event event) {
@@ -167,12 +239,10 @@ public class ReportOverallFragment extends Fragment {
         });
 
         List<DataEntry> dataPie = new ArrayList<>();
-        dataPie.add(new ValueDataEntry("Test Apartment", 20));
-        dataPie.add(new ValueDataEntry("Test Hotel", 14));
-        dataPie.add(new ValueDataEntry("Test Test", 18));
+        dataPie.add(new ValueDataEntry("", 0));
 
         pie.data(dataPie);
-        pie.title("Reservations for selected period");
+        pie.title("Days reserved for selected period");
         pie.labels().position("outside");
         pie.legend().title().enabled(true);
         pie.legend().title()
@@ -182,6 +252,5 @@ public class ReportOverallFragment extends Fragment {
                 .position("center-bottom")
                 .itemsLayout(LegendLayout.HORIZONTAL)
                 .align(Align.CENTER);
-        reservationChart.setChart(pie);
     }
 }
