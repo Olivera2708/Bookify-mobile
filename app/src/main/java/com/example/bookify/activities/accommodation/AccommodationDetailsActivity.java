@@ -88,6 +88,14 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
 
         getData(id);
 
+        Button favorite = findViewById(R.id.favorite);
+        favorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addToFavorites(favorite);
+            }
+        });
+
 
 //        View view1 = findViewById(R.id.include1);
 //        View view2 = findViewById(R.id.include2);
@@ -402,5 +410,25 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return p1;
+    }
+
+    private void addToFavorites(Button favorite){
+        SharedPreferences sharedPreferences = this.getSharedPreferences("sharedPref", Context.MODE_PRIVATE);
+        Long guestId = sharedPreferences.getLong(JWTUtils.USER_ID, -1);
+        Call<ResponseBody> call = ClientUtils.accommodationService.addToFavorites(guestId, accommodation.getId());
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    favorite.setBackgroundResource(R.drawable.favorite);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.d("AddToFavorites", "Not added");
+                JWTUtils.autoLogout(AccommodationDetailsActivity.this, t);
+            }
+        });
     }
 }

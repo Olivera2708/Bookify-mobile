@@ -192,7 +192,7 @@ public interface AccommodationService {
             "User-Agent: Mobile-Android",
             "Content-Type:application/json"
     })
-    @POST("accommodations/add-to-favorites/${guestId}/${accommodationId}")
+    @POST("accommodations/add-to-favorites/{guestId}/{accommodationId}")
     Call<ResponseBody> addToFavorites(@Path("guestId") Long guestId, @Path("accommodationId") Long accommodationId);
 
     @Headers({
@@ -206,6 +206,6 @@ public interface AccommodationService {
             "User-Agent: Mobile-Android",
             "Content-Type:application/json"
     })
-    @GET("accommodations/added-to-favorites/${guestId}/${accommodationId}")
+    @GET("accommodations/added-to-favorites/{guestId}/{accommodationId}")
     Call<List<AccommodationBasicDTO>> checkIfInFavorites(@Path("guestId") Long guestId, @Path("accommodationId") Long accommodationId);
 }
