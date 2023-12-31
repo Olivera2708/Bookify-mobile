@@ -1,19 +1,25 @@
 package com.example.bookify.fragments.feedback;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.anychart.APIlib;
@@ -34,6 +40,8 @@ import com.example.bookify.model.DropdownItem;
 import com.example.bookify.model.accommodation.ChartDTO;
 import com.example.bookify.utils.JWTUtils;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -41,6 +49,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -56,6 +65,7 @@ public class ReportForAccommodationFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 1;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -145,6 +155,66 @@ public class ReportForAccommodationFragment extends Fragment {
             if (accommodationId[0] != null)
                 getData();
         });
+
+        Button download = view.findViewById(R.id.download);
+        download.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("sharedPref", Context.MODE_PRIVATE);
+                Long ownerId = sharedPreferences.getLong(JWTUtils.USER_ID, -1);
+                if (accommodationId[0] != null && selected != null) {
+                    checkAndRequestPermissionsForDownload(ownerId, accommodationId[0], selected);
+                }
+            }
+        });
+    }
+
+    private void checkAndRequestPermissionsForDownload(Long ownerId, Long accommodationId, int year) {
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted, request it
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    REQUEST_WRITE_EXTERNAL_STORAGE);
+        } else {
+            // Permission is already granted, proceed with PDF download
+            downloadPdf(ownerId, accommodationId, year);
+        }
+    }
+
+    private void downloadPdf(Long ownerId, Long accommodationId, int year) {
+        Call<ResponseBody> call = ClientUtils.accommodationService.generatePdfReportForAccommodation(ownerId, accommodationId, year);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.code() == 200 && response.body() != null) {
+                    savePdf(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                JWTUtils.autoLogout((AppCompatActivity) getActivity(), t);
+            }
+        });
+    }
+
+    private void savePdf(ResponseBody body) {
+        File path = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DOWNLOADS);
+        String fileName = "report" + System.currentTimeMillis() + ".pdf";
+        File file = new File(path, fileName);
+
+        try {
+            path.mkdirs();
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(body.bytes());
+            fos.close();
+
+            Toast.makeText(getContext(), "File saved in downloads folder!", Toast.LENGTH_LONG).show();
+        } catch (Exception e){
+            Log.d("DownloadActivity", e.getMessage());
+        }
     }
 
     private void setIncomeYearChart(View view){

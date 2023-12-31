@@ -2,14 +2,17 @@ package com.example.bookify.fragments.feedback;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
 
-import android.os.Handler;
+import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +36,7 @@ import com.anychart.enums.HoverMode;
 import com.anychart.enums.LegendLayout;
 import com.anychart.enums.Position;
 import com.anychart.enums.TooltipPositionMode;
+import android.Manifest;
 import com.example.bookify.R;
 import com.example.bookify.activities.accommodation.AccommodationDetailsActivity;
 import com.example.bookify.clients.ClientUtils;
@@ -42,6 +46,9 @@ import com.example.bookify.utils.JWTUtils;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -64,6 +71,7 @@ public class ReportOverallFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 1;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -72,6 +80,7 @@ public class ReportOverallFragment extends Fragment {
     Cartesian cartesianIncome;
     AnyChartView reservationChart;
     Pie pie;
+    String startDate, endDate;
 
     public ReportOverallFragment() {
         // Required empty public constructor
@@ -139,8 +148,8 @@ public class ReportOverallFragment extends Fragment {
                 materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Pair<Long, Long>>() {
                     @Override
                     public void onPositiveButtonClick(Pair<Long, Long> selection) {
-                        String startDate = new SimpleDateFormat("dd.MM.yyyy.", Locale.getDefault()).format(new Date(selection.first));
-                        String endDate = new SimpleDateFormat("dd.MM.yyyy.", Locale.getDefault()).format(new Date(selection.second));
+                        startDate = new SimpleDateFormat("dd.MM.yyyy.", Locale.getDefault()).format(new Date(selection.first));
+                        endDate = new SimpleDateFormat("dd.MM.yyyy.", Locale.getDefault()).format(new Date(selection.second));
 
                         editDate.setText(startDate + " - " + endDate);
 
@@ -163,6 +172,18 @@ public class ReportOverallFragment extends Fragment {
                     }
                 });
                 materialDatePicker.show(getActivity().getSupportFragmentManager(), "tag");
+            }
+        });
+
+        Button download = view.findViewById(R.id.download);
+        download.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("sharedPref", Context.MODE_PRIVATE);
+                Long ownerId = sharedPreferences.getLong(JWTUtils.USER_ID, -1);
+                if (startDate != null && endDate != null) {
+                    checkAndRequestPermissionsForDownload(ownerId, startDate, endDate);
+                }
             }
         });
     }
@@ -252,5 +273,53 @@ public class ReportOverallFragment extends Fragment {
                 .position("center-bottom")
                 .itemsLayout(LegendLayout.HORIZONTAL)
                 .align(Align.CENTER);
+    }
+
+    private void savePdf(ResponseBody body) {
+        File path = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DOWNLOADS);
+        String fileName = "report" + System.currentTimeMillis() + ".pdf";
+        File file = new File(path, fileName);
+
+        try {
+            path.mkdirs();
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(body.bytes());
+            fos.close();
+
+            Toast.makeText(getContext(), "File saved in downloads folder!", Toast.LENGTH_LONG).show();
+        } catch (Exception e){
+            Log.d("DownloadActivity", e.getMessage());
+        }
+    }
+
+    private void checkAndRequestPermissionsForDownload(Long ownerId, String startDate, String endDate) {
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted, request it
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    REQUEST_WRITE_EXTERNAL_STORAGE);
+        } else {
+            // Permission is already granted, proceed with PDF download
+            downloadPdf(ownerId, startDate, endDate);
+        }
+    }
+
+    private void downloadPdf(Long ownerId, String startDate, String endDate) {
+        Call<ResponseBody> call = ClientUtils.accommodationService.generatePdfReportForOverall(ownerId, startDate, endDate);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.code() == 200 && response.body() != null) {
+                    savePdf(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                JWTUtils.autoLogout((AppCompatActivity) getActivity(), t);
+            }
+        });
     }
 }
