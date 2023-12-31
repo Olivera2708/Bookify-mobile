@@ -94,7 +94,6 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
         getData(id);
 
         Button favorite = findViewById(R.id.favorite);
-//        checkIfInFavorites(favorite);
         favorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -173,6 +172,9 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
         ImageView ownerImage = findViewById(R.id.ownerPicture);
         ViewFlipper slider = findViewById(R.id.imageSlider);
         GridLayout amenitiesLayout = findViewById(R.id.amenitiesLayout);
+        Button favorite = findViewById(R.id.favorite);
+
+        checkIfInFavorites(favorite);
 
         //amenities
 
@@ -426,10 +428,13 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
         call.enqueue(new Callback<Boolean>() {
             @Override
             public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-//                if (response.isSuccessful() && response.body() != null) {
-//                    if (response.body())
-//                        favorite.setBackgroundResource(R.drawable.favorite);
-//                }
+                if (response.isSuccessful() && response.body() != null) {
+                    Boolean isFavorite = response.body();
+                    if (isFavorite) {
+                        favorite.setBackgroundResource(R.drawable.favorite);
+                        favorite.setTag("full");
+                    }
+                }
             }
 
             @Override
