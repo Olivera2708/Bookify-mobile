@@ -33,16 +33,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <Button
+                <ImageView
                     android:id="@+id/userPicture"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_centerHorizontal="true"
-                    android:background="@drawable/account_round"
-                    android:backgroundTint="?attr/colorSecondaryContainer"
+                    android:src="@drawable/account_round"
                     android:scaleType="centerCrop"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView2" />
+                    app:layout_constraintTop_toBottomOf="@+id/textView2"
+                    android:layout_marginRight="15dp"/>
             </LinearLayout>
 
             <LinearLayout
@@ -66,12 +66,14 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/userName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Luka"
                             android:textColor="?attr/colorOnSecondary" />
 
                         <TextView
+                            android:id="@+id/date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="25.10.2023."
@@ -101,6 +103,7 @@
                 </LinearLayout>
 
                 <TextView
+                    android:id="@+id/commentText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Veoma prljavo i staro. Zaobidjite!"
