@@ -37,6 +37,7 @@ import com.example.bookify.model.FilterDTO;
 import com.example.bookify.model.accommodation.SearchResponseDTO;
 import com.example.bookify.navigation.NavigationBar;
 import com.example.bookify.R;
+import com.example.bookify.utils.ScrollHandler;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
@@ -76,6 +77,7 @@ public class ResultsActivity extends AppCompatActivity {
     boolean isChanged = false;
     String sort = "";
     FilterDTO filter;
+    ScrollHandler handler;
 
     String[] allAmenities = new String[]{
             "Free WiFi", "Air conditioning", "Terrace", "Swimming pool", "Bar", "Sauna", "Luggage storage",
@@ -187,7 +189,7 @@ public class ResultsActivity extends AppCompatActivity {
         getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
-    private void filterData(){
+    private void filterData() {
         Call<SearchResponseDTO> call = ClientUtils.accommodationService.getForFilter(this.search,
                 this.dates.split(" - ")[0],
                 this.dates.split(" - ")[1],
@@ -210,7 +212,7 @@ public class ResultsActivity extends AppCompatActivity {
         });
     }
 
-    private void searchData(){
+    private void searchData() {
         if (this.persons > 0 && begin.after(new Date()) && !begin.equals(end)) {
             Call<SearchResponseDTO> call = ClientUtils.accommodationService.getForSearch(this.search,
                     this.dates.split(" - ")[0],
@@ -234,12 +236,11 @@ public class ResultsActivity extends AppCompatActivity {
 
                 }
             });
-        }
-        else
+        } else
             Toast.makeText(ResultsActivity.this, "Please enter correct parameters", Toast.LENGTH_SHORT).show();
     }
 
-    private void showResults(List<AccommodationBasicDTO> accommodations){
+    private void showResults(List<AccommodationBasicDTO> accommodations) {
         if (adapter == null) {
             adapter = new AccommodationListAdapter(this, accommodations);
             listView = findViewById(R.id.resultList);
@@ -253,6 +254,8 @@ public class ResultsActivity extends AppCompatActivity {
             listView.invalidateViews();
         }
 
+        handler = new ScrollHandler(this, listView);
+
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView arg0, int arg1) {
@@ -263,8 +266,8 @@ public class ResultsActivity extends AppCompatActivity {
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, final int totalItemCount) {
                 if (totalItemCount > 0) {
                     int lastInScreen = firstVisibleItem + visibleItemCount;
-                    if (lastInScreen == totalItemCount && (page+1) * 10 <= totalResults) {
-                        page ++;
+                    if (lastInScreen == totalItemCount && (page + 1) * 10 <= totalResults) {
+                        page++;
                         if (!sort.equals("") || filter.getMaxPrice() != -1 || filter.getFilters().size() != 0 || filter.getTypes().size() != 3)
                             filterData();
                         else
@@ -275,7 +278,27 @@ public class ResultsActivity extends AppCompatActivity {
         });
     }
 
-    private void getSearchData(){
+    @Override
+    protected void onPause() {
+        super.onPause();
+        handler.unregister();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        handler.unregister();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (handler != null) {
+            handler.register();
+        }
+    }
+
+    private void getSearchData() {
         Intent intent = getIntent();
         search = intent.getStringExtra("location");
         persons = intent.getIntExtra("persons", 2);
@@ -288,7 +311,7 @@ public class ResultsActivity extends AppCompatActivity {
         setSearchValues(dates);
     }
 
-    private void setSearchValues(String dates){
+    private void setSearchValues(String dates) {
         this.locationInput.setText(this.search);
         this.personsInput.setText(String.valueOf(this.persons));
         this.editDate.setText(dates);
@@ -305,8 +328,7 @@ public class ResultsActivity extends AppCompatActivity {
         if (Math.round(this.minPrice) == Math.round(this.maxPrice)) {
             priceSlider.setValueTo(Math.round(this.maxPrice) + 1);
             priceSlider.setValues((float) Math.round(this.minPrice), (float) Math.round(this.maxPrice) + 1);
-        }
-        else {
+        } else {
             priceSlider.setValueTo(Math.round(this.maxPrice));
             if (filter.getMaxPrice() == -1)
                 priceSlider.setValues((float) Math.round(this.minPrice), (float) Math.round(this.maxPrice));
@@ -376,9 +398,15 @@ public class ResultsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 switch (i) {
-                    case 0: sort = "Name"; break;
-                    case 1: sort = "Lowest"; break;
-                    case 2: sort = "Highest"; break;
+                    case 0:
+                        sort = "Name";
+                        break;
+                    case 1:
+                        sort = "Lowest";
+                        break;
+                    case 2:
+                        sort = "Highest";
+                        break;
                 }
             }
         });
@@ -400,7 +428,7 @@ public class ResultsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 isChanged = true;
 
-                if (Integer.valueOf(minPriceEdit.getText().toString()) != Math.round(minPrice) || Integer.valueOf(maxPriceEdit.getText().toString()) != Math.round(maxPrice)){
+                if (Integer.valueOf(minPriceEdit.getText().toString()) != Math.round(minPrice) || Integer.valueOf(maxPriceEdit.getText().toString()) != Math.round(maxPrice)) {
                     filter.setMaxPrice(Integer.valueOf(maxPriceEdit.getText().toString()));
                     filter.setMinPrice(Integer.valueOf(minPriceEdit.getText().toString()));
                 }
@@ -420,7 +448,7 @@ public class ResultsActivity extends AppCompatActivity {
         dialog.getWindow().setGravity(Gravity.BOTTOM);
     }
 
-    private void setFilterTypes(){
+    private void setFilterTypes() {
         CheckBox hotel = dialog.findViewById(R.id.hotel);
         CheckBox apartment = dialog.findViewById(R.id.apartment);
         CheckBox room = dialog.findViewById(R.id.room);
@@ -436,7 +464,7 @@ public class ResultsActivity extends AppCompatActivity {
         filter.setTypes(types);
     }
 
-    private void setAmenities(){
+    private void setAmenities() {
         List<Filter> filterAmenities = new ArrayList<>();
         for (int i = 0; i < checkboxIds.length; i++) {
             CheckBox checkbox = dialog.findViewById(checkboxIds[i]);
@@ -446,10 +474,10 @@ public class ResultsActivity extends AppCompatActivity {
         filter.setFilters(filterAmenities);
     }
 
-    private void setAmenitiesCheckboxes(){
+    private void setAmenitiesCheckboxes() {
         if (filter.getFilters().size() != 0) {
             for (int i = 0; i < checkboxIds.length; i++) {
-                if (filter.getFilters().contains(Filter.valueOf(transformLabel(allAmenities[i])))){
+                if (filter.getFilters().contains(Filter.valueOf(transformLabel(allAmenities[i])))) {
                     CheckBox checkbox = dialog.findViewById(checkboxIds[i]);
                     checkbox.setChecked(true);
                 }
@@ -457,8 +485,8 @@ public class ResultsActivity extends AppCompatActivity {
         }
     }
 
-    private void deleteAllAmenities(){
-        for (int id : checkboxIds){
+    private void deleteAllAmenities() {
+        for (int id : checkboxIds) {
             CheckBox checkBox = dialog.findViewById(id);
             checkBox.setChecked(false);
         }
@@ -471,12 +499,12 @@ public class ResultsActivity extends AppCompatActivity {
         room.setChecked(true);
     }
 
-    private void setTypeCheckboxes(){
+    private void setTypeCheckboxes() {
         CheckBox hotel = dialog.findViewById(R.id.hotel);
         CheckBox apartment = dialog.findViewById(R.id.apartment);
         CheckBox room = dialog.findViewById(R.id.room);
 
-        if (filter.getTypes().size() != 3){
+        if (filter.getTypes().size() != 3) {
             if (!filter.getTypes().contains(AccommodationType.ROOM))
                 room.setChecked(false);
             if (!filter.getTypes().contains(AccommodationType.HOTEL))
@@ -496,7 +524,7 @@ public class ResultsActivity extends AppCompatActivity {
         filter.setTypes(types);
     }
 
-    private String getSortValue(){
+    private String getSortValue() {
         if (sort.equals("Lowest"))
             return "Price lowest first";
         else if (sort.equals("Highest"))
@@ -504,13 +532,13 @@ public class ResultsActivity extends AppCompatActivity {
         return sort;
     }
 
-    private String transformLabel(String label){
+    private String transformLabel(String label) {
         if (label.equals("24-hour front desk"))
             return "FRONT_DESK";
         return label.toUpperCase().replace(' ', '_');
     }
 
-    private void resetFilter(){
+    private void resetFilter() {
         List<Filter> listF = new ArrayList<>();
         List<AccommodationType> type = new ArrayList<>();
         type.add(AccommodationType.HOTEL);
@@ -519,7 +547,7 @@ public class ResultsActivity extends AppCompatActivity {
         filter = new FilterDTO(listF, type, -1, -1);
     }
 
-    private void hideKeyboard(){
+    private void hideKeyboard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(ResultsActivity.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
     }
