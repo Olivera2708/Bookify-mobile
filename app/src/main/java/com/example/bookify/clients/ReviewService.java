@@ -28,10 +28,6 @@ public interface ReviewService {
     @POST("reviews/new-accommodation/{accommodationId}")
     Call<ReviewDTO> addAccommodationReview(@Path("accommodationId") Long accommodationId, @Body ReviewDTO reviewDTO);
 
-//    reportUser(reportedUser: ReportedUserDTO): Observable<number> {
-//        return this.httpClient.post<number>(environment.apiUser + "/report", reportedUser);
-//    }
-
     @Headers({
             "User-Agent: Mobile-Android",
             "Content-Type:application/json"
