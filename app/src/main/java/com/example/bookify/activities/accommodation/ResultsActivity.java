@@ -2,7 +2,6 @@ package com.example.bookify.activities.accommodation;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Pair;
 
@@ -43,7 +42,6 @@ import com.example.bookify.model.FilterDTO;
 import com.example.bookify.model.accommodation.SearchResponseDTO;
 import com.example.bookify.navigation.NavigationBar;
 import com.example.bookify.R;
-import com.example.bookify.utils.ScrollHandler;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
@@ -83,7 +81,6 @@ public class ResultsActivity extends AppCompatActivity implements SensorEventLis
     boolean isChanged = false;
     String sort = "";
     FilterDTO filter;
-    //    ScrollHandler handler;
     private SensorManager sensorManager;
     private static final int SHAKE_THRESHOLD = 800;
     private Sensor accelerometer;
@@ -91,6 +88,10 @@ public class ResultsActivity extends AppCompatActivity implements SensorEventLis
     private float last_x;
     private float last_y;
     private float last_z;
+    Boolean isSortAvailable = true;
+    String[] sorts = new String[]{"Name", "Lowest", "Highest"};
+    int counter = -1;
+
 
     String[] allAmenities = new String[]{
             "Free WiFi", "Air conditioning", "Terrace", "Swimming pool", "Bar", "Sauna", "Luggage storage",
@@ -268,8 +269,6 @@ public class ResultsActivity extends AppCompatActivity implements SensorEventLis
             listView.invalidateViews();
         }
 
-//        handler = new ScrollHandler(this, listView);
-
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView arg0, int arg1) {
@@ -295,13 +294,15 @@ public class ResultsActivity extends AppCompatActivity implements SensorEventLis
     @Override
     protected void onPause() {
         super.onPause();
-//        handler.unregister();
+        sensorManager.unregisterListener(this);
+        sensorManager.unregisterListener(this, accelerometer);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-//        handler.unregister();
+        sensorManager.unregisterListener(this);
+        sensorManager.unregisterListener(this, accelerometer);
     }
 
     @Override
@@ -312,9 +313,6 @@ public class ResultsActivity extends AppCompatActivity implements SensorEventLis
                     sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
                     SensorManager.SENSOR_DELAY_NORMAL);
         }
-//        if (handler != null) {
-//            handler.register();
-//        }
     }
 
     private void getSearchData() {
@@ -571,15 +569,13 @@ public class ResultsActivity extends AppCompatActivity implements SensorEventLis
         imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
     }
 
-    String[] sorts = new String[]{"Name", "Lowest", "Highest"};
-    int counter = -1;
-
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
             long curTime = System.currentTimeMillis();
-            if ((curTime - lastUpdate) > 330) {
-                long diffTime = (curTime - lastUpdate);
+            long diffTime = (curTime - lastUpdate);
+            if (diffTime > 330 && isSortAvailable) {
+                isSortAvailable = false;
                 lastUpdate = curTime;
 
                 float[] values = event.values;
@@ -589,13 +585,12 @@ public class ResultsActivity extends AppCompatActivity implements SensorEventLis
 
                 float speed = Math.abs(x + y + z - last_x - last_y - last_z) / diffTime * 10000;
 
-                if (speed > SHAKE_THRESHOLD ) {
+                if (speed > SHAKE_THRESHOLD) {
                     if (counter >= 2) {
                         counter = 0;
                     } else {
                         counter++;
                     }
-                    Log.d("REZ", "shake detected w/ speed: " + counter);
                     sort = sorts[counter];
                     isChanged = true;
                     page = 0;
@@ -604,6 +599,7 @@ public class ResultsActivity extends AppCompatActivity implements SensorEventLis
                 last_x = x;
                 last_y = y;
                 last_z = z;
+                isSortAvailable = true;
             }
 
         }

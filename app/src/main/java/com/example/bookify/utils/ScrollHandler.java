@@ -87,7 +87,7 @@ public class ScrollHandler implements SensorEventListener {
         scrollView.post(() -> {
             int maxScroll = scrollView.getChildAt(0).getHeight() - scrollView.getHeight();
             int currentScroll = scrollView.getScrollY();
-            int newScroll = Math.min(currentScroll + 10, maxScroll);
+            int newScroll = Math.min(currentScroll + 20, maxScroll);
 
             if (newScroll != currentScroll) {
                 scrollView.smoothScrollTo(0, newScroll);
@@ -98,7 +98,7 @@ public class ScrollHandler implements SensorEventListener {
     private void scrollScrollViewUp(ScrollView scrollView) {
         scrollView.post(() -> {
             int currentScroll = scrollView.getScrollY();
-            int newScroll = Math.max(currentScroll - 10, 0);
+            int newScroll = Math.max(currentScroll - 20, 0);
 
             if (newScroll != currentScroll) {
                 scrollView.smoothScrollTo(0, newScroll);
