@@ -45,7 +45,7 @@ public class ScrollHandler implements SensorEventListener {
                     magnetometerValues = event.values.clone();
                     break;
             }
-            
+
             SensorManager.getRotationMatrix(rotationMatrix, null, accelerometerValues, magnetometerValues);
             SensorManager.getOrientation(rotationMatrix, orientationValues);
             //-90 vertikalno uspravno, 0 na strani

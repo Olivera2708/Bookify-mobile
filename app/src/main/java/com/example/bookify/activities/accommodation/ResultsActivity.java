@@ -2,12 +2,18 @@ package com.example.bookify.activities.accommodation;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Pair;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -55,7 +61,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ResultsActivity extends AppCompatActivity {
+public class ResultsActivity extends AppCompatActivity implements SensorEventListener {
 
     FloatingActionButton filterButton;
     private AccommodationListAdapter adapter;
@@ -77,7 +83,14 @@ public class ResultsActivity extends AppCompatActivity {
     boolean isChanged = false;
     String sort = "";
     FilterDTO filter;
-    ScrollHandler handler;
+    //    ScrollHandler handler;
+    private SensorManager sensorManager;
+    private static final int SHAKE_THRESHOLD = 800;
+    private Sensor accelerometer;
+    private long lastUpdate;
+    private float last_x;
+    private float last_y;
+    private float last_z;
 
     String[] allAmenities = new String[]{
             "Free WiFi", "Air conditioning", "Terrace", "Swimming pool", "Bar", "Sauna", "Luggage storage",
@@ -90,12 +103,13 @@ public class ResultsActivity extends AppCompatActivity {
             R.id.familyRooms, R.id.garden, R.id.frontDesk, R.id.jacuzzi, R.id.heating,
             R.id.breakfast, R.id.dinner, R.id.privateBathroom, R.id.depositBox, R.id.cityCenter};
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
         NavigationBar.setNavigationBar(findViewById(R.id.bottom_navigaiton), this, R.id.navigation_home);
+
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
         format = new SimpleDateFormat("dd.MM.yyyy.");
         editDate = findViewById(R.id.dateButton);
@@ -254,7 +268,7 @@ public class ResultsActivity extends AppCompatActivity {
             listView.invalidateViews();
         }
 
-        handler = new ScrollHandler(this, listView);
+//        handler = new ScrollHandler(this, listView);
 
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
@@ -281,21 +295,26 @@ public class ResultsActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        handler.unregister();
+//        handler.unregister();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        handler.unregister();
+//        handler.unregister();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (handler != null) {
-            handler.register();
+        if (sensorManager != null) {
+            sensorManager.registerListener(this,
+                    sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                    SensorManager.SENSOR_DELAY_NORMAL);
         }
+//        if (handler != null) {
+//            handler.register();
+//        }
     }
 
     private void getSearchData() {
@@ -550,5 +569,48 @@ public class ResultsActivity extends AppCompatActivity {
     private void hideKeyboard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(ResultsActivity.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+    }
+
+    String[] sorts = new String[]{"Name", "Lowest", "Highest"};
+    int counter = 0;
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            long curTime = System.currentTimeMillis();
+            // only allow one update every 100ms.
+            if ((curTime - lastUpdate) > 100) {
+                long diffTime = (curTime - lastUpdate);
+                lastUpdate = curTime;
+
+                float[] values = event.values;
+                float x = values[0];
+                float y = values[1];
+                float z = values[2];
+
+                float speed = Math.abs(x + y + z - last_x - last_y - last_z) / diffTime * 10000;
+
+                if (speed > SHAKE_THRESHOLD) {
+                    Log.d("REZ", "shake detected w/ speed: " + speed);
+                    sort = sorts[counter];
+                    isChanged = true;
+                    filterData();
+                    if (counter > 2) {
+                        counter = 0;
+                    } else {
+                        counter++;
+                    }
+                }
+                last_x = x;
+                last_y = y;
+                last_z = z;
+            }
+
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
     }
 }
