@@ -572,14 +572,13 @@ public class ResultsActivity extends AppCompatActivity implements SensorEventLis
     }
 
     String[] sorts = new String[]{"Name", "Lowest", "Highest"};
-    int counter = 0;
+    int counter = -1;
 
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
             long curTime = System.currentTimeMillis();
-            // only allow one update every 100ms.
-            if ((curTime - lastUpdate) > 100) {
+            if ((curTime - lastUpdate) > 330) {
                 long diffTime = (curTime - lastUpdate);
                 lastUpdate = curTime;
 
@@ -590,16 +589,17 @@ public class ResultsActivity extends AppCompatActivity implements SensorEventLis
 
                 float speed = Math.abs(x + y + z - last_x - last_y - last_z) / diffTime * 10000;
 
-                if (speed > SHAKE_THRESHOLD) {
-                    Log.d("REZ", "shake detected w/ speed: " + speed);
-                    sort = sorts[counter];
-                    isChanged = true;
-                    filterData();
-                    if (counter > 2) {
+                if (speed > SHAKE_THRESHOLD ) {
+                    if (counter >= 2) {
                         counter = 0;
                     } else {
                         counter++;
                     }
+                    Log.d("REZ", "shake detected w/ speed: " + counter);
+                    sort = sorts[counter];
+                    isChanged = true;
+                    page = 0;
+                    filterData();
                 }
                 last_x = x;
                 last_y = y;
