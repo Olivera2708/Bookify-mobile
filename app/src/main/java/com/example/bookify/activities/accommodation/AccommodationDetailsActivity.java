@@ -127,13 +127,19 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
         handler = new ScrollHandler(this, scrollView);
 
         Button favorite = findViewById(R.id.favorite);
-        favorite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (favorite.getTag().equals("empty"))
-                    addToFavorites(favorite);
-            }
-        });
+        SharedPreferences sharedPreferences = this.getSharedPreferences("sharedPref", Context.MODE_PRIVATE);
+        if (sharedPreferences.getString("userType", "none").equals("GUEST")) {
+            favorite.setVisibility(View.VISIBLE);
+            favorite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (favorite.getTag().equals("empty"))
+                        addToFavorites(favorite);
+                }
+            });
+        }
+        else
+            favorite.setVisibility(View.INVISIBLE);
 
         ImageView ownerDetailsInfo = findViewById(R.id.ownerPicture);
         ownerDetailsInfo.setOnClickListener(new View.OnClickListener() {
@@ -373,7 +379,9 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
         GridLayout amenitiesLayout = findViewById(R.id.amenitiesLayout);
         Button favorite = findViewById(R.id.favorite);
 
-        checkIfInFavorites(favorite);
+        SharedPreferences sharedPreferences = this.getSharedPreferences("sharedPref", Context.MODE_PRIVATE);
+        if (sharedPreferences.getString("userType", "none").equals("GUEST"))
+            checkIfInFavorites(favorite);
 
         //amenities
 
@@ -394,7 +402,6 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
         slider.startFlipping();
         setAmenities(amenitiesLayout);
 
-        SharedPreferences sharedPreferences = this.getSharedPreferences("sharedPref", Context.MODE_PRIVATE);
         if (sharedPreferences.getString("userType", "none").equals("GUEST"))
             showReservationOption();
     }
