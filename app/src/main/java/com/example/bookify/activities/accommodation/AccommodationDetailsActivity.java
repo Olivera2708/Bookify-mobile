@@ -18,6 +18,8 @@ import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Shader;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -34,6 +36,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
@@ -51,6 +54,7 @@ import com.example.bookify.model.reservation.ReservationRequestDTO;
 import com.example.bookify.navigation.NavigationBar;
 import com.example.bookify.R;
 import com.example.bookify.utils.JWTUtils;
+import com.example.bookify.utils.ScrollHandler;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.model.LatLng;
@@ -79,6 +83,7 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
     double price = -1;
     private SharedPreferences sharedPreferences;
     Long userId;
+    ScrollHandler handler;
 
     Map<String, Integer> amenitiesIcons = new HashMap<String, Integer>() {{
         put("Free wifi", R.drawable.wifi);
@@ -118,6 +123,8 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
         Long id = intent.getLongExtra("id", 0);
 
         getData(id);
+        ScrollView scrollView = findViewById(R.id.scrollView);
+        handler = new ScrollHandler(this, scrollView);
 
         Button favorite = findViewById(R.id.favorite);
         favorite.setOnClickListener(new View.OnClickListener() {
@@ -606,6 +613,25 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return p1;
+    }
+
+    protected void onPause() {
+        super.onPause();
+        handler.unregister();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        handler.unregister();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (handler != null) {
+            handler.register();
+        }
     }
 
     private void checkIfInFavorites(Button favorite){

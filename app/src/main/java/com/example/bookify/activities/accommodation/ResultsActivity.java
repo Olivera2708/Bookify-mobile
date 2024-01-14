@@ -5,9 +5,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Pair;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -54,7 +59,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ResultsActivity extends AppCompatActivity {
+public class ResultsActivity extends AppCompatActivity implements SensorEventListener {
 
     FloatingActionButton filterButton;
     private AccommodationListAdapter adapter;
@@ -76,6 +81,17 @@ public class ResultsActivity extends AppCompatActivity {
     boolean isChanged = false;
     String sort = "";
     FilterDTO filter;
+    private SensorManager sensorManager;
+    private static final int SHAKE_THRESHOLD = 800;
+    private Sensor accelerometer;
+    private long lastUpdate;
+    private float last_x;
+    private float last_y;
+    private float last_z;
+    Boolean isSortAvailable = true;
+    String[] sorts = new String[]{"Name", "Lowest", "Highest"};
+    int counter = -1;
+
 
     String[] allAmenities = new String[]{
             "Free WiFi", "Air conditioning", "Terrace", "Swimming pool", "Bar", "Sauna", "Luggage storage",
@@ -88,12 +104,13 @@ public class ResultsActivity extends AppCompatActivity {
             R.id.familyRooms, R.id.garden, R.id.frontDesk, R.id.jacuzzi, R.id.heating,
             R.id.breakfast, R.id.dinner, R.id.privateBathroom, R.id.depositBox, R.id.cityCenter};
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
         NavigationBar.setNavigationBar(findViewById(R.id.bottom_navigaiton), this, R.id.navigation_home);
+
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
         format = new SimpleDateFormat("dd.MM.yyyy.");
         editDate = findViewById(R.id.dateButton);
@@ -187,7 +204,7 @@ public class ResultsActivity extends AppCompatActivity {
         getOnBackPressedDispatcher().addCallback(this, callback);
     }
 
-    private void filterData(){
+    private void filterData() {
         Call<SearchResponseDTO> call = ClientUtils.accommodationService.getForFilter(this.search,
                 this.dates.split(" - ")[0],
                 this.dates.split(" - ")[1],
@@ -210,7 +227,7 @@ public class ResultsActivity extends AppCompatActivity {
         });
     }
 
-    private void searchData(){
+    private void searchData() {
         if (this.persons > 0 && begin.after(new Date()) && !begin.equals(end)) {
             Call<SearchResponseDTO> call = ClientUtils.accommodationService.getForSearch(this.search,
                     this.dates.split(" - ")[0],
@@ -234,12 +251,11 @@ public class ResultsActivity extends AppCompatActivity {
 
                 }
             });
-        }
-        else
+        } else
             Toast.makeText(ResultsActivity.this, "Please enter correct parameters", Toast.LENGTH_SHORT).show();
     }
 
-    private void showResults(List<AccommodationBasicDTO> accommodations){
+    private void showResults(List<AccommodationBasicDTO> accommodations) {
         if (adapter == null) {
             adapter = new AccommodationListAdapter(this, accommodations);
             listView = findViewById(R.id.resultList);
@@ -263,8 +279,8 @@ public class ResultsActivity extends AppCompatActivity {
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, final int totalItemCount) {
                 if (totalItemCount > 0) {
                     int lastInScreen = firstVisibleItem + visibleItemCount;
-                    if (lastInScreen == totalItemCount && (page+1) * 10 <= totalResults) {
-                        page ++;
+                    if (lastInScreen == totalItemCount && (page + 1) * 10 <= totalResults) {
+                        page++;
                         if (!sort.equals("") || filter.getMaxPrice() != -1 || filter.getFilters().size() != 0 || filter.getTypes().size() != 3)
                             filterData();
                         else
@@ -275,7 +291,31 @@ public class ResultsActivity extends AppCompatActivity {
         });
     }
 
-    private void getSearchData(){
+    @Override
+    protected void onPause() {
+        super.onPause();
+        sensorManager.unregisterListener(this);
+        sensorManager.unregisterListener(this, accelerometer);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        sensorManager.unregisterListener(this);
+        sensorManager.unregisterListener(this, accelerometer);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (sensorManager != null) {
+            sensorManager.registerListener(this,
+                    sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                    SensorManager.SENSOR_DELAY_NORMAL);
+        }
+    }
+
+    private void getSearchData() {
         Intent intent = getIntent();
         search = intent.getStringExtra("location");
         persons = intent.getIntExtra("persons", 2);
@@ -288,7 +328,7 @@ public class ResultsActivity extends AppCompatActivity {
         setSearchValues(dates);
     }
 
-    private void setSearchValues(String dates){
+    private void setSearchValues(String dates) {
         this.locationInput.setText(this.search);
         this.personsInput.setText(String.valueOf(this.persons));
         this.editDate.setText(dates);
@@ -305,8 +345,7 @@ public class ResultsActivity extends AppCompatActivity {
         if (Math.round(this.minPrice) == Math.round(this.maxPrice)) {
             priceSlider.setValueTo(Math.round(this.maxPrice) + 1);
             priceSlider.setValues((float) Math.round(this.minPrice), (float) Math.round(this.maxPrice) + 1);
-        }
-        else {
+        } else {
             priceSlider.setValueTo(Math.round(this.maxPrice));
             if (filter.getMaxPrice() == -1)
                 priceSlider.setValues((float) Math.round(this.minPrice), (float) Math.round(this.maxPrice));
@@ -376,9 +415,15 @@ public class ResultsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 switch (i) {
-                    case 0: sort = "Name"; break;
-                    case 1: sort = "Lowest"; break;
-                    case 2: sort = "Highest"; break;
+                    case 0:
+                        sort = "Name";
+                        break;
+                    case 1:
+                        sort = "Lowest";
+                        break;
+                    case 2:
+                        sort = "Highest";
+                        break;
                 }
             }
         });
@@ -400,7 +445,7 @@ public class ResultsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 isChanged = true;
 
-                if (Integer.valueOf(minPriceEdit.getText().toString()) != Math.round(minPrice) || Integer.valueOf(maxPriceEdit.getText().toString()) != Math.round(maxPrice)){
+                if (Integer.valueOf(minPriceEdit.getText().toString()) != Math.round(minPrice) || Integer.valueOf(maxPriceEdit.getText().toString()) != Math.round(maxPrice)) {
                     filter.setMaxPrice(Integer.valueOf(maxPriceEdit.getText().toString()));
                     filter.setMinPrice(Integer.valueOf(minPriceEdit.getText().toString()));
                 }
@@ -420,7 +465,7 @@ public class ResultsActivity extends AppCompatActivity {
         dialog.getWindow().setGravity(Gravity.BOTTOM);
     }
 
-    private void setFilterTypes(){
+    private void setFilterTypes() {
         CheckBox hotel = dialog.findViewById(R.id.hotel);
         CheckBox apartment = dialog.findViewById(R.id.apartment);
         CheckBox room = dialog.findViewById(R.id.room);
@@ -436,7 +481,7 @@ public class ResultsActivity extends AppCompatActivity {
         filter.setTypes(types);
     }
 
-    private void setAmenities(){
+    private void setAmenities() {
         List<Filter> filterAmenities = new ArrayList<>();
         for (int i = 0; i < checkboxIds.length; i++) {
             CheckBox checkbox = dialog.findViewById(checkboxIds[i]);
@@ -446,10 +491,10 @@ public class ResultsActivity extends AppCompatActivity {
         filter.setFilters(filterAmenities);
     }
 
-    private void setAmenitiesCheckboxes(){
+    private void setAmenitiesCheckboxes() {
         if (filter.getFilters().size() != 0) {
             for (int i = 0; i < checkboxIds.length; i++) {
-                if (filter.getFilters().contains(Filter.valueOf(transformLabel(allAmenities[i])))){
+                if (filter.getFilters().contains(Filter.valueOf(transformLabel(allAmenities[i])))) {
                     CheckBox checkbox = dialog.findViewById(checkboxIds[i]);
                     checkbox.setChecked(true);
                 }
@@ -457,8 +502,8 @@ public class ResultsActivity extends AppCompatActivity {
         }
     }
 
-    private void deleteAllAmenities(){
-        for (int id : checkboxIds){
+    private void deleteAllAmenities() {
+        for (int id : checkboxIds) {
             CheckBox checkBox = dialog.findViewById(id);
             checkBox.setChecked(false);
         }
@@ -471,12 +516,12 @@ public class ResultsActivity extends AppCompatActivity {
         room.setChecked(true);
     }
 
-    private void setTypeCheckboxes(){
+    private void setTypeCheckboxes() {
         CheckBox hotel = dialog.findViewById(R.id.hotel);
         CheckBox apartment = dialog.findViewById(R.id.apartment);
         CheckBox room = dialog.findViewById(R.id.room);
 
-        if (filter.getTypes().size() != 3){
+        if (filter.getTypes().size() != 3) {
             if (!filter.getTypes().contains(AccommodationType.ROOM))
                 room.setChecked(false);
             if (!filter.getTypes().contains(AccommodationType.HOTEL))
@@ -496,7 +541,7 @@ public class ResultsActivity extends AppCompatActivity {
         filter.setTypes(types);
     }
 
-    private String getSortValue(){
+    private String getSortValue() {
         if (sort.equals("Lowest"))
             return "Price lowest first";
         else if (sort.equals("Highest"))
@@ -504,13 +549,13 @@ public class ResultsActivity extends AppCompatActivity {
         return sort;
     }
 
-    private String transformLabel(String label){
+    private String transformLabel(String label) {
         if (label.equals("24-hour front desk"))
             return "FRONT_DESK";
         return label.toUpperCase().replace(' ', '_');
     }
 
-    private void resetFilter(){
+    private void resetFilter() {
         List<Filter> listF = new ArrayList<>();
         List<AccommodationType> type = new ArrayList<>();
         type.add(AccommodationType.HOTEL);
@@ -519,8 +564,49 @@ public class ResultsActivity extends AppCompatActivity {
         filter = new FilterDTO(listF, type, -1, -1);
     }
 
-    private void hideKeyboard(){
+    private void hideKeyboard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(ResultsActivity.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
+            long curTime = System.currentTimeMillis();
+            long diffTime = (curTime - lastUpdate);
+            if (diffTime > 330 && isSortAvailable) {
+                isSortAvailable = false;
+                lastUpdate = curTime;
+
+                float[] values = event.values;
+                float x = values[0];
+                float y = values[1];
+                float z = values[2];
+
+                float speed = Math.abs(x + y + z - last_x - last_y - last_z) / diffTime * 10000;
+
+                if (speed > SHAKE_THRESHOLD) {
+                    if (counter >= 2) {
+                        counter = 0;
+                    } else {
+                        counter++;
+                    }
+                    sort = sorts[counter];
+                    isChanged = true;
+                    page = 0;
+                    filterData();
+                }
+                last_x = x;
+                last_y = y;
+                last_z = z;
+                isSortAvailable = true;
+            }
+
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
     }
 }
