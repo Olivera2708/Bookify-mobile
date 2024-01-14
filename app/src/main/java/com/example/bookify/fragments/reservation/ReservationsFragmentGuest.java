@@ -181,7 +181,7 @@ public class ReservationsFragmentGuest extends Fragment {
             return;
         }
         ReviewDTO reviewDTO = new ReviewDTO(comment, rating, guestId);
-        Call<ReviewDTO> call = ClientUtils.reviewService.addOwnerReview(11L, reviewDTO);
+        Call<ReviewDTO> call = ClientUtils.reviewService.addOwnerReview(3L, reviewDTO);
 
         call.enqueue(new Callback<ReviewDTO>() {
             @Override
@@ -212,7 +212,7 @@ public class ReservationsFragmentGuest extends Fragment {
             Toast.makeText(getActivity(), "Reason is required", Toast.LENGTH_SHORT).show();
             return;
         }
-        ReportedUserDTO reportedUserDTO = new ReportedUserDTO(comment, new Date(), 11L, guestId);
+        ReportedUserDTO reportedUserDTO = new ReportedUserDTO(comment, new Date(), 3L, guestId);
         Call<Long> call = ClientUtils.reviewService.reportUser(reportedUserDTO);
 
         call.enqueue(new Callback<Long>() {

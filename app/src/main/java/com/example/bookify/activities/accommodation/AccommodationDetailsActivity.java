@@ -227,6 +227,13 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
             progres2.setProgress(ratingDTO.getTwoStars() * 100 / count);
             progres1.setProgress(ratingDTO.getOneStars() * 100 / count);
         }
+        else {
+            progres5.setProgress(0);
+            progres4.setProgress(0);
+            progres3.setProgress(0);
+            progres2.setProgress(0);
+            progres1.setProgress(0);
+        }
 
         total_1.setText("(" + ratingDTO.getOneStars() + ")");
         total_2.setText("(" + ratingDTO.getTwoStars() + ")");
