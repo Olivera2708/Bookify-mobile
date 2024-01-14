@@ -1,6 +1,8 @@
 package com.example.bookify.fragments.reservation;
 
 import android.app.Dialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -13,8 +15,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.bookify.R;
+import com.example.bookify.clients.ClientUtils;
+import com.example.bookify.model.ReportedUserDTO;
+import com.google.android.material.textfield.TextInputEditText;
+
+import java.util.Date;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -86,5 +99,44 @@ public class ReservationsFragmentOwner extends Fragment {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         dialog.getWindow().setGravity(Gravity.CENTER_VERTICAL);
+
+        TextView reportGuest = dialog.findViewById(R.id.reportGuest);
+        reportGuest.setVisibility(View.VISIBLE);
+        Button btnReport = dialog.findViewById(R.id.btnReport);
+
+        btnReport.setOnClickListener(v -> {
+            sendReportOwner(dialog);
+        });
+    }
+
+    private void sendReportOwner(Dialog dialog){
+        TextInputEditText reason = dialog.findViewById(R.id.reason);
+
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("sharedPref", Context.MODE_PRIVATE);
+        Long ownerId = sharedPreferences.getLong("id", 0L);
+        String comment = reason.getText().toString();
+
+        if (comment.equals("")) {
+            Toast.makeText(getActivity(), "Reason is required", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        ReportedUserDTO reportedUserDTO = new ReportedUserDTO(comment, new Date(), 2L, ownerId);
+        Call<Long> call = ClientUtils.reviewService.reportUser(reportedUserDTO);
+
+        call.enqueue(new Callback<Long>() {
+            @Override
+            public void onResponse(Call<Long> call, Response<Long> response) {
+                if(response.isSuccessful()){
+                    Toast.makeText(getActivity(), "Successfully reported user", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(getActivity(), "Cannot report user", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Long> call, Throwable t) {
+                Toast.makeText(getActivity(), "Cannot report user", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

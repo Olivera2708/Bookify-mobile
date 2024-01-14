@@ -1,13 +1,17 @@
 package com.example.bookify.activities.accommodation;
 
+import static java.security.AccessController.getContext;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.util.Pair;
 
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
@@ -16,6 +20,7 @@ import android.graphics.Paint;
 import android.graphics.Shader;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -121,9 +126,15 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
         ScrollView scrollView = findViewById(R.id.scrollView);
         handler = new ScrollHandler(this, scrollView);
 
-//        View view1 = findViewById(R.id.include1);
-//        View view2 = findViewById(R.id.include2);
-//        View view3 = findViewById(R.id.include3);
+        Button favorite = findViewById(R.id.favorite);
+        favorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (favorite.getTag().equals("empty"))
+                    addToFavorites(favorite);
+            }
+        });
+
         ImageView ownerDetailsInfo = findViewById(R.id.ownerPicture);
         ownerDetailsInfo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,21 +146,6 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
                 overridePendingTransition(0, 0);
             }
         });
-
-//        SharedPreferences sharedPreferences = getSharedPreferences("sharedPref", MODE_PRIVATE);
-//        if (sharedPreferences.getString("userType", "none").equals("guest")) {
-//            showReservationOption();
-//        }
-//        if (sharedPreferences.getString("userType", "none").equals("owner")) {
-//            setReportButton(view1);
-//            setReportButton(view2);
-//            setReportButton(view3);
-//        }
-//        if (sharedPreferences.getString("userType", "none").equals("guest")) {
-//            setDeleteIcon(view1);
-//            setDeleteIcon(view2);
-//            setDeleteIcon(view3);
-//        }
     }
 
     private void setReviews(Long id) {
@@ -270,7 +266,6 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Log.d("Image", "Basic accommodation image");
-//                JWTUtils.autoLogout((AppCompatActivity) getContext(), t);
             }
         });
 
@@ -376,6 +371,9 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
         ImageView ownerImage = findViewById(R.id.ownerPicture);
         ViewFlipper slider = findViewById(R.id.imageSlider);
         GridLayout amenitiesLayout = findViewById(R.id.amenitiesLayout);
+        Button favorite = findViewById(R.id.favorite);
+
+        checkIfInFavorites(favorite);
 
         //amenities
 
@@ -636,4 +634,65 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
         }
     }
 
+    private void checkIfInFavorites(Button favorite){
+        SharedPreferences sharedPreferences = this.getSharedPreferences("sharedPref", Context.MODE_PRIVATE);
+        Long guestId = sharedPreferences.getLong(JWTUtils.USER_ID, -1);
+        Call<Boolean> call = ClientUtils.accommodationService.checkIfInFavorites(guestId, accommodation.getId());
+        call.enqueue(new Callback<Boolean>() {
+            @Override
+            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Boolean isFavorite = response.body();
+                    if (isFavorite) {
+                        favorite.setBackgroundResource(R.drawable.favorite);
+                        favorite.setTag("full");
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Boolean> call, Throwable t) {
+                Log.d("LoadingFavorites", "Not loaded");
+                JWTUtils.autoLogout(AccommodationDetailsActivity.this, t);
+            }
+        });
+    }
+
+    private void addToFavorites(Button favorite){
+        SharedPreferences sharedPreferences = this.getSharedPreferences("sharedPref", Context.MODE_PRIVATE);
+        Long guestId = sharedPreferences.getLong(JWTUtils.USER_ID, -1);
+        Call<ResponseBody> call = ClientUtils.accommodationService.addToFavorites(guestId, accommodation.getId());
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    favorite.setBackgroundResource(R.drawable.favorite);
+                    favorite.setTag("full");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.d("AddToFavorites", "Not added");
+                JWTUtils.autoLogout(AccommodationDetailsActivity.this, t);
+            }
+        });
+    }
+
+    private int getResourceIdFromDrawable(Drawable drawable) {
+        if (drawable == null) {
+            return 0;
+        }
+
+        Resources resources = getResources();
+        if (resources != null) {
+            return resources.getIdentifier(
+                    resources.getResourceEntryName(drawable.hashCode()),
+                    "drawable",
+                    getPackageName()
+            );
+        }
+
+        return 0;
+    }
 }

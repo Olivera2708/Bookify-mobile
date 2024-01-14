@@ -150,4 +150,6 @@
     <string name="amenities">Amenities</string>
     <string name="paymeny_details">Paymeny details</string>
     <string name="availability">Availability</string>
+    <string name="report_guest">Report guest</string>
+    <string name="report_owner">Report owner</string>
 </resources>

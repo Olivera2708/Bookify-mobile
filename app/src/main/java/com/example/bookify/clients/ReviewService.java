@@ -2,6 +2,7 @@ package com.example.bookify.clients;
 
 import com.example.bookify.model.Accommodation;
 import com.example.bookify.model.AccommodationInsertDTO;
+import com.example.bookify.model.ReportedUserDTO;
 import com.example.bookify.model.CommentDTO;
 import com.example.bookify.model.RatingDTO;
 import com.example.bookify.model.ReviewDTO;
@@ -34,6 +35,13 @@ public interface ReviewService {
     })
     @POST("reviews/new-accommodation/{accommodationId}")
     Call<ReviewDTO> addAccommodationReview(@Path("accommodationId") Long accommodationId, @Body ReviewDTO reviewDTO);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @POST("users/report")
+    Call<Long> reportUser(@Body ReportedUserDTO reportedUserDTO);
 
     @Headers({
             "User-Agent: Mobile-Android",

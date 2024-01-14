@@ -117,16 +117,14 @@
                 android:layout_width="170dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
-                android:text="@string/pending"
-                android:checked="true"/>
+                android:text="@string/pending"/>
 
             <CheckBox
                 android:id="@+id/accepted"
                 android:layout_width="170dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
-                android:text="@string/accepted"
-                android:checked="true"/>
+                android:text="@string/accepted"/>
         </LinearLayout>
 
         <LinearLayout
@@ -142,16 +140,14 @@
                 android:layout_width="170dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
-                android:text="@string/rejected"
-                android:checked="true"/>
+                android:text="@string/rejected"/>
 
             <CheckBox
                 android:id="@+id/canceled"
                 android:layout_width="170dp"
                 android:layout_height="30dp"
                 android:layout_weight="1"
-                android:text="@string/canceled"
-                android:checked="true"/>
+                android:text="@string/canceled"/>
         </LinearLayout>
     </LinearLayout>
 

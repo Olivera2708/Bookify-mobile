@@ -8,9 +8,11 @@ import com.example.bookify.model.FilterDTO;
 import com.example.bookify.model.ImageMobileDTO;
 import com.example.bookify.model.PricelistItemDTO;
 import com.example.bookify.enumerations.PricePer;
+import com.example.bookify.model.accommodation.AccommodationBasicDTO;
 import com.example.bookify.model.accommodation.AccommodationDetailDTO;
 import com.example.bookify.model.FilterDTO;
 import com.example.bookify.model.accommodation.AccommodationRequestDTO;
+import com.example.bookify.model.accommodation.ChartDTO;
 import com.example.bookify.model.accommodation.SearchResponseDTO;
 
 import com.example.bookify.model.accommodation.AccommodationOwnerDTO;
@@ -23,6 +25,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -186,4 +189,67 @@ public interface AccommodationService {
     })
     @GET("accommodations/{ownerId}")
     Call<List<AccommodationOwnerDTO>> getOwnerAccommodations(@Path("ownerId") Long id);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @POST("accommodations/add-to-favorites/{guestId}/{accommodationId}")
+    Call<ResponseBody> addToFavorites(@Path("guestId") Long guestId, @Path("accommodationId") Long accommodationId);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("accommodations/favorites")
+    Call<List<AccommodationBasicDTO>> getFavorites(@Query("guestId") Long guestId);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("accommodations/added-to-favorites/{guestId}/{accommodationId}")
+    Call<Boolean> checkIfInFavorites(@Path("guestId") Long guestId, @Path("accommodationId") Long accommodationId);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("accommodations/top-accommodations")
+    Call<List<AccommodationBasicDTO>> getTopAccommodations(@Query("results") int results);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("accommodations/overall-charts")
+    Call<List<ChartDTO>> getOverallCharts(@Query("ownerId") Long ownerId, @Query("begin") String begin, @Query("end") String end);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("accommodations/charts-accommodations")
+    Call<Map<Long, String>> getNamesForAccommodations(@Query("ownerId") Long ownerId);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("accommodations/accommodation-charts")
+    Call<List<ChartDTO>> getAccommodationCharts(@Query("ownerId") Long ownerId, @Query("accommodationId") Long accommodationId, @Query("year") int year);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("accommodations/download-reports-overall")
+    Call<ResponseBody> generatePdfReportForOverall(@Query("ownerId") Long ownerId, @Query("begin") String begin, @Query("end") String end);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("accommodations/download-reports-accommodation")
+    Call<ResponseBody> generatePdfReportForAccommodation(@Query("ownerId") Long ownerId, @Query("accommodationId") Long accommodationId, @Query("year") int year);
 }
