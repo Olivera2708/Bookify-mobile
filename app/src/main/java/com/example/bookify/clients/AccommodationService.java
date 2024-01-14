@@ -8,6 +8,7 @@ import com.example.bookify.model.FilterDTO;
 import com.example.bookify.model.ImageMobileDTO;
 import com.example.bookify.model.PricelistItemDTO;
 import com.example.bookify.enumerations.PricePer;
+import com.example.bookify.model.accommodation.AccommodationBasicDTO;
 import com.example.bookify.model.accommodation.AccommodationDetailDTO;
 import com.example.bookify.model.FilterDTO;
 import com.example.bookify.model.accommodation.AccommodationRequestDTO;
@@ -186,4 +187,25 @@ public interface AccommodationService {
     })
     @GET("accommodations/{ownerId}")
     Call<List<AccommodationOwnerDTO>> getOwnerAccommodations(@Path("ownerId") Long id);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @POST("accommodations/add-to-favorites/{guestId}/{accommodationId}")
+    Call<ResponseBody> addToFavorites(@Path("guestId") Long guestId, @Path("accommodationId") Long accommodationId);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("accommodations/favorites")
+    Call<List<AccommodationBasicDTO>> getFavorites(@Query("guestId") Long guestId);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("accommodations/added-to-favorites/{guestId}/{accommodationId}")
+    Call<Boolean> checkIfInFavorites(@Path("guestId") Long guestId, @Path("accommodationId") Long accommodationId);
 }

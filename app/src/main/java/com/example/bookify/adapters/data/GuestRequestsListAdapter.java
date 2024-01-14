@@ -85,7 +85,9 @@ public class GuestRequestsListAdapter extends ArrayAdapter<ReservationDTO> {
         if (request != null){
             stars.setRating((float) request.getAvgRating());
             name.setText(request.getAccommodationName());
-            owner.setText("Owner: " + request.getUser().getFirstName() + " " + request.getUser().getLastName() + " (" + request.getUser().getAvgRating() + "/5)");
+            double avgRating = request.getUser().getAvgRating();
+            String formattedAvgRating = String.format("%.2f", avgRating);
+            owner.setText("Owner: " + request.getUser().getFirstName() + " " + request.getUser().getLastName() + " (" + formattedAvgRating + "/5)");
             date.setText("Date: " + request.getStart() + " - " + request.getEnd());
             persons.setText("Persons: " + request.getGuestNumber());
             price.setText("Price: " + request.getPrice() + " EUR");

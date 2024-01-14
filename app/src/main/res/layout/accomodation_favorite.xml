@@ -7,8 +7,10 @@
     android:layout_height="match_parent">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="14dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,10 +34,25 @@
                 app:layout_constraintTop_toBottomOf="@id/stars" >
 
                 <ImageView
+                    android:id="@id/image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/apartment"/>
+                    android:scaleType="centerCrop"/>
             </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/acc_type"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:fontFamily="@font/montserrat_medium"
+                android:text="HOTEL"
+                android:textColor="?attr/textFillColor"
+                android:textSize="8sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.14"
+                app:layout_constraintStart_toEndOf="@+id/apartment_image"
+                app:layout_constraintTop_toTopOf="@+id/stars" />
 
             <TextView
                 android:id="@+id/apartment_name"
@@ -49,7 +66,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.14"
                 app:layout_constraintStart_toEndOf="@+id/apartment_image"
-                app:layout_constraintTop_toTopOf="@+id/stars" />
+                app:layout_constraintTop_toBottomOf="@+id/acc_type" />
 
             <TextView
                 android:id="@+id/apartment_address"
@@ -63,22 +80,25 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/apartment_name"
                 app:layout_constraintTop_toBottomOf="@id/apartment_name"
-                app:layout_constraintVertical_bias="0.0"
                 app:layout_wrapBefore="true" />
 
-            <Button
-                android:id="@+id/details"
-                android:layout_width="wrap_content"
-                android:layout_height="42dp"
-                android:fontFamily="@font/montserrat_medium"
-                android:text="@string/remove"
-                android:textColor="@color/white"
-                android:textSize="14dp"
-                android:textAlignment="center"
-                android:layout_marginBottom="4dp"
-                android:backgroundTint="@color/grey"
+            <TextView
+                android:id="@+id/apartment_desc"
+                style="@style/TextAppearance.MaterialComponents.Subtitle2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="3"
+                android:text="Bulevar Kneza Milos 45, Novi Sad, Srbija"
+                android:textColor="?attr/textFillColor"
+                android:textSize="11sp"
+                app:layout_constraintBottom_toBottomOf="@+id/apartment_image"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/apartment_name"
+                app:layout_constraintTop_toBottomOf="@+id/apartment_address"
+                app:layout_constraintVertical_bias="0.53"
+                app:layout_wrapBefore="true" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/stars"
