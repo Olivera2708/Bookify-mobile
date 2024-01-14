@@ -12,6 +12,7 @@ import com.example.bookify.model.accommodation.AccommodationBasicDTO;
 import com.example.bookify.model.accommodation.AccommodationDetailDTO;
 import com.example.bookify.model.FilterDTO;
 import com.example.bookify.model.accommodation.AccommodationRequestDTO;
+import com.example.bookify.model.accommodation.ChartDTO;
 import com.example.bookify.model.accommodation.SearchResponseDTO;
 
 import com.example.bookify.model.accommodation.AccommodationOwnerDTO;
@@ -24,6 +25,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -215,4 +217,39 @@ public interface AccommodationService {
     })
     @GET("accommodations/top-accommodations")
     Call<List<AccommodationBasicDTO>> getTopAccommodations(@Query("results") int results);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("accommodations/overall-charts")
+    Call<List<ChartDTO>> getOverallCharts(@Query("ownerId") Long ownerId, @Query("begin") String begin, @Query("end") String end);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("accommodations/charts-accommodations")
+    Call<Map<Long, String>> getNamesForAccommodations(@Query("ownerId") Long ownerId);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("accommodations/accommodation-charts")
+    Call<List<ChartDTO>> getAccommodationCharts(@Query("ownerId") Long ownerId, @Query("accommodationId") Long accommodationId, @Query("year") int year);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("accommodations/download-reports-overall")
+    Call<ResponseBody> generatePdfReportForOverall(@Query("ownerId") Long ownerId, @Query("begin") String begin, @Query("end") String end);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("accommodations/download-reports-accommodation")
+    Call<ResponseBody> generatePdfReportForAccommodation(@Query("ownerId") Long ownerId, @Query("accommodationId") Long accommodationId, @Query("year") int year);
 }
