@@ -14,6 +14,10 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.BitmapShader;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
@@ -28,14 +32,19 @@ import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.denzcoskun.imageslider.models.SlideModel;
+import com.example.bookify.activities.user.AccountDetailsActivity;
+import com.example.bookify.activities.user.OwnerDetailsActivity;
 import com.example.bookify.clients.ClientUtils;
 import com.example.bookify.enumerations.Filter;
+import com.example.bookify.model.CommentDTO;
+import com.example.bookify.model.RatingDTO;
 import com.example.bookify.model.accommodation.AccommodationDetailDTO;
 import com.example.bookify.model.reservation.ReservationDTO;
 import com.example.bookify.model.reservation.ReservationRequestDTO;
@@ -68,18 +77,33 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
     AccommodationDetailDTO accommodation;
     Bundle savedInstanceState;
     double price = -1;
+    private SharedPreferences sharedPreferences;
+    Long userId;
+
     Map<String, Integer> amenitiesIcons = new HashMap<String, Integer>() {{
-            put("Free wifi", R.drawable.wifi); put("Air conditioning", R.drawable.air);
-            put("Terrace", R.drawable.terrace); put("Swimming pool", R.drawable.pool);
-            put("Bar", R.drawable.bar); put("Sauna", R.drawable.sauna);
-            put("Luggage storage", R.drawable.luggage); put("Lunch", R.drawable.lunch_dining);
-            put("Airport shuttle", R.drawable.airport_shuttle); put("Wheelchair", R.drawable.wheelchair);
-            put("Non smoking", R.drawable.smoking); put("Free parking", R.drawable.parking);
-            put("Family rooms", R.drawable.family_room); put("Garden", R.drawable.yard);
-            put("Front desk", R.drawable.bell); put("Jacuzzi", R.drawable.hot_tub);
-            put("Heating", R.drawable.heating); put("Breakfast", R.drawable.breakfast);
-            put("Diner", R.drawable.dinner); put("Private bathroom", R.drawable.bathroom);
-            put("Deposit box", R.drawable.local_atm); put("City center", R.drawable.city); }};
+        put("Free wifi", R.drawable.wifi);
+        put("Air conditioning", R.drawable.air);
+        put("Terrace", R.drawable.terrace);
+        put("Swimming pool", R.drawable.pool);
+        put("Bar", R.drawable.bar);
+        put("Sauna", R.drawable.sauna);
+        put("Luggage storage", R.drawable.luggage);
+        put("Lunch", R.drawable.lunch_dining);
+        put("Airport shuttle", R.drawable.airport_shuttle);
+        put("Wheelchair", R.drawable.wheelchair);
+        put("Non smoking", R.drawable.smoking);
+        put("Free parking", R.drawable.parking);
+        put("Family rooms", R.drawable.family_room);
+        put("Garden", R.drawable.yard);
+        put("Front desk", R.drawable.bell);
+        put("Jacuzzi", R.drawable.hot_tub);
+        put("Heating", R.drawable.heating);
+        put("Breakfast", R.drawable.breakfast);
+        put("Diner", R.drawable.dinner);
+        put("Private bathroom", R.drawable.bathroom);
+        put("Deposit box", R.drawable.local_atm);
+        put("City center", R.drawable.city);
+    }};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +111,8 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
         this.savedInstanceState = savedInstanceState;
         setContentView(R.layout.activity_accommodation_details);
         NavigationBar.setNavigationBar(findViewById(R.id.bottom_navigaiton), this, R.id.navigation_home);
+
+        this.sharedPreferences = getSharedPreferences("sharedPref", MODE_PRIVATE);
 
         Intent intent = getIntent();
         Long id = intent.getLongExtra("id", 0);
@@ -102,38 +128,202 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
             }
         });
 
-
-//        View view1 = findViewById(R.id.include1);
-//        View view2 = findViewById(R.id.include2);
-//        View view3 = findViewById(R.id.include3);
-//        Button ownerDetailsInfo = findViewById(R.id.ownerPicture);
-//        ownerDetailsInfo.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(AccommodationDetailsActivity.this, OwnerDetailsActivity.class);
-//                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-//                startActivity(intent);
-//                overridePendingTransition(0, 0);
-//            }
-//        });
-
-//        SharedPreferences sharedPreferences = getSharedPreferences("sharedPref", MODE_PRIVATE);
-//        if (sharedPreferences.getString("userType", "none").equals("guest")) {
-//            showReservationOption();
-//        }
-//        if (sharedPreferences.getString("userType", "none").equals("owner")) {
-//            setReportButton(view1);
-//            setReportButton(view2);
-//            setReportButton(view3);
-//        }
-//        if (sharedPreferences.getString("userType", "none").equals("guest")) {
-//            setDeleteIcon(view1);
-//            setDeleteIcon(view2);
-//            setDeleteIcon(view3);
-//        }
+        ImageView ownerDetailsInfo = findViewById(R.id.ownerPicture);
+        ownerDetailsInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AccommodationDetailsActivity.this, OwnerDetailsActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                intent.putExtra("ownerId", accommodation.getOwner().getId());
+                startActivity(intent);
+                overridePendingTransition(0, 0);
+            }
+        });
     }
 
-    private void setMap(){
+    private void setReviews(Long id) {
+        userId = sharedPreferences.getLong("id", 0L);
+
+        Call<List<CommentDTO>> call = ClientUtils.reviewService.getAccommodationComments(id);
+        call.enqueue(new Callback<List<CommentDTO>>() {
+            @Override
+            public void onResponse(Call<List<CommentDTO>> call, Response<List<CommentDTO>> response) {
+                if (response.code() == 200 && response.body() != null) {
+                    List<CommentDTO> comments = response.body();
+                    setComments(comments, id);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<CommentDTO>> call, Throwable t) {
+
+            }
+        });
+
+        Call<RatingDTO> callRating = ClientUtils.reviewService.getAccommodationRating(id);
+        callRating.enqueue(new Callback<RatingDTO>() {
+            @Override
+            public void onResponse(Call<RatingDTO> call, Response<RatingDTO> response) {
+                if (response.code() == 200 && response.body() != null) {
+                    RatingDTO ratingDTO = response.body();
+                    setRating(ratingDTO);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RatingDTO> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void setRating(RatingDTO ratingDTO) {
+        String avgRating = String.format("%.2f", ratingDTO.getAvgRating());
+
+        RatingBar rating = findViewById(R.id.rating);
+        rating.setRating((float) ratingDTO.getAvgRating());
+
+        ProgressBar progres5 = findViewById(R.id.progress_5);
+        ProgressBar progres4 = findViewById(R.id.progress_4);
+        ProgressBar progres3 = findViewById(R.id.progress_3);
+        ProgressBar progres2 = findViewById(R.id.progress_2);
+        ProgressBar progres1 = findViewById(R.id.progress_1);
+
+        TextView total_5 = findViewById(R.id.total_5);
+        TextView total_4 = findViewById(R.id.total_4);
+        TextView total_3 = findViewById(R.id.total_3);
+        TextView total_2 = findViewById(R.id.total_2);
+        TextView total_1 = findViewById(R.id.total_1);
+
+        TextView total = findViewById(R.id.total);
+        TextView total1 = findViewById(R.id.total1);
+
+        int count = ratingDTO.getFiveStars() + ratingDTO.getFourStars() + ratingDTO.getThreeStars() +
+                ratingDTO.getTwoStars() + ratingDTO.getOneStars();
+
+        int sum = ratingDTO.getFiveStars() * 5 + ratingDTO.getFourStars() * 4 + ratingDTO.getThreeStars() * 3 +
+                ratingDTO.getTwoStars() * 2 + ratingDTO.getOneStars();
+
+        total.setText("(" + count + ")");
+        total1.setText(avgRating);
+
+        if (count > 0) {
+            progres5.setProgress(ratingDTO.getFiveStars() * 100 / count);
+            progres4.setProgress(ratingDTO.getFourStars() * 100 / count);
+            progres3.setProgress(ratingDTO.getThreeStars() * 100 / count);
+            progres2.setProgress(ratingDTO.getTwoStars() * 100 / count);
+            progres1.setProgress(ratingDTO.getOneStars() * 100 / count);
+        }
+
+        total_1.setText("(" + ratingDTO.getOneStars() + ")");
+        total_2.setText("(" + ratingDTO.getTwoStars() + ")");
+        total_3.setText("(" + ratingDTO.getThreeStars() + ")");
+        total_4.setText("(" + ratingDTO.getFourStars() + ")");
+        total_5.setText("(" + ratingDTO.getFiveStars() + ")");
+    }
+
+    private void setComments(List<CommentDTO> comments, Long id) {
+        LinearLayout commentSection = findViewById(R.id.comment_section);
+        commentSection.removeAllViews();
+        for (CommentDTO comment : comments) {
+            LayoutInflater inflater = LayoutInflater.from(this);
+            View commentView = inflater.inflate(R.layout.comment, commentSection, false);
+
+            setComment(comment, commentView, id);
+            commentSection.addView(commentView);
+        }
+    }
+
+    private void setComment(CommentDTO comment, View commentView, Long id) {
+        TextView name = commentView.findViewById(R.id.userName);
+        TextView date = commentView.findViewById(R.id.date);
+        ImageView image = commentView.findViewById(R.id.userPicture);
+        RatingBar stars = commentView.findViewById(R.id.stars);
+        TextView commentText = commentView.findViewById(R.id.commentText);
+
+        Button report = commentView.findViewById(R.id.btnReport);
+        ImageView delete = commentView.findViewById(R.id.deleteComment);
+
+        Call<ResponseBody> callImage = ClientUtils.accommodationService.getImage(comment.getImageId());
+        callImage.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Bitmap bitmap = BitmapFactory.decodeStream(response.body().byteStream());
+                    image.setImageBitmap(getRoundedBitmap(bitmap));
+                } else {
+                    image.setImageResource(R.drawable.account_round);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.d("Image", "Basic accommodation image");
+            }
+        });
+
+        stars.setRating((float) comment.getRate());
+        name.setText(comment.getName());
+        java.text.SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("dd.MM.yyyy.", Locale.getDefault());
+        date.setText(dateFormat.format(comment.getDate()));
+        commentText.setText(comment.getComment());
+
+        if (accommodation.getOwner().getId() == userId) {
+            report.setVisibility(View.VISIBLE);
+            report.setOnClickListener(v -> {
+                Call<Long> call = ClientUtils.reviewService.reportComment(comment.getId());
+                call.enqueue(new Callback<Long>() {
+                    @Override
+                    public void onResponse(Call<Long> call, Response<Long> response) {
+                        Toast.makeText(AccommodationDetailsActivity.this, "Review reported", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFailure(Call<Long> call, Throwable t) {
+
+                    }
+                });
+            });
+        }
+
+        if (comment.getGuestId() == userId) {
+            delete.setVisibility(View.VISIBLE);
+            delete.setOnClickListener(v -> {
+                Call<Void> callDelete = ClientUtils.reviewService.deleteAccommodationReview(id, comment.getId());
+                callDelete.enqueue(new Callback() {
+                    @Override
+                    public void onResponse(Call call, Response response) {
+                        Toast.makeText(AccommodationDetailsActivity.this, "Successfully deleted review", Toast.LENGTH_SHORT).show();
+                        setReviews(id);
+                    }
+
+                    @Override
+                    public void onFailure(Call call, Throwable t) {
+
+                    }
+                });
+            });
+        }
+    }
+
+    private Bitmap getRoundedBitmap(Bitmap bitmap) {
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        int radius = Math.min(width, height) / 2;
+
+        BitmapShader shader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setShader(shader);
+
+        Bitmap roundedBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(roundedBitmap);
+        canvas.drawCircle(width / 2, height / 2, radius, paint);
+
+        return roundedBitmap;
+    }
+
+    private void setMap() {
         mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(googleMap -> {
@@ -143,7 +333,7 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
         });
     }
 
-    private void getData(Long id){
+    private void getData(Long id) {
         Call<AccommodationDetailDTO> call = ClientUtils.accommodationService.getAccommodationDetails(id);
         call.enqueue(new Callback<AccommodationDetailDTO>() {
             @Override
@@ -151,9 +341,11 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     accommodation = response.body();
                     showData();
+                    setReviews(id);
                 }
                 Log.d("Testiranje", "TEST");
             }
+
             @Override
             public void onFailure(Call<AccommodationDetailDTO> call, Throwable t) {
                 Log.d("Error", "Accommodation details");
@@ -161,7 +353,7 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
         });
     }
 
-    private void showData(){
+    private void showData() {
         RatingBar stars = findViewById(R.id.starRating);
         TextView name = findViewById(R.id.name);
         TextView desc = findViewById(R.id.description);
@@ -200,8 +392,8 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
             showReservationOption();
     }
 
-    private void setAmenities(GridLayout amenitiesLayout){
-        for (Filter f : accommodation.getFilters()){
+    private void setAmenities(GridLayout amenitiesLayout) {
+        for (Filter f : accommodation.getFilters()) {
             View amenity = LayoutInflater.from(this).inflate(R.layout.amenity, null);
             TextView name = amenity.findViewById(R.id.amenityName);
             ImageView icon = amenity.findViewById(R.id.amenityIcon);
@@ -213,11 +405,11 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
         }
     }
 
-    private String transformFilter(Filter f){
+    private String transformFilter(Filter f) {
         return f.toString().substring(0, 1) + f.toString().replace("_", " ").substring(1, f.toString().length()).toLowerCase();
     }
 
-    private void setImages(ViewFlipper slider){
+    private void setImages(ViewFlipper slider) {
         Call<String[]> call = ClientUtils.accommodationService.getImages(accommodation.getId());
         call.enqueue(new Callback<String[]>() {
             @Override
@@ -227,7 +419,7 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
                     for (String imageResponse : response.body()) {
                         Bitmap bitmap = decodeBase64Image(imageResponse);
                         if (bitmap != null) {
-                            ImageView image = new ImageView (getApplicationContext());
+                            ImageView image = new ImageView(getApplicationContext());
                             image.setScaleType(ImageView.ScaleType.CENTER_CROP);
                             image.setImageBitmap(bitmap);
                             slider.addView(image);
@@ -248,7 +440,7 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
         return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
     }
 
-    private void getOwnerImage(ImageView ownerImage){
+    private void getOwnerImage(ImageView ownerImage) {
         Call<ResponseBody> call = ClientUtils.accountService.getImage(accommodation.getOwner().getImageId());
         call.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -371,7 +563,7 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
         });
     }
 
-    private void calculatePrice(View reservation, String begin, String end, int persons){
+    private void calculatePrice(View reservation, String begin, String end, int persons) {
         TextView priceView = reservation.findViewById(R.id.price);
         priceView.setText("Calculating...");
         Call<Double> call = ClientUtils.accommodationService.getTotalPrice(accommodation.getId(), begin, end, accommodation.getPricePer(), persons);
@@ -395,17 +587,14 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
         });
     }
 
-    public LatLng getLocationFromAddress(String strAddress)
-    {
-        Geocoder coder= new Geocoder(this);
+    public LatLng getLocationFromAddress(String strAddress) {
+        Geocoder coder = new Geocoder(this);
         List<Address> address;
         LatLng p1 = null;
 
-        try
-        {
+        try {
             address = coder.getFromLocationName(strAddress, 5);
-            if(address==null)
-            {
+            if (address == null) {
                 return null;
             }
             Address location = address.get(0);
@@ -413,9 +602,7 @@ public class AccommodationDetailsActivity extends AppCompatActivity {
             location.getLongitude();
 
             p1 = new LatLng(location.getLatitude(), location.getLongitude());
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return p1;

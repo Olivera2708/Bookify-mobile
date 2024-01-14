@@ -69,22 +69,8 @@
                                 android:layout_width="100dp"
                                 android:layout_height="100dp"
                                 android:src="@drawable/account_round"
-                                app:tint="?attr/iconTint"
+                                android:scaleType="centerCrop"
                                 />
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/e_mail"
-                                android:textSize="18sp"
-                                />
-
-                            <TextView
-                                android:id="@+id/email"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginBottom="5dp"
-                                android:text="radojko.petrovic@example.com"/>
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -96,8 +82,7 @@
                                 android:id="@+id/first_name"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginBottom="5dp"
-                                android:text="Radojko"/>
+                                android:layout_marginBottom="5dp"/>
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -109,8 +94,7 @@
                                 android:id="@+id/last_name"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginBottom="5dp"
-                                android:text="Petrovic"/>
+                                android:layout_marginBottom="5dp"/>
 
                             <TextView
                                 android:layout_width="match_parent"
@@ -119,14 +103,14 @@
                                 android:textSize="18sp"/>
 
                             <TextView
+                                android:id="@+id/phone"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginBottom="5dp"
-                                android:text="+3816542521"/>
+                                android:layout_marginBottom="5dp"/>
                         </LinearLayout>
             </androidx.cardview.widget.CardView>
             <include
-                android:id="@+id/comment_section"
+                android:id="@+id/comments_1"
                 layout="@layout/account_rating_and_comments"/>
         </LinearLayout>
     </ScrollView>

@@ -34,21 +34,28 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
+                <TextView
+                    android:id="@+id/total1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="?attr/colorOnBackground" />
+
+
                 <RatingBar
                     android:id="@+id/rating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:progressTint="?attr/colorOnBackground"
                     android:numStars="5"
-                    android:rating="3.5"
+                    android:stepSize="0.1"
                     android:scaleY="0.8"
                     android:scaleX="0.8"
                     android:isIndicator="true"/>
 
                 <TextView
+                    android:id="@+id/total"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="(565)"
                     android:textColor="?attr/colorOnBackground" />
             </LinearLayout>
 
@@ -89,14 +96,13 @@
                         style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
                         android:layout_width="180dp"
                         android:layout_height="wrap_content"
-                        android:progress="50"
                         android:progressTint="?colorOnBackground"/>
 
                     <TextView
+                        android:id="@+id/total_5"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="7dp"
-                        android:text="(500)"
                         android:textColor="?colorOnBackground" />
                 </LinearLayout>
 
@@ -125,14 +131,13 @@
                         style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
                         android:layout_width="180dp"
                         android:layout_height="wrap_content"
-                        android:progress="20"
                         android:progressTint="?colorOnBackground" />
 
                     <TextView
+                        android:id="@+id/total_4"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="7dp"
-                        android:text="(50)"
                         android:textColor="?colorOnBackground" />
                 </LinearLayout>
 
@@ -161,14 +166,13 @@
                         style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
                         android:layout_width="180dp"
                         android:layout_height="wrap_content"
-                        android:progress="1"
                         android:progressTint="?colorOnBackground" />
 
                     <TextView
+                        android:id="@+id/total_3"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="7dp"
-                        android:text="(10)"
                         android:textColor="?colorOnBackground" />
                 </LinearLayout>
 
@@ -197,14 +201,13 @@
                         style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
                         android:layout_width="180dp"
                         android:layout_height="wrap_content"
-                        android:progress="1"
                         android:progressTint="?colorOnBackground" />
 
                     <TextView
+                        android:id="@+id/total_2"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="7dp"
-                        android:text="(5)"
                         android:textColor="?colorOnBackground" />
                 </LinearLayout>
 
@@ -233,14 +236,13 @@
                         style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
                         android:layout_width="180dp"
                         android:layout_height="wrap_content"
-                        android:progress="0"
                         android:progressTint="?colorOnBackground" />
 
                     <TextView
+                        android:id="@+id/total_1"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="7dp"
-                        android:text="(0)"
                         android:textColor="?colorOnBackground" />
                 </LinearLayout>
             </LinearLayout>

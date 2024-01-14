@@ -57,6 +57,7 @@ public class ClientUtils {
         ClientUtils.accommodationService = retrofit.create(AccommodationService.class);
         ClientUtils.accountService = retrofit.create(AccountService.class);
         ClientUtils.reservationService = retrofit.create(ReservationService.class);
+        ClientUtils.reviewService = retrofit.create(ReviewService.class);
     }
     /*
      * Prvo je potrebno da definisemo retrofit instancu preko koje ce komunikacija ici
@@ -71,4 +72,5 @@ public class ClientUtils {
     public static AccommodationService accommodationService = null;
     public static AccountService accountService = null;
     public static ReservationService reservationService = null;
+    public static ReviewService reviewService = null;
 }

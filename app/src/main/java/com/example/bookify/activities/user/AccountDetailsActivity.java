@@ -15,9 +15,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.BitmapShader;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Shader;
 import android.graphics.drawable.ColorDrawable;
 import android.icu.text.SimpleDateFormat;
 import android.net.Uri;
@@ -26,11 +31,17 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +51,8 @@ import com.example.bookify.clients.ClientUtils;
 import com.example.bookify.databinding.AccountDeletionDialogBinding;
 import com.example.bookify.databinding.ActivityAccountDetailsBinding;
 import com.example.bookify.databinding.ChangePasswordBinding;
+import com.example.bookify.model.CommentDTO;
+import com.example.bookify.model.RatingDTO;
 import com.example.bookify.model.user.UserDetailsDTO;
 import com.example.bookify.navigation.NavigationBar;
 import com.example.bookify.R;
@@ -55,6 +68,7 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -77,6 +91,7 @@ public class AccountDetailsActivity extends AppCompatActivity {
     private AccountDeletionDialogBinding accountDeletionDialogBinding;
     private boolean takeAPicture = false;
     private Uri file;
+
     private final ActivityResultLauncher<String[]> permissionsResult = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), result -> {
         ArrayList<Boolean> list = new ArrayList<>(result.values());
         if (list.get(0) && list.get(1)) takeAPicture = true;
@@ -86,10 +101,10 @@ public class AccountDetailsActivity extends AppCompatActivity {
                 if (result.getResultCode() == Activity.RESULT_OK) {
                     String filePath = "";
                     Uri imageData;
-                    if(result.getData() != null) {
+                    if (result.getData() != null) {
                         Intent intent = result.getData();
                         imageData = intent.getData();
-                    }else{
+                    } else {
                         imageData = file;
                     }
                     filePath = getFilePath(imageData);
@@ -127,16 +142,18 @@ public class AccountDetailsActivity extends AppCompatActivity {
         setLogoutButtonAction();
         setDeleteAccountAction();
 
-        View view1 = findViewById(R.id.include1);
-        View view2 = findViewById(R.id.include2);
-        View view3 = findViewById(R.id.include3);
-
+//        View view1 = findViewById(R.id.include1);
+//        View view2 = findViewById(R.id.include2);
+//        View view3 = findViewById(R.id.include3);
+//
         this.sharedPreferences = getSharedPreferences("sharedPref", MODE_PRIVATE);
         if (sharedPreferences.getString("userType", "none").equals("OWNER")) {
-            setReportButton(view1);
-            setReportButton(view2);
-            setReportButton(view3);
+//            setReportButton(view1);
+//            setReportButton(view2);
+//            setReportButton(view3);
+            setReviews();
         }
+
 
         OnBackPressedCallback callback = new OnBackPressedCallback(true) {
             @Override
@@ -152,6 +169,166 @@ public class AccountDetailsActivity extends AppCompatActivity {
         processPermission();
         loadUserData();
         setTextFieldsValidators();
+    }
+
+    private void setReviews() {
+        Long ownerId = sharedPreferences.getLong("id", 0L);
+        Call<List<CommentDTO>> call = ClientUtils.reviewService.getOwnerComments(ownerId);
+        call.enqueue(new Callback<List<CommentDTO>>() {
+            @Override
+            public void onResponse(Call<List<CommentDTO>> call, Response<List<CommentDTO>> response) {
+                if (response.code() == 200 && response.body() != null) {
+                    List<CommentDTO> comments = response.body();
+                    setComments(comments);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<CommentDTO>> call, Throwable t) {
+
+            }
+        });
+
+        Call<RatingDTO> callRating = ClientUtils.reviewService.getOwnerRating(ownerId);
+        callRating.enqueue(new Callback<RatingDTO>() {
+            @Override
+            public void onResponse(Call<RatingDTO> call, Response<RatingDTO> response) {
+                if (response.code() == 200 && response.body() != null) {
+                    RatingDTO ratingDTO = response.body();
+                    setRating(ratingDTO);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<RatingDTO> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void setRating(RatingDTO ratingDTO) {
+        String avgRating = String.format("%.2f", ratingDTO.getAvgRating());
+
+        RatingBar rating = findViewById(R.id.rating);
+        rating.setRating((float) ratingDTO.getAvgRating());
+
+        ProgressBar progres5 = findViewById(R.id.progress_5);
+        ProgressBar progres4 = findViewById(R.id.progress_4);
+        ProgressBar progres3 = findViewById(R.id.progress_3);
+        ProgressBar progres2 = findViewById(R.id.progress_2);
+        ProgressBar progres1 = findViewById(R.id.progress_1);
+
+        TextView total_5 = findViewById(R.id.total_5);
+        TextView total_4 = findViewById(R.id.total_4);
+        TextView total_3 = findViewById(R.id.total_3);
+        TextView total_2 = findViewById(R.id.total_2);
+        TextView total_1 = findViewById(R.id.total_1);
+
+        TextView total = findViewById(R.id.total);
+        TextView total1 = findViewById(R.id.total1);
+
+        int count = ratingDTO.getFiveStars() + ratingDTO.getFourStars() + ratingDTO.getThreeStars() +
+                ratingDTO.getTwoStars() + ratingDTO.getOneStars();
+
+        int sum = ratingDTO.getFiveStars() * 5 + ratingDTO.getFourStars() * 4 + ratingDTO.getThreeStars() * 3 +
+                ratingDTO.getTwoStars() * 2 + ratingDTO.getOneStars();
+
+        total.setText("(" + count + ")");
+        total1.setText(avgRating);
+
+        if (count > 0) {
+            progres5.setProgress(ratingDTO.getFiveStars() * 100 / count);
+            progres4.setProgress(ratingDTO.getFourStars() * 100 / count);
+            progres3.setProgress(ratingDTO.getThreeStars() * 100 / count);
+            progres2.setProgress(ratingDTO.getTwoStars() * 100 / count);
+            progres1.setProgress(ratingDTO.getOneStars() * 100 / count);
+        }
+
+        total_1.setText("(" + ratingDTO.getOneStars() + ")");
+        total_2.setText("(" + ratingDTO.getTwoStars() + ")");
+        total_3.setText("(" + ratingDTO.getThreeStars() + ")");
+        total_4.setText("(" + ratingDTO.getFourStars() + ")");
+        total_5.setText("(" + ratingDTO.getFiveStars() + ")");
+    }
+
+    private void setComments(List<CommentDTO> comments) {
+        LinearLayout commentSection = findViewById(R.id.comment_section);
+        for (CommentDTO comment : comments) {
+            LayoutInflater inflater = LayoutInflater.from(this);
+            View commentView = inflater.inflate(R.layout.comment, commentSection, false);
+
+            setComment(comment, commentView);
+            commentSection.addView(commentView);
+        }
+    }
+
+    private void setComment(CommentDTO comment, View commentView) {
+        TextView name = commentView.findViewById(R.id.userName);
+        TextView date = commentView.findViewById(R.id.date);
+        ImageView image = commentView.findViewById(R.id.userPicture);
+        RatingBar stars = commentView.findViewById(R.id.stars);
+        TextView commentText = commentView.findViewById(R.id.commentText);
+
+        Button report = commentView.findViewById(R.id.btnReport);
+//        ImageView delete = commentView.findViewById(R.id.deleteComment);
+
+        Call<ResponseBody> callImage = ClientUtils.accommodationService.getImage(comment.getImageId());
+        callImage.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Bitmap bitmap = BitmapFactory.decodeStream(response.body().byteStream());
+                    image.setImageBitmap(getRoundedBitmap(bitmap));
+                } else {
+                    image.setImageResource(R.drawable.account_round);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.d("Image", "Basic accommodation image");
+//                JWTUtils.autoLogout((AppCompatActivity) getContext(), t);
+            }
+        });
+
+        stars.setRating((float) comment.getRate());
+        name.setText(comment.getName());
+        java.text.SimpleDateFormat dateFormat = new java.text.SimpleDateFormat("dd.MM.yyyy.", Locale.getDefault());
+        date.setText(dateFormat.format(comment.getDate()));
+        commentText.setText(comment.getComment());
+
+        report.setVisibility(View.VISIBLE);
+        report.setOnClickListener(v -> {
+            Call<Long> call = ClientUtils.reviewService.reportComment(comment.getId());
+            call.enqueue(new Callback<Long>() {
+                @Override
+                public void onResponse(Call<Long> call, Response<Long> response) {
+                    Toast.makeText(AccountDetailsActivity.this, "Review reported", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onFailure(Call<Long> call, Throwable t) {
+
+                }
+            });
+        });
+    }
+
+    private Bitmap getRoundedBitmap(Bitmap bitmap) {
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        int radius = Math.min(width, height) / 2;
+
+        BitmapShader shader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setShader(shader);
+
+        Bitmap roundedBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(roundedBitmap);
+        canvas.drawCircle(width / 2, height / 2, radius, paint);
+
+        return roundedBitmap;
     }
 
     private void loadUserData() {
@@ -480,19 +657,19 @@ public class AccountDetailsActivity extends AppCompatActivity {
             return changePasswordBinding.password.getError().toString();
         }
         if (changePasswordBinding.repeatedPassword.getError() != null) {
-            return  changePasswordBinding.repeatedPassword.getError().toString();
+            return changePasswordBinding.repeatedPassword.getError().toString();
         }
         return "";
     }
 
-    private void setDeleteAccountAction(){
+    private void setDeleteAccountAction() {
         binding.accountInformation.btnDeleteAccount.setOnClickListener(v -> {
             final Dialog dialog = new Dialog(this);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             accountDeletionDialogBinding = AccountDeletionDialogBinding.inflate(getLayoutInflater());
             dialog.setContentView(accountDeletionDialogBinding.getRoot());
 
-            accountDeletionDialogBinding.btnAcceptDelete.setOnClickListener(v1->{
+            accountDeletionDialogBinding.btnAcceptDelete.setOnClickListener(v1 -> {
                 deleteAccount();
                 dialog.dismiss();
             });
@@ -513,7 +690,7 @@ public class AccountDetailsActivity extends AppCompatActivity {
         deleteAccountCall.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if(response.code() == 400){
+                if (response.code() == 400) {
                     try {
                         Snackbar.make(binding.getRoot(), response.errorBody().string(), Snackbar.LENGTH_LONG).setAnchorView(binding.bottomNavigaiton).show();
                     } catch (IOException e) {
@@ -522,7 +699,7 @@ public class AccountDetailsActivity extends AppCompatActivity {
                 }
                 JWTUtils.clearCurrentLoginUserData(sharedPreferences);
                 Intent intent = new Intent(AccountDetailsActivity.this, LoginActivity.class);
-                intent.putExtra(JWTUtils.AUTO_LOGOUT,true);
+                intent.putExtra(JWTUtils.AUTO_LOGOUT, true);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                 startActivity(intent);
                 overridePendingTransition(0, 0);
