@@ -208,4 +208,11 @@ public interface AccommodationService {
     })
     @GET("accommodations/added-to-favorites/{guestId}/{accommodationId}")
     Call<Boolean> checkIfInFavorites(@Path("guestId") Long guestId, @Path("accommodationId") Long accommodationId);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("accommodations/top-accommodations")
+    Call<List<AccommodationBasicDTO>> getTopAccommodations(@Query("results") int results);
 }

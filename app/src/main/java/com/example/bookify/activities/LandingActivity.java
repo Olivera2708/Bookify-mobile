@@ -3,21 +3,31 @@ package com.example.bookify.activities;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.util.Pair;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.bookify.activities.accommodation.ResultsActivity;
+import com.example.bookify.adapters.data.TopAccommodationsAdapter;
+import com.example.bookify.adapters.pagers.AccommodationListAdapter;
+import com.example.bookify.clients.ClientUtils;
+import com.example.bookify.model.accommodation.AccommodationBasicDTO;
+import com.example.bookify.model.accommodation.SearchResponseDTO;
 import com.example.bookify.navigation.NavigationBar;
 import com.example.bookify.R;
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -26,11 +36,18 @@ import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClic
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LandingActivity extends AppCompatActivity {
     Button editDate;
     Button search;
+    private TopAccommodationsAdapter adapter;
+    RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +55,8 @@ public class LandingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_landing);
 
         NavigationBar.setNavigationBar(findViewById(R.id.bottom_navigaiton), this, R.id.navigation_home);
+
+        getData();
 
         View searchLayout = findViewById(R.id.searchLayout);
         editDate = searchLayout.findViewById(R.id.dateInput);
@@ -118,5 +137,30 @@ public class LandingActivity extends AppCompatActivity {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         dialog.getWindow().setGravity(Gravity.CENTER_VERTICAL);
+    }
+
+    private void getData(){
+        Call<List<AccommodationBasicDTO>> call = ClientUtils.accommodationService.getTopAccommodations(5);
+        call.enqueue(new Callback<List<AccommodationBasicDTO>>() {
+            @Override
+            public void onResponse(Call<List<AccommodationBasicDTO>> call, Response<List<AccommodationBasicDTO>> response) {
+                if (response.code() == 200 && response.body() != null) {
+                    showResults(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<AccommodationBasicDTO>> call, Throwable t) {
+                Log.d("Error", "Top accommodations");
+            }
+        });
+    }
+
+    private void showResults(List<AccommodationBasicDTO> accommodations){
+        adapter = new TopAccommodationsAdapter(this, accommodations);
+        recyclerView = findViewById(R.id.horizontalRecyclerView);
+        recyclerView.setAdapter(adapter);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(layoutManager);
     }
 }
