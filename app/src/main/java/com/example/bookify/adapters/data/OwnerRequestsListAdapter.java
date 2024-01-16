@@ -20,11 +20,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bookify.R;
 import com.example.bookify.clients.ClientUtils;
+import com.example.bookify.enumerations.Status;
 import com.example.bookify.model.reservation.ReservationDTO;
 import com.example.bookify.utils.JWTUtils;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.w3c.dom.Text;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -111,6 +114,64 @@ public class OwnerRequestsListAdapter extends ArrayAdapter<ReservationDTO> {
                         Log.d("Image", "Basic accommodation image");
                         JWTUtils.autoLogout((AppCompatActivity) getContext(), t);
                     }
+                });
+            }
+            int buttonVisibility = request.getStatus().equals(Status.PENDING) ? Button.VISIBLE : Button.INVISIBLE;
+            accept.setVisibility(buttonVisibility);
+            reject.setVisibility(buttonVisibility);
+            if(buttonVisibility == Button.VISIBLE){
+                accept.setOnClickListener(v->{
+                    Call<ReservationDTO> reservationAcceptCall = ClientUtils.reservationService.acceptReservation(request.getId());
+                    reservationAcceptCall.enqueue(new Callback<ReservationDTO>() {
+                        @Override
+                        public void onResponse(Call<ReservationDTO> call, Response<ReservationDTO> response) {
+                            if(response.isSuccessful() && response.body() != null){
+                                ReservationDTO r = response.body();
+                                requests.set(requests.indexOf(request), r);
+                                Snackbar.make(parent, "Reservation request accepted", Snackbar.LENGTH_LONG).setAnchorView(R.id.bottom_navigaiton).show();
+                                notifyDataSetChanged();
+                            }
+                            if(response.code() == 400){
+                                try {
+                                    Snackbar.make(parent, response.errorBody().string(), Snackbar.LENGTH_LONG).setAnchorView(R.id.bottom_navigaiton).show();
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ReservationDTO> call, Throwable t) {
+                            JWTUtils.autoLogout((AppCompatActivity) getContext(), t);
+                        }
+                    });
+                });
+
+                reject.setOnClickListener(v->{
+                    Call<ReservationDTO> reservationRejectCall = ClientUtils.reservationService.rejectReservation(request.getId());
+                    reservationRejectCall.enqueue(new Callback<ReservationDTO>() {
+                        @Override
+                        public void onResponse(Call<ReservationDTO> call, Response<ReservationDTO> response) {
+                            if(response.isSuccessful() && response.body() != null){
+                                ReservationDTO r = response.body();
+                                requests.set(requests.indexOf(request), r);
+                                Snackbar.make(parent, "Reservation request rejected", Snackbar.LENGTH_LONG).setAnchorView(R.id.bottom_navigaiton).show();
+                                notifyDataSetChanged();
+                            }
+                            if(response.code() == 400){
+                                try {
+                                    Snackbar.make(parent, response.errorBody().string(), Snackbar.LENGTH_LONG).setAnchorView(R.id.bottom_navigaiton).show();
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ReservationDTO> call, Throwable t) {
+                            JWTUtils.autoLogout((AppCompatActivity) getContext(), t);
+                        }
+                    });
                 });
             }
         }

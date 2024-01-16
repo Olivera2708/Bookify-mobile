@@ -86,4 +86,18 @@ public interface ReservationService {
                                                            @Query("endDate") String endDate,
                                                            @Query("statuses") Status[] statuses);
 
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @PUT("reservations/accept/{reservationId}")
+    Call<ReservationDTO> acceptReservation(@Path("reservationId") Long reservationId);
+
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @PUT("reservations/reject/{reservationId}")
+    Call<ReservationDTO> rejectReservation(@Path("reservationId") Long reservationId);
 }
