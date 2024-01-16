@@ -1,49 +1,48 @@
 package com.example.bookify.fragments.feedback;
 
+import android.app.Activity;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.example.bookify.R;
+import com.example.bookify.adapters.data.AllUsersAdapter;
+import com.example.bookify.adapters.data.ReportedUsersListAdapter;
+import com.example.bookify.clients.ClientUtils;
+import com.example.bookify.model.user.ReportedUserDetailsDTO;
+import com.example.bookify.model.user.UserDTO;
+import com.example.bookify.utils.JWTUtils;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ReportedUsersFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+
 public class ReportedUsersFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private List<ReportedUserDetailsDTO> reportedUsers;
+    private ReportedUsersListAdapter adapter;
+    private ListView reportedUsersListView;
+    private Activity activity;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public ReportedUsersFragment() {
+    public ReportedUsersFragment(Activity activity) {
         // Required empty public constructor
+        this.activity = activity;
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ReportedUsersFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ReportedUsersFragment newInstance(String param1, String param2) {
-        ReportedUsersFragment fragment = new ReportedUsersFragment();
+    public static ReportedUsersFragment newInstance(Activity activity) {
+        ReportedUsersFragment fragment = new ReportedUsersFragment(activity);
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -51,10 +50,6 @@ public class ReportedUsersFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -62,5 +57,30 @@ public class ReportedUsersFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_reported_users, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        reportedUsersListView = view.findViewById(R.id.reported_users);
+        getReportedUsers();
+    }
+    private void getReportedUsers(){
+        Call<List<ReportedUserDetailsDTO>> call = ClientUtils.accountService.getAllReportedUsers();
+        call.enqueue(new Callback<List<ReportedUserDetailsDTO>>() {
+            @Override
+            public void onResponse(Call<List<ReportedUserDetailsDTO>> call, Response<List<ReportedUserDetailsDTO>> response) {
+                if(response.body() != null && response.code() == 200) {
+                    reportedUsers = response.body();
+                    adapter = new ReportedUsersListAdapter(requireActivity(), reportedUsers);
+                    reportedUsersListView.setAdapter(adapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ReportedUserDetailsDTO>> call, Throwable t) {
+                JWTUtils.autoLogout((AppCompatActivity) activity, t);
+            }
+        });
     }
 }

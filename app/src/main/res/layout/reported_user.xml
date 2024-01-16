@@ -20,7 +20,7 @@
             android:paddingHorizontal="12dp">
 
             <ImageView
-                android:id="@+id/notification_icon"
+                android:id="@+id/account_icon"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_centerVertical="true"
@@ -33,7 +33,7 @@
                 android:id="@+id/user_info"
                 android:layout_width="280dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintStart_toEndOf="@id/notification_icon"
+                app:layout_constraintStart_toEndOf="@id/account_icon"
                 app:layout_constraintTop_toTopOf="parent"
                 android:orientation="vertical"
                 android:layout_marginEnd="6dp"
@@ -73,6 +73,7 @@
                         android:text="Reason:"
                         android:textSize="18sp"/>
                     <TextView
+                        android:id="@+id/report_reason"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur ornare interdum lorem, eu auctor nunc semper eu. Aenean rhoncus ac nibh ac volutpat. Morbi nisl eros, vulputate ac sodales sed, vehicula a lorem. "
@@ -83,11 +84,13 @@
                         android:text="Reported by:"
                         android:textSize="18sp"/>
                     <TextView
+                        android:id="@+id/reported_by_email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="neda.nedic@example.com"
                         />
                     <TextView
+                        android:id="@+id/reported_by_first_and_last_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Neda Nedic"

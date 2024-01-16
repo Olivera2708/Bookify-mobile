@@ -25,26 +25,21 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link AllUsersFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class AllUsersFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private List<UserDTO> users;
     private ListView allUsersListView;
     private AllUsersAdapter adapter;
     private Activity activity;
 
-    public AllUsersFragment() {
+    public AllUsersFragment(Activity activity) {
         // Required empty public constructor
+        this.activity = activity;
     }
 
     public static AllUsersFragment newInstance(Activity activity) {
-        AllUsersFragment fragment = new AllUsersFragment();
+        AllUsersFragment fragment = new AllUsersFragment(activity);
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;

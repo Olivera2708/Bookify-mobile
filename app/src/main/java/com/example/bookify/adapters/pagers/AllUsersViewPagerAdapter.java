@@ -22,7 +22,7 @@ public class AllUsersViewPagerAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         switch (position){
             case 1:
-                return new ReportedUsersFragment();
+                return ReportedUsersFragment.newInstance(activity);
             default:
                 return AllUsersFragment.newInstance(activity);
         }
