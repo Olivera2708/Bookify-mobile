@@ -21,6 +21,7 @@ import com.example.bookify.clients.ClientUtils;
 import com.example.bookify.model.user.UserDTO;
 import com.example.bookify.utils.JWTUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,22 +33,24 @@ import retrofit2.Response;
 
 public class AllUsersAdapter extends ArrayAdapter<UserDTO> {
     private List<UserDTO> users;
+    private List<UserDTO> filteredUsers;
     private Activity activity;
     private Map<Long, Bitmap> accountImages;
     public AllUsersAdapter(@NonNull Activity context, List<UserDTO> resource) {
         super(context, R.layout.user, resource);
         this.users = resource;
+        filteredUsers = new ArrayList<>(resource);
         this.activity = context;
         this.accountImages = new HashMap<>();
     }
 
     @Override
-    public int getCount() {return this.users.size(); }
+    public int getCount() {return this.filteredUsers.size(); }
 
     @Nullable
     @Override
     public UserDTO getItem(int position) {
-        return this.users.get(position);
+        return this.filteredUsers.get(position);
     }
 
     @Override
@@ -107,7 +110,7 @@ public class AllUsersAdapter extends ArrayAdapter<UserDTO> {
             @Override
             public void onResponse(Call<UserDTO> call, Response<UserDTO> response) {
                 if(response.isSuccessful() && response.code() == 200){
-                    users.set(position, response.body());
+                    filteredUsers.set(position, response.body());
                     String blockText = response.body().isBlocked() ? "Unblock" : "Block";
                     button.setText(blockText);
                 }
@@ -118,5 +121,16 @@ public class AllUsersAdapter extends ArrayAdapter<UserDTO> {
                 JWTUtils.autoLogout((AppCompatActivity) activity, t);
             }
         });
+    }
+    public void filterUsers(String searchPara){
+        if(searchPara.isEmpty()) {
+            this.filteredUsers = new ArrayList<>(this.users);
+        }
+        this.filteredUsers.clear();
+        this.users.forEach(u -> {
+            if((u.getFirstName() + " " + u.getLastName() + " " + u.getEmail()).contains(searchPara)) this.filteredUsers.add(u);
+        });
+
+        notifyDataSetChanged();
     }
 }

@@ -8,16 +8,21 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.bookify.R;
 import com.example.bookify.adapters.data.AllUsersAdapter;
 import com.example.bookify.clients.ClientUtils;
 import com.example.bookify.model.user.UserDTO;
 import com.example.bookify.utils.JWTUtils;
+import com.example.bookify.utils.SearchWatcher;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.List;
 
@@ -32,6 +37,7 @@ public class AllUsersFragment extends Fragment {
     private ListView allUsersListView;
     private AllUsersAdapter adapter;
     private Activity activity;
+    private TextInputEditText searchTextBox;
 
     public AllUsersFragment(Activity activity) {
         // Required empty public constructor
@@ -63,6 +69,13 @@ public class AllUsersFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         allUsersListView = view.findViewById(R.id.all_users);
         getAllUsers();
+        searchTextBox = view.findViewById(R.id.search);
+        searchTextBox.addTextChangedListener(new SearchWatcher(searchTextBox) {
+            @Override
+            public void applySearch(TextView textView, String text) {
+                adapter.filterUsers(text);
+            }
+        });
     }
 
     private void getAllUsers(){
