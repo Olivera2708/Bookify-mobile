@@ -65,9 +65,8 @@ public class ReportedUsersListAdapter extends ArrayAdapter<ReportedUserDetailsDT
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         ReportedUserDetailsDTO reportedUser = getItem(position);
-        if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.reported_user, parent, false);
-        }
+        convertView = LayoutInflater.from(getContext()).inflate(R.layout.reported_user, parent, false);
+
         ImageView accountImage = convertView.findViewById(R.id.account_icon);
         TextView firstAndLastName = convertView.findViewById(R.id.first_and_last_name);
         TextView email = convertView.findViewById(R.id.email);

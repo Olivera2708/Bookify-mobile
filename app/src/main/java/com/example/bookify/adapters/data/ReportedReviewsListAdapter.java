@@ -66,9 +66,8 @@ public class ReportedReviewsListAdapter extends ArrayAdapter<ReviewAdminViewDTO>
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         ReviewAdminViewDTO review = getItem(position);
-        if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.reported_review_admin, parent, false);
-        }
+        convertView = LayoutInflater.from(getContext()).inflate(R.layout.reported_review_admin, parent, false);
+
 
         if (review != null) {
             ImageView accountImage = convertView.findViewById(R.id.userPicture);
