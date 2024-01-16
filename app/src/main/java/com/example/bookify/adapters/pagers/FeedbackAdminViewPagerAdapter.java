@@ -20,12 +20,10 @@ public class FeedbackAdminViewPagerAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-        switch (position){
-            case 1:
-                return ReportedReviewsFragment.newInstance(activity);
-            default:
-                return new NewReviewsFragment();
+        if (position == 1) {
+            return ReportedReviewsFragment.newInstance(activity);
         }
+        return NewReviewsFragment.newInstance(activity);
     }
 
     @Override
