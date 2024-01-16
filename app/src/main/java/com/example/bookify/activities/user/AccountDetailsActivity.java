@@ -693,6 +693,7 @@ public class AccountDetailsActivity extends AppCompatActivity {
                 if (response.code() == 400) {
                     try {
                         Snackbar.make(binding.getRoot(), response.errorBody().string(), Snackbar.LENGTH_LONG).setAnchorView(binding.bottomNavigaiton).show();
+                        return;
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }

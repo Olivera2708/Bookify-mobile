@@ -80,11 +80,6 @@ public class ReservationsFragmentOwner extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_reservations_owner, container, false);
-
-//        Button report = view.findViewById(R.id.btnReport);
-//        report.setOnClickListener(v -> {
-//            ShowDialog(R.layout.report);
-//        });
         return view;
     }
 
@@ -95,56 +90,6 @@ public class ReservationsFragmentOwner extends Fragment {
         getOwnerReservations();
     }
 
-    private void ShowDialog(int id) {
-        final Dialog dialog = new Dialog(getActivity());
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(id);
-
-        dialog.show();
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-        dialog.getWindow().setGravity(Gravity.CENTER_VERTICAL);
-
-        TextView reportGuest = dialog.findViewById(R.id.reportGuest);
-        reportGuest.setVisibility(View.VISIBLE);
-        Button btnReport = dialog.findViewById(R.id.btnReport);
-
-        btnReport.setOnClickListener(v -> {
-            sendReportOwner(dialog);
-        });
-    }
-
-    private void sendReportOwner(Dialog dialog){
-        TextInputEditText reason = dialog.findViewById(R.id.reason);
-
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("sharedPref", Context.MODE_PRIVATE);
-        Long ownerId = sharedPreferences.getLong("id", 0L);
-        String comment = reason.getText().toString();
-
-        if (comment.equals("")) {
-            Toast.makeText(getActivity(), "Reason is required", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        ReportedUserDTO reportedUserDTO = new ReportedUserDTO(comment, new Date(), 2L, ownerId);
-        Call<Long> call = ClientUtils.reviewService.reportUser(reportedUserDTO);
-
-        call.enqueue(new Callback<Long>() {
-            @Override
-            public void onResponse(Call<Long> call, Response<Long> response) {
-                if(response.isSuccessful()){
-                    Toast.makeText(getActivity(), "Successfully reported user", Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(getActivity(), "Cannot report user", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Long> call, Throwable t) {
-                Toast.makeText(getActivity(), "Cannot report user", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
     private void getOwnerReservations(){
         SharedPreferences sharedPreferences = getContext().getSharedPreferences("sharedPref", Context.MODE_PRIVATE);
         Long ownerId = sharedPreferences.getLong(JWTUtils.USER_ID, -1);

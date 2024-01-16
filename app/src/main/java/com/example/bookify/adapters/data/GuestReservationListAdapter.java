@@ -1,17 +1,24 @@
 package com.example.bookify.adapters.data;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,12 +27,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.bookify.R;
 import com.example.bookify.clients.ClientUtils;
 import com.example.bookify.model.OwnerDTO;
+import com.example.bookify.model.ReportedUserDTO;
+import com.example.bookify.model.ReviewDTO;
 import com.example.bookify.model.accommodation.AccommodationDetailDTO;
+import com.example.bookify.model.reservation.ReservationDTO;
 import com.example.bookify.model.reservation.ReservationGuestViewDTO;
 import com.example.bookify.utils.JWTUtils;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,6 +85,9 @@ public class GuestReservationListAdapter extends ArrayAdapter<ReservationGuestVi
         RatingBar stars = convertView.findViewById(R.id.starsRating);
         ImageView image = convertView.findViewById(R.id.image);
         Button cancel = convertView.findViewById(R.id.cancel);
+        Button report = convertView.findViewById(R.id.btnReport);
+        Button comment = convertView.findViewById(R.id.btnComment);
+
 
         if(reservation != null) {
             name.setText(reservation.getAccommodationName());
@@ -93,6 +108,7 @@ public class GuestReservationListAdapter extends ArrayAdapter<ReservationGuestVi
                         if(response.body() != null && response.isSuccessful()){
                             OwnerDTO ownerDTO = response.body().getOwner();
                             owner.setText("Owner: " + ownerDTO.getFirstName() + " " + ownerDTO.getLastName() + " (" + ownerDTO.getAvgRating()+"/5)");
+                            owners.put(reservation.getAccommodationId(), ownerDTO);
                         }
                     }
 
@@ -150,7 +166,146 @@ public class GuestReservationListAdapter extends ArrayAdapter<ReservationGuestVi
                 }
             });
         });
+        report.setOnClickListener(v -> {
+            ShowDialog(R.layout.report, reservation);
+        });
 
+        comment.setOnClickListener(v -> {
+            ShowDialog(R.layout.new_comment, reservation);
+        });
         return convertView;
+    }
+    private void ShowDialog(int id, ReservationGuestViewDTO reservation) {
+        final Dialog dialog = new Dialog(getContext());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(id);
+
+        dialog.show();
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().setGravity(Gravity.CENTER_VERTICAL);
+
+        if (id == R.layout.new_comment) {
+            Button accommodationReview = dialog.findViewById(R.id.btnSendAccommodation);
+
+            accommodationReview.setOnClickListener(v -> {
+                sendAccommodationReview(dialog, reservation.getAccommodationId());
+            });
+
+            Button ownerReview = dialog.findViewById(R.id.btnSendOwner);
+
+            ownerReview.setOnClickListener(v -> {
+                sendOwnerReview(dialog, owners.get(reservation.getAccommodationId()).getId());
+            });
+        } else {
+            TextView reportOwner = dialog.findViewById(R.id.reportOwner);
+            reportOwner.setVisibility(View.VISIBLE);
+            Button btnReport = dialog.findViewById(R.id.btnReport);
+
+            btnReport.setOnClickListener(v -> {
+                sendReportOwner(dialog, owners.get(reservation.getAccommodationId()).getId());
+            });
+        }
+
+    }
+
+    private void sendAccommodationReview(Dialog dialog, Long accommodationId) {
+        RatingBar accommodationRating = dialog.findViewById(R.id.ratingsAccommodation);
+        TextInputEditText accommodationComment = dialog.findViewById(R.id.accommodationComment);
+
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("sharedPref", Context.MODE_PRIVATE);
+        Long guestId = sharedPreferences.getLong("id", 0L);
+        String comment = accommodationComment.getText().toString();
+        int rating = (int) accommodationRating.getRating();
+
+        if (rating <= 0 || comment.equals("")) {
+            Toast.makeText(getContext(), "Comment and rating is required", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        ReviewDTO reviewDTO = new ReviewDTO(comment, rating, guestId);
+        Call<ReviewDTO> call = ClientUtils.reviewService.addAccommodationReview(accommodationId, reviewDTO);
+
+        call.enqueue(new Callback<ReviewDTO>() {
+            @Override
+            public void onResponse(Call<ReviewDTO> call, Response<ReviewDTO> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(getContext(), "Your comment has been sent to admin for approval", Toast.LENGTH_SHORT).show();
+                }
+                if (response.code() == 400) {
+                    Toast.makeText(getContext(), "You need to have a reservation to be able to comment on the accommodation", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ReviewDTO> call, Throwable t) {
+                Toast.makeText(getContext(), "You need to have a reservation to be able to comment on the accommodation", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void sendOwnerReview(Dialog dialog, Long ownerId) {
+        RatingBar accommodationRating = dialog.findViewById(R.id.ratingsOwner);
+        TextInputEditText accommodationComment = dialog.findViewById(R.id.ownerComment);
+
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("sharedPref", Context.MODE_PRIVATE);
+        Long guestId = sharedPreferences.getLong("id", 0L);
+        String comment = accommodationComment.getText().toString();
+        int rating = (int) accommodationRating.getRating();
+
+        if (rating <= 0 || comment.equals("")) {
+            Toast.makeText(getContext(), "Comment and rating is required", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        ReviewDTO reviewDTO = new ReviewDTO(comment, rating, guestId);
+        Call<ReviewDTO> call = ClientUtils.reviewService.addOwnerReview(ownerId, reviewDTO);
+
+        call.enqueue(new Callback<ReviewDTO>() {
+            @Override
+            public void onResponse(Call<ReviewDTO> call, Response<ReviewDTO> response) {
+                if (response.isSuccessful()) {
+                    Toast.makeText(getContext(), "Your comment has been sent to admin for approval", Toast.LENGTH_SHORT).show();
+                }
+                if (response.code() == 400) {
+                    Toast.makeText(getContext(), "You need to have a reservation to be able to comment on the owner", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ReviewDTO> call, Throwable t) {
+                Toast.makeText(getContext(), "You need to have a reservation to be able to comment on the owner", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void sendReportOwner(Dialog dialog, Long ownerId){
+        TextInputEditText reason = dialog.findViewById(R.id.reason);
+
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("sharedPref", Context.MODE_PRIVATE);
+        Long guestId = sharedPreferences.getLong("id", 0L);
+        String comment = reason.getText().toString();
+
+        if (comment.equals("")) {
+            Toast.makeText(getContext(), "Reason is required", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        ReportedUserDTO reportedUserDTO = new ReportedUserDTO(comment, new Date(), ownerId, guestId);
+        Call<Long> call = ClientUtils.reviewService.reportUser(reportedUserDTO);
+
+        call.enqueue(new Callback<Long>() {
+            @Override
+            public void onResponse(Call<Long> call, Response<Long> response) {
+                if(response.isSuccessful()){
+                    Toast.makeText(getContext(), "Successfully reported user", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(getContext(), "Cannot report user", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Long> call, Throwable t) {
+                Toast.makeText(getContext(), "Cannot report user", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
