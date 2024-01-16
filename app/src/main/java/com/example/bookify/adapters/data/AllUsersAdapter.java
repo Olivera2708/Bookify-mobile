@@ -39,7 +39,7 @@ public class AllUsersAdapter extends ArrayAdapter<UserDTO> {
     public AllUsersAdapter(@NonNull Activity context, List<UserDTO> resource) {
         super(context, R.layout.user, resource);
         this.users = resource;
-        filteredUsers = new ArrayList<>(resource);
+        filteredUsers = (ArrayList<UserDTO>) ((ArrayList<UserDTO>) this.users).clone();
         this.activity = context;
         this.accountImages = new HashMap<>();
     }
@@ -110,8 +110,10 @@ public class AllUsersAdapter extends ArrayAdapter<UserDTO> {
             @Override
             public void onResponse(Call<UserDTO> call, Response<UserDTO> response) {
                 if(response.isSuccessful() && response.code() == 200){
-                    filteredUsers.set(position, response.body());
-                    String blockText = response.body().isBlocked() ? "Unblock" : "Block";
+                    UserDTO u = response.body();
+                    user.setBlocked(u.isBlocked());
+//                    filteredUsers.set(position, response.body());
+                    String blockText = u.isBlocked() ? "Unblock" : "Block";
                     button.setText(blockText);
                 }
             }
@@ -123,9 +125,6 @@ public class AllUsersAdapter extends ArrayAdapter<UserDTO> {
         });
     }
     public void filterUsers(String searchPara){
-        if(searchPara.isEmpty()) {
-            this.filteredUsers = new ArrayList<>(this.users);
-        }
         this.filteredUsers.clear();
         this.users.forEach(u -> {
             if((u.getFirstName() + " " + u.getLastName() + " " + u.getEmail()).contains(searchPara)) this.filteredUsers.add(u);
