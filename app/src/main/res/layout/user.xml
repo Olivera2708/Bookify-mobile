@@ -22,7 +22,7 @@
             android:paddingHorizontal="12dp">
 
             <ImageView
-                android:id="@+id/notification_icon"
+                android:id="@+id/account_icon"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_centerVertical="true"
@@ -35,7 +35,7 @@
                 android:id="@+id/user_info"
                 android:layout_width="280dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintStart_toEndOf="@id/notification_icon"
+                app:layout_constraintStart_toEndOf="@id/account_icon"
                 app:layout_constraintTop_toTopOf="parent"
                 android:orientation="vertical"
                 android:layout_marginEnd="6dp"
