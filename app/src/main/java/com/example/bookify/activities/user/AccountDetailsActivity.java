@@ -15,7 +15,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
@@ -39,7 +38,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -56,6 +54,7 @@ import com.example.bookify.model.RatingDTO;
 import com.example.bookify.model.user.UserDetailsDTO;
 import com.example.bookify.navigation.NavigationBar;
 import com.example.bookify.R;
+import com.example.bookify.services.NotificationsForegroundService;
 import com.example.bookify.utils.GenericFileProvider;
 import com.example.bookify.utils.JWTUtils;
 import com.example.bookify.utils.TextValidator;
@@ -384,6 +383,9 @@ public class AccountDetailsActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     JWTUtils.clearCurrentLoginUserData(sharedPreferences);
+                    Intent stopService = new Intent(AccountDetailsActivity.this, NotificationsForegroundService.class);
+                    stopService.setAction(NotificationsForegroundService.ACTION_STOP_FOREGROUND_SERVICE);
+                    AccountDetailsActivity.this.startService(stopService);
                     Intent intent = new Intent(AccountDetailsActivity.this, LoginActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     startActivity(intent);

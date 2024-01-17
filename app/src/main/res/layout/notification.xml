@@ -41,22 +41,22 @@
                 android:layout_marginEnd="6dp"
                 android:text="Gordana accepted your booking request for 23.11.2023."
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/notification_delete"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/notification_icon"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:contentDescription="@string/delete"
-                android:id="@+id/notification_delete"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_delete"
-                app:tint="?attr/iconTint"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/notification_text"
-                app:layout_constraintTop_toTopOf="parent" />
+<!--            <ImageView-->
+<!--                android:contentDescription="@string/delete"-->
+<!--                android:id="@+id/notification_delete"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_centerVertical="true"-->
+<!--                android:src="@drawable/ic_delete"-->
+<!--                app:tint="?attr/iconTint"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toEndOf="@id/notification_text"-->
+<!--                app:layout_constraintTop_toTopOf="parent" />-->
 
         </androidx.constraintlayout.widget.ConstraintLayout>
         

@@ -11,6 +11,7 @@ import com.example.bookify.R;
 import com.example.bookify.activities.LoginActivity;
 import com.example.bookify.activities.accommodation.ResultsActivity;
 import com.example.bookify.model.user.UserJWT;
+import com.example.bookify.services.NotificationsForegroundService;
 
 import java.util.Date;
 
@@ -67,6 +68,9 @@ public abstract class JWTUtils {
     public static void autoLogout(AppCompatActivity context, Throwable t){
         clearCurrentLoginUserData(context.getSharedPreferences("sharedPref", context.MODE_PRIVATE));
         if(t.getMessage().equals("401")){
+            Intent stopService = new Intent(context, NotificationsForegroundService.class);
+            stopService.setAction(NotificationsForegroundService.ACTION_STOP_FOREGROUND_SERVICE);
+            context.startService(stopService);
             Intent intent = new Intent(context, LoginActivity.class);
             intent.putExtra(JWTUtils.AUTO_LOGOUT, true);
             context.startActivity(intent);
