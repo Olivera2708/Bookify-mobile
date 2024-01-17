@@ -1,6 +1,7 @@
 package com.example.bookify.adapters.data;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import androidx.annotation.Nullable;
 import com.example.bookify.R;
 import com.example.bookify.enumerations.NotificationType;
 import com.example.bookify.model.NotificationDTO;
+import com.example.bookify.services.NotificationsForegroundService;
 
 import java.util.List;
 
@@ -52,6 +54,7 @@ public class NotificationListAdapter extends ArrayAdapter<NotificationDTO> {
     }
 
     private void setIcon(NotificationType notificationType, ImageView notificationIcon){
-
+        int id = NotificationsForegroundService.getIcon(notificationType);
+        notificationIcon.setImageResource(id);
     }
 }

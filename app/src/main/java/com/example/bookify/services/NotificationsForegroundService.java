@@ -95,7 +95,6 @@ public class NotificationsForegroundService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Toast.makeText(getApplicationContext(), "Stop foreground service.", Toast.LENGTH_LONG).show();
         if(stompClient != null) {
             stompClient.disconnect();
         }
