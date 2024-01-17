@@ -65,9 +65,7 @@ public class OwnerAccommodationListAdapter extends ArrayAdapter<AccommodationOwn
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         AccommodationOwnerDTO accommodation = getItem(position);
-        if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.accommodation_owner_view, parent, false);
-        }
+        convertView = LayoutInflater.from(getContext()).inflate(R.layout.accommodation_owner_view, parent, false);
 
         TextView name = convertView.findViewById(R.id.apartment_name);
         TextView address = convertView.findViewById(R.id.apartment_address);

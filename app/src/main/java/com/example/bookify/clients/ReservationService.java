@@ -3,6 +3,7 @@ package com.example.bookify.clients;
 import com.example.bookify.enumerations.Status;
 import com.example.bookify.model.accommodation.SearchResponseDTO;
 import com.example.bookify.model.reservation.ReservationDTO;
+import com.example.bookify.model.reservation.ReservationGuestViewDTO;
 import com.example.bookify.model.reservation.ReservationRequestDTO;
 
 import java.util.List;
@@ -86,4 +87,32 @@ public interface ReservationService {
                                                            @Query("endDate") String endDate,
                                                            @Query("statuses") Status[] statuses);
 
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @PUT("reservations/accept/{reservationId}")
+    Call<ReservationDTO> acceptReservation(@Path("reservationId") Long reservationId);
+
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @PUT("reservations/reject/{reservationId}")
+    Call<ReservationDTO> rejectReservation(@Path("reservationId") Long reservationId);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("reservations/guest/{guestId}")
+    Call<List<ReservationGuestViewDTO>> getGuestReservations(@Path("guestId") Long guestId);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @PUT("reservations/cancel/{reservationId}")
+    Call<ReservationGuestViewDTO> cancelReservation(@Path("reservationId") Long reservationId);
 }

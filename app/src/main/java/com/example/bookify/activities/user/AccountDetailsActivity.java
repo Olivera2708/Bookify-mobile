@@ -241,6 +241,12 @@ public class AccountDetailsActivity extends AppCompatActivity {
             progres3.setProgress(ratingDTO.getThreeStars() * 100 / count);
             progres2.setProgress(ratingDTO.getTwoStars() * 100 / count);
             progres1.setProgress(ratingDTO.getOneStars() * 100 / count);
+        } else {
+            progres5.setProgress(0);
+            progres4.setProgress(0);
+            progres3.setProgress(0);
+            progres2.setProgress(0);
+            progres1.setProgress(0);
         }
 
         total_1.setText("(" + ratingDTO.getOneStars() + ")");
@@ -695,6 +701,7 @@ public class AccountDetailsActivity extends AppCompatActivity {
                 if (response.code() == 400) {
                     try {
                         Snackbar.make(binding.getRoot(), response.errorBody().string(), Snackbar.LENGTH_LONG).setAnchorView(binding.bottomNavigaiton).show();
+                        return;
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
