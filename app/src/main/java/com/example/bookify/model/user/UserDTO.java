@@ -13,6 +13,8 @@ public class UserDTO {
     private String lastName;
     @Expose
     private boolean blocked;
+    @Expose
+    private Long imageId;
 
     public Long getId() {
         return id;
@@ -54,14 +56,23 @@ public class UserDTO {
         this.blocked = blocked;
     }
 
+    public Long getImageId() {
+        return imageId;
+    }
+
+    public void setImageId(Long imageId) {
+        this.imageId = imageId;
+    }
+
     public UserDTO() {
     }
 
-    public UserDTO(Long id, String email, String firstName, String lastName, boolean blocked) {
+    public UserDTO(Long id, String email, String firstName, String lastName, boolean blocked, Long imageId) {
         this.id = id;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.blocked = blocked;
+        this.imageId = imageId;
     }
 }
