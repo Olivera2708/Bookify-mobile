@@ -2,6 +2,7 @@ package com.example.bookify.activities;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,6 +20,7 @@ import com.example.bookify.clients.ClientUtils;
 import com.example.bookify.databinding.ActivityLoginBinding;
 import com.example.bookify.model.user.UserCredentialsDTO;
 import com.example.bookify.model.user.UserJWT;
+import com.example.bookify.services.NotificationsForegroundService;
 import com.example.bookify.utils.JWTUtils;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -126,6 +128,7 @@ public class LoginActivity extends AppCompatActivity {
                 JWTUtils.setCurrentLoginUser(sharedPreferences, token);
                 Intent intent = new Intent(LoginActivity.this, LandingActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                checkForNotificationService();
                 startActivity(intent);
                 overridePendingTransition(0, 0);
                 finish();
@@ -160,6 +163,15 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
         overridePendingTransition(0, 0);
         finish();
+    }
+
+    private void checkForNotificationService(){
+        String userRole = sharedPreferences.getString(JWTUtils.USER_ROLE, "none");
+        if(userRole.equals("GUEST") || userRole.equals("OWNER")) {
+            Intent serviceIntent = new Intent(this, NotificationsForegroundService.class);
+            serviceIntent.setAction(NotificationsForegroundService.ACTION_START_FOREGROUND_SERVICE);
+            ContextCompat.startForegroundService(this, serviceIntent);
+        }
     }
 
 }

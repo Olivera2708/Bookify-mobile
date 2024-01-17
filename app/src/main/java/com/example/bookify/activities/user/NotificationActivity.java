@@ -2,32 +2,54 @@ package com.example.bookify.activities.user;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.example.bookify.BuildConfig;
 import com.example.bookify.activities.LandingActivity;
 import com.example.bookify.adapters.data.NotificationListAdapter;
 import com.example.bookify.clients.ClientUtils;
 import com.example.bookify.model.NotificationDTO;
 import com.example.bookify.navigation.NavigationBar;
 import com.example.bookify.R;
+import com.example.bookify.services.NotificationsForegroundService;
 import com.example.bookify.utils.JWTUtils;
+import com.example.bookify.utils.StompUtils;
 
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.WebSocket;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import ua.naiksoftware.stomp.Stomp;
+import ua.naiksoftware.stomp.StompClient;
+import ua.naiksoftware.stomp.dto.StompHeader;
 
 public class NotificationActivity extends AppCompatActivity {
 
@@ -75,13 +97,13 @@ public class NotificationActivity extends AppCompatActivity {
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         dialog.getWindow().setGravity(Gravity.CENTER_VERTICAL);
     }
-    private void getNotifications(){
+    private void getNotifications() {
         Long userId = sharedPreferences.getLong(JWTUtils.USER_ID, -1);
         Call<List<NotificationDTO>> getNotificationsCall = ClientUtils.notificationService.getUserNotifications(userId);
         getNotificationsCall.enqueue(new Callback<List<NotificationDTO>>() {
             @Override
             public void onResponse(Call<List<NotificationDTO>> call, Response<List<NotificationDTO>> response) {
-                if(response.isSuccessful() && response.body() != null){
+                if (response.isSuccessful() && response.body() != null) {
                     notifications = response.body();
                     adapter = new NotificationListAdapter(NotificationActivity.this, notifications);
                     notificationsListView.setAdapter(adapter);
