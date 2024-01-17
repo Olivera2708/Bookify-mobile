@@ -8,15 +8,13 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
@@ -25,25 +23,16 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.example.bookify.BuildConfig;
 import com.example.bookify.R;
-import com.example.bookify.activities.LoginActivity;
 import com.example.bookify.activities.SplashScreenActivity;
 import com.example.bookify.enumerations.NotificationType;
 import com.example.bookify.model.NotificationDTO;
 import com.example.bookify.utils.JWTUtils;
 import com.example.bookify.utils.StompUtils;
-import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
-import okhttp3.Request;
-import okhttp3.WebSocket;
-import okio.ByteString;
 import ua.naiksoftware.stomp.Stomp;
 import ua.naiksoftware.stomp.StompClient;
-import ua.naiksoftware.stomp.dto.LifecycleEvent;
-import ua.naiksoftware.stomp.dto.StompMessage;
 
 public class NotificationsForegroundService extends Service {
     private String socketAddress = "ws://" + BuildConfig.IP_ADDR + ":8080/socket/websocket";
@@ -123,7 +112,7 @@ public class NotificationsForegroundService extends Service {
 
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            notificationChannel = new NotificationChannel(CHANNEL_ID, "Foreground Service Channel", NotificationManager.IMPORTANCE_DEFAULT);
+            notificationChannel = new NotificationChannel(CHANNEL_ID, "Foreground Service Channel", NotificationManager.IMPORTANCE_HIGH);
         }
         NotificationManager manager = getSystemService(NotificationManager.class);
         manager.createNotificationChannel(notificationChannel);
@@ -155,23 +144,28 @@ public class NotificationsForegroundService extends Service {
         NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
         bigTextStyle.setBigContentTitle(notification.getNotificationType().name());
         bigTextStyle.bigText(notification.getDescription());
-        Intent fullScreenIntent = new Intent(this, SplashScreenActivity.class);
-        PendingIntent fullScreenPendingIntent = PendingIntent.getActivity(this, notificationID, fullScreenIntent, PendingIntent.FLAG_IMMUTABLE);
-
         builder.setSmallIcon(getIcon(notification.getNotificationType()))
                 .setStyle(bigTextStyle)
                 .setContentTitle(notification.getNotificationType().name())
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setWhen(System.currentTimeMillis())
                 .setContentIntent(contentIntent)
                 .setAutoCancel(true)
-                .setFullScreenIntent(fullScreenPendingIntent, true);
+                .setFullScreenIntent(contentIntent, true);
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
         notificationManagerCompat.notify(id, builder.build());
+        playRingtone();
     }
+
+    private void playRingtone() {
+        Uri ringtoneURI = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        Ringtone ringtone = RingtoneManager.getRingtone(getApplicationContext(), ringtoneURI);
+        ringtone.play();
+    }
+
     public static int getIcon(NotificationType notificationType){
         if(notificationType.equals(NotificationType.RESERVATION_CANCELED)){
             return R.drawable.notification_reservation_cancelled;
