@@ -28,6 +28,7 @@ import com.google.android.material.snackbar.Snackbar;
 import org.w3c.dom.Text;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -91,7 +92,8 @@ public class OwnerRequestsListAdapter extends ArrayAdapter<ReservationDTO> {
             guestCancel.setText("(Canceled " + request.getUser().getCancellationTimes() + " times" + ")");
             date.setText("Date: " + request.getStart() + " - " + request.getEnd());
             persons.setText("Persons: " + request.getGuestNumber());
-            price.setText("Income: " + request.getPrice() + " EUR");
+            DecimalFormat decimalFormat = new DecimalFormat("#.##");
+            price.setText("Income: " + decimalFormat.format(request.getPrice()) + " EUR");
             status.setText(request.getStatus().toString());
 
             if (imageMap.containsKey(request.getImageId())){

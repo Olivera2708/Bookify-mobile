@@ -32,6 +32,7 @@ import com.example.bookify.model.reservation.ReservationDTO;
 import com.example.bookify.utils.JWTUtils;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -83,7 +84,8 @@ public class OwnerReservationListAdapter extends ArrayAdapter<ReservationDTO> {
             name.setText(reservation.getAccommodationName());
             date.setText("Date:" + reservation.getStart() + " - " + reservation.getEnd());
             persons.setText("Persons: " + reservation.getGuestNumber());
-            price.setText("Cost: " + reservation.getPrice());
+            DecimalFormat decimalFormat = new DecimalFormat("#.##");
+            price.setText("Income: " + decimalFormat.format(reservation.getPrice()) + " EUR");
             stars.setRating((float) reservation.getAvgRating());
             status.setText("Status: " + reservation.getStatus().name());
             guest.setText("Guest: " + reservation.getUser().getFirstName() + " " + reservation.getUser().getLastName());
