@@ -7,6 +7,7 @@ import com.example.bookify.model.CommentDTO;
 import com.example.bookify.model.RatingDTO;
 import com.example.bookify.model.ReviewDTO;
 import com.example.bookify.model.UserBasicDTO;
+import com.example.bookify.model.review.ReviewAdminViewDTO;
 
 import java.util.List;
 
@@ -100,4 +101,48 @@ public interface ReviewService {
     @GET("users/user/{userId}")
     Call<UserBasicDTO> getUserBasic(@Path("userId") Long userId);
 
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("reviews/created")
+    Call<List<ReviewAdminViewDTO>> getAllCreatedReviews();
+
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("reviews/reported")
+    Call<List<ReviewAdminViewDTO>> getAllReportedReviews();
+
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @PUT("reviews/decline/{reviewId}")
+    Call<ReviewAdminViewDTO> declineReview(@Path("reviewId") Long reviewId);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @PUT("reviews/accept/{reviewId}")
+    Call<ReviewAdminViewDTO> acceptReview(@Path("reviewId") Long reviewId);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @PUT("reviews/ignore/{reviewId}")
+    Call<ReviewAdminViewDTO> ignoreReview(@Path("reviewId") Long reviewId);
+
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @DELETE("reviews/remove/{reviewId}")
+    Call<ReviewAdminViewDTO> removeReview(@Path("reviewId") Long reviewId);
 }

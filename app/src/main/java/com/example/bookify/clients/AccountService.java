@@ -4,9 +4,13 @@ import com.example.bookify.model.MessageDTO;
 import com.example.bookify.model.UserRegistrationDTO;
 import android.net.Uri;
 
+import com.example.bookify.model.user.ReportedUserDetailsDTO;
 import com.example.bookify.model.user.UserCredentialsDTO;
+import com.example.bookify.model.user.UserDTO;
 import com.example.bookify.model.user.UserDetailsDTO;
 import com.example.bookify.model.user.UserJWT;
+
+import java.util.List;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -91,4 +95,33 @@ public interface AccountService {
     })
     @DELETE("users/{userId}")
     Call<ResponseBody> deleteUser(@Path("userId") Long userId);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("users")
+    Call<List<UserDTO>> getAllUsers();
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @GET("users/reported")
+    Call<List<ReportedUserDetailsDTO>> getAllReportedUsers();
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @PUT("users/{userId}/block-user")
+    Call<UserDTO> blockUser(@Path("userId") Long userId);
+
+    @Headers({
+            "User-Agent: Mobile-Android",
+            "Content-Type:application/json"
+    })
+    @PUT("users/{userId}/unblock-user")
+    Call<UserDTO> unblockUser(@Path("userId") Long userId);
+
 }

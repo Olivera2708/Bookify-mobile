@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp">
                 <Button
-                    android:id="@+id/button_reject"
+                    android:id="@+id/button_approve"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:layout_width="100dp"
@@ -47,8 +47,8 @@
                     android:text="@string/approve"
                     />
                 <Button
-                    android:id="@+id/button_approve"
-                    app:layout_constraintEnd_toStartOf="@id/button_reject"
+                    android:id="@+id/button_reject"
+                    app:layout_constraintEnd_toStartOf="@id/button_approve"
                     app:layout_constraintBottom_toBottomOf="parent"
                     android:layout_width="100dp"
                     android:layout_height="36dp"

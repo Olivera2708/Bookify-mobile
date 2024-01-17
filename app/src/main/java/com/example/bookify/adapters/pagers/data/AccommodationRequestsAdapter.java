@@ -66,9 +66,9 @@ public class AccommodationRequestsAdapter extends ArrayAdapter<AccommodationRequ
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         AccommodationRequestDTO request = getItem(position);
-        if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.accommodation_request_admin, parent, false);
-        }
+
+        convertView = LayoutInflater.from(getContext()).inflate(R.layout.accommodation_request_admin, parent, false);
+
         TextView ownerEmail = convertView.findViewById(R.id.owner_email);
         TextView ownerFirstAndLastName = convertView.findViewById(R.id.owner_first_and_last_name);
         TextView name = convertView.findViewById(R.id.accommodation_name);
