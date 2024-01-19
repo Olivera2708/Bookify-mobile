@@ -37,6 +37,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -93,7 +94,8 @@ public class GuestReservationListAdapter extends ArrayAdapter<ReservationGuestVi
             name.setText(reservation.getAccommodationName());
             date.setText("Date:" + reservation.getStart() + " - " + reservation.getEnd());
             persons.setText("Persons: " + reservation.getGuestNumber());
-            price.setText("Cost: " + reservation.getPrice());
+            DecimalFormat decimalFormat = new DecimalFormat("#.##");
+            price.setText("Cost: " + decimalFormat.format(reservation.getPrice()) + " EUR");
             stars.setRating((float) reservation.getAvgRating());
             status.setText("Status: " + reservation.getStatus().name());
             cancellationDate.setText("Cancellation due: " + reservation.getCancellationDate());

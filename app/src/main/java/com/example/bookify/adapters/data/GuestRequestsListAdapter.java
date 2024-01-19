@@ -28,6 +28,7 @@ import com.example.bookify.model.accommodation.AccommodationBasicDTO;
 import com.example.bookify.model.reservation.ReservationDTO;
 import com.example.bookify.utils.JWTUtils;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -90,7 +91,8 @@ public class GuestRequestsListAdapter extends ArrayAdapter<ReservationDTO> {
             owner.setText("Owner: " + request.getUser().getFirstName() + " " + request.getUser().getLastName() + " (" + formattedAvgRating + "/5)");
             date.setText("Date: " + request.getStart() + " - " + request.getEnd());
             persons.setText("Persons: " + request.getGuestNumber());
-            price.setText("Price: " + request.getPrice() + " EUR");
+            DecimalFormat decimalFormat = new DecimalFormat("#.##");
+            price.setText("Price: " + decimalFormat.format(request.getPrice()) + " EUR");
             status.setText(request.getStatus().toString());
 
             cancel.setOnClickListener(new View.OnClickListener() {
