@@ -28,6 +28,6 @@ Open project in Android Studio. Make sure to set ip_addr in local.properites to 
 
 ## Authors
 
-* Strindet 1 -  Miloš Bojanić - *SV9/2021* - [GitHub](https://github.com/milosbojanic)
+* Student 1 -  Miloš Bojanić - *SV9/2021* - [GitHub](https://github.com/milosbojanic)
 * Student 2 - Aleksa Vukomanović - *SV66/2021* - [GitHub](https://github.com/aleksaaaa02)
 * Student 3 - Olivera Radovanović - *SV46/2021* - [GitHub](https://github.com/Olivera2708)
