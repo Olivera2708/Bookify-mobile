@@ -13,6 +13,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 - Android Studio
 - [Server](https://github.com/SIIT-Team-3/Bookify-server)
+- [Client](https://github.com/SIIT-Team-3/Bookify-client)
 
 ### Installing
 
@@ -24,7 +25,7 @@ git clone https://github.com/SIIT-Team-3/Bookify-mobile
 
 ## Usage
 
-Open project in Android Studio. Make sure to set ip_addr in local.properites to your ip address (where the server is running). You can now press run and start an application.
+Open project in Android Studio. Make sure to set ip_addr in local.properites to your ip address (where the server is running), as well as `IP_ADDRESS` in `UserControler` in [Server](https://github.com/SIIT-Team-3/Bookify-server), `apiMobile` in `env` in [Client](https://github.com/SIIT-Team-3/Bookify-client) and run the Client whit `ng serve --host 0.0.0.0` . You can now press run and start an application.
 
 ## Authors
 
