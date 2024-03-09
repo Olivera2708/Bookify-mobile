@@ -1,24 +1,24 @@
 # Bookify mobile
 
-Bookify is a powerful accommodation booking Android application developed using Android Studio and several key technologies. It offers a robust platform for users to seamlessly book accommodations, with features such as real-time availability and recommendations.
+Bookify is a powerful accommodation booking Android application developed using Android Studio and several key technologies. It offers a robust platform for users to seamlessly book accommodations, with features such as real-time availability and recommendations. Bookify is your ultimate companion for booking accommodations seamlessly! Whether you're planning a business trip or a leisurely getaway, Bookify simplifies the booking process with its intuitive interface and powerful features.
+
 
 ## Course Information
 This project is part of the coursework for the course "Mobilne aplikacije" (Mobile applications) at [Fakultet Tehničikih Nauka](https://www.ftn.uns.ac.rs/). The goal of the project is to apply the concepts learned during the course and showcase practical skills in developing Android application.
 
 ## Preview of Key Features
 
-### Two themes
-- Dark theme
-- Light theme
+### Two Themes for Enhanced Experience
+- **Dark Theme**
+- **Light Theme**
 
 <p align="center">
   <img src="images/login_dark.jpg" width="240"/>
   <img src="images/login_light.jpg" width="240"/>
 </p>
 
-### Home
-
-View top accommodations and locations to get an inspiration for your next trevel.
+### Home Screen
+Discover top accommodations and exciting destinations to inspire your next adventure.
 
 <p align="center">
   <img src="images/home_dark.jpg" width="240"/>
@@ -26,9 +26,7 @@ View top accommodations and locations to get an inspiration for your next trevel
 </p>
 
 ### Searching and Filtering Accommodations
-
-Effortlessly find the perfect accommodation with our advanced search and filtering options, including:
-
+Easily find the perfect accommodation with advanced search and filtering options, including:
 - **Location**
 - **Availability Date**
 - **Number of Persons**
@@ -42,9 +40,7 @@ Effortlessly find the perfect accommodation with our advanced search and filteri
 </p>
 
 ### Accommodation Details
-
-Explore comprehensive details about accommodations, including:
-
+Get comprehensive details about accommodations, including:
 - **Slideshow of Pictures**
 - **Detailed Descriptions**
 - **Option to Reserve (for logged-in guests)**
@@ -52,16 +48,12 @@ Explore comprehensive details about accommodations, including:
 
 <p align="center">
   <img src="images/details_light.jpg" width="240"/>
-  <img src="images/filter_dark.jpg" width="240"/>
-  <img src="images/filter_light.jpg" width="240"/>
   <img src="images/comments.jpg" width="240"/>
 </p>
 
 ### Reports
-
 Stay informed about the performance and status of your accommodations effortlessly.
 Generate insightful reports and download them, including two types:
-
 - **By Accommodation**
 - **By Period**
 
@@ -71,10 +63,12 @@ Generate insightful reports and download them, including two types:
 </p>
 
 ### Requests Management
-
 Efficiently manage reservation requests with easy filtering options and status updates.
 
-![Requests Preview](images/requests.png)
+<p align="center">
+  <img src="images/filter_dark.jpg" width="240"/>
+  <img src="images/filter_light.jpg" width="240"/>
+</p>
 
 ---
 
