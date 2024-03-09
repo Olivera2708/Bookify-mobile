@@ -7,12 +7,22 @@ This project is part of the coursework for the course "Mobilne aplikacije" (Mobi
 
 ## Preview of Key Features
 
+### Two themes
+- Dark theme
+- Light theme
+
+<p align="center">
+  <img src="images/login_dark.jpg" width="240"/>
+  <img src="images/login_light.jpg" width="240"/>
+</p>
+
 ### Home
 
 View top accommodations and locations to get an inspiration for your next trevel.
 
 <p align="center">
-  <img src="images/home.jpg" width="240"/>
+  <img src="images/home_dark.jpg" width="240"/>
+  <img src="images/home_light.jpg" width="240"/>
 </p>
 
 ### Searching and Filtering Accommodations
@@ -29,7 +39,6 @@ Effortlessly find the perfect accommodation with our advanced search and filteri
 <p align="center">
   <img src="images/search.jpg" width="240"/>
   <img src="images/filter.jpg" width="240"/>
-  <img src="images/image3.jpg" width="240"/>
 </p>
 
 ### Accommodation Details
@@ -42,9 +51,10 @@ Explore comprehensive details about accommodations, including:
 - **User Comments and Reviews**
 
 <p align="center">
-  <img src="images/details1.jpg" width="240"/>
-  <img src="images/details2.jpg" width="240"/>
-  <img src="images/details3.jpg" width="240"/>
+  <img src="images/details_light.jpg" width="240"/>
+  <img src="images/filter_dark.jpg" width="240"/>
+  <img src="images/filter_light.jpg" width="240"/>
+  <img src="images/comments.jpg" width="240"/>
 </p>
 
 ### Reports
